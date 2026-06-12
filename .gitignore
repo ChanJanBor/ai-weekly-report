@@ -2,6 +2,7 @@
 ai_weekly_data.json
 ai_weekly_last.json
 ai_news_cache.json
+history/
 
 # ── Python ──
 __pycache__/

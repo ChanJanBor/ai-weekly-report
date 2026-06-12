@@ -33,12 +33,45 @@ from urllib.parse import urlparse, parse_qs
 
 BASE_DIR = Path(__file__).parent.resolve()
 DATA_FILE = BASE_DIR / "ai_weekly_data.json"
+HISTORY_DIR = BASE_DIR / "history"
 SCRAPER_FILE = BASE_DIR / "ai_scraper.py"
 SENTIMENT_FILE = BASE_DIR / "ai_sentiment.py"
 REPORT_HTML = BASE_DIR / "report.html"
 DESKTOP = Path.home() / "Desktop"
 
 PORT = 8899
+
+# ============================================================
+# 历史数据管理
+# ============================================================
+
+def save_to_history():
+    """将当前数据保存到 history/ 目录，按年-周命名"""
+    if not DATA_FILE.exists():
+        return None
+    HISTORY_DIR.mkdir(exist_ok=True)
+    now = datetime.now()
+    # 文件名: 2026-W24.json
+    week_str = f"{now.strftime('%Y')}-W{now.strftime('%V')}"
+    dest = HISTORY_DIR / f"{week_str}.json"
+    import shutil
+    shutil.copy2(str(DATA_FILE), str(dest))
+    print(f"📦 历史归档: {dest.name}")
+    return str(dest)
+
+
+def get_last_week_file():
+    """查找上一周的历史数据文件"""
+    if not HISTORY_DIR.exists():
+        return None
+    files = sorted(HISTORY_DIR.glob("*.json"), reverse=True)
+    # 排除当前周的文件
+    now = datetime.now()
+    current_week = f"{now.strftime('%Y')}-W{now.strftime('%V')}"
+    for f in files:
+        if f.stem != current_week:
+            return f
+    return None
 
 # ============================================================
 # 抓取 + 分析
@@ -56,15 +89,9 @@ def run_scrape_and_analyze():
         _fetch_status["running"] = True
         _fetch_status["error"] = None
         try:
-            # 备份当前数据为上周数据
-            if DATA_FILE.exists():
-                backup_path = BASE_DIR / "ai_weekly_last.json"
-                try:
-                    import shutil
-                    shutil.copy2(str(DATA_FILE), str(backup_path))
-                    print("📦 已备份当前数据为上周数据")
-                except Exception as e:
-                    print(f"  ⚠ 备份失败: {e}")
+            # 将当前数据归档到 history/
+            save_to_history()
+
             # Step 1: 抓取
             print("\n📡 正在抓取最近7天数据...")
             r = subprocess.run(
@@ -86,6 +113,9 @@ def run_scrape_and_analyze():
             )
             if r2.returncode != 0:
                 print(f"  ⚠ 情感分析警告: {r2.stderr[-200:]}")
+
+            # Step 3: 将新数据也归档
+            save_to_history()
 
             _last_fetch_time = datetime.now().isoformat()
             _fetch_status["last_time"] = _last_fetch_time
@@ -432,6 +462,41 @@ class ReportHandler(http.server.SimpleHTTPRequestHandler):
                 return
             result, source = do_translate(text, tl)
             self._json_response({"translatedText": result, "source": source})
+            return
+
+        # API: 获取上周数据（自动从 history 查找）
+        if path == "/api/last-week":
+            last_file = get_last_week_file()
+            if last_file and last_file.exists():
+                self.send_response(200)
+                self.send_header("Content-Type", "application/json; charset=utf-8")
+                self.send_header("Cache-Control", "no-cache")
+                self.end_headers()
+                self.wfile.write(last_file.read_bytes())
+            else:
+                self._json_response({"articles": [], "meta": {}, "note": "no history yet"})
+            return
+
+        # API: 历史数据列表
+        if path == "/api/history":
+            if not HISTORY_DIR.exists():
+                self._json_response({"files": []})
+                return
+            files = sorted(HISTORY_DIR.glob("*.json"), reverse=True)
+            result = []
+            for f in files:
+                try:
+                    d = json.loads(f.read_text("utf-8"))
+                    meta = d.get("meta", {})
+                    result.append({
+                        "filename": f.name,
+                        "week": f.stem,
+                        "articles": meta.get("total_articles", len(d.get("articles", []))),
+                        "generated": meta.get("generated_at", ""),
+                    })
+                except:
+                    result.append({"filename": f.name, "week": f.stem})
+            self._json_response({"files": result})
             return
 
         # 静态文件: ai_weekly_data.json

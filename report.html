@@ -465,11 +465,17 @@ async function loadData(force) {
     ALL = getDemo();
     document.getElementById('dateRange').textContent = '演示数据';
   }
-  // 尝试加载上周数据
+  // 自动从 history 加载上周数据
   try {
-    const lr = await fetch('ai_weekly_last.json?t=' + Date.now());
-    if (lr.ok) LW = (await lr.json()).articles || null;
-  } catch(e) {}
+    const lr = await fetch('/api/last-week?t=' + Date.now());
+    if (lr.ok) {
+      const ld = await lr.json();
+      if (ld.articles && ld.articles.length > 0) {
+        LW = ld.articles;
+        console.log('✅ 已加载上周数据:', LW.length, '条');
+      }
+    }
+  } catch(e) { console.warn('上周数据加载失败:', e); }
   renderAll();
 }
 
@@ -570,7 +576,7 @@ function sentStatCard(num, pct, lbl, color, lightColor) {
 function renderCompare() {
   const grid = document.getElementById('compareGrid');
   if (!LW || !LW.length) {
-    grid.innerHTML = '<div class="compare-card" style="grid-column:1/-1;text-align:center;color:var(--txd);padding:40px 20px"><p style="font-size:1rem;margin-bottom:8px">📭 暂无上周数据</p><p style="font-size:.82rem">上周数据保存为 <code style="background:rgba(59,130,246,0.15);padding:2px 6px;border-radius:4px;color:#93c5fd">ai_weekly_last.json</code> 后可启用周度对比功能。</p><p style="font-size:.78rem;margin-top:6px;color:#475569">每次更新数据时，当前周数据会自动备份为上周数据。</p></div>';
+    grid.innerHTML = '<div class="compare-card" style="grid-column:1/-1;text-align:center;color:var(--txd);padding:40px 20px"><p style="font-size:1rem;margin-bottom:8px">📭 暂无上周数据</p><p style="font-size:.82rem">系统会自动将每次更新的数据归档到 <code style="background:rgba(59,130,246,0.15);padding:2px 6px;border-radius:4px;color:#93c5fd">history/</code> 目录。</p><p style="font-size:.78rem;margin-top:6px;color:#475569">下次更新数据时，系统会自动加载上周数据进行对比。</p></div>';
     return;
   }
   const cur = ALL;
@@ -879,17 +885,6 @@ async function batchTranslate() {
 
 // ── 导出 ──
 async function doFetch() {
-  // 备份当前数据为上周数据
-  try {
-    const r = await fetch('ai_weekly_data.json');
-    if (r.ok) {
-      const d = await r.json();
-      if (d.articles && d.articles.length > 0) {
-        // 通过服务器备份（简单方案：直接在前端标记）
-        localStorage.setItem('ai_weekly_last_backup', JSON.stringify(d));
-      }
-    }
-  } catch(e) {}
   await loadData(true);
 }
 
