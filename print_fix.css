@@ -1,0 +1,12 @@
+@media print{
+  *{background:#fff!important;color:#000!important;box-shadow:none!important;text-shadow:none!important}
+  .act-bar,.tab-bar,.fb,.ft,.modal,#sb{display:none!important}
+  .tab-content{display:block!important}
+  .card,.tc,.tl-i,.dc,.cg-card,.kpi-card{break-inside:avoid;page-break-inside:avoid}
+  a[href]:after{content:" (" attr(href) ")";font-size:9px;color:#555}
+  .hero{background:#fff!important;color:#000!important;padding:20px!important}
+  .hero h1{background:none!important;-webkit-text-fill-color:#000!important;color:#000!important}
+  .kpi-card .num{background:none!important;-webkit-text-fill-color:#000!important;color:#000!important}
+  .tag,.sent-bull,.sent-bear,.sent-neu,.sig,.sb,.sn,.sr{background:#f0f0f0!important;color:#000!important;border:1px solid #ccc!important}
+  .tl::before,.ti::before{background:#000!important}
+}

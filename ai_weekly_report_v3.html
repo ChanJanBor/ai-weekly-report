@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>AI 行业周报 2026.05 | 8 功能完整版</title>
+<style>
+:root{--bg:#0a0e1a;--card:#111827;--cardH:#1a2236;--bd:#1e293b;--acc:#3b82f6;--acc2:#8b5cf6;--acc3:#06b6d4;--g:#10b981;--r:#ef4444;--y:#f59e0b;--tx:#e2e8f0;--txd:#94a3b8;--txb:#f8fafc}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Noto Sans SC',sans-serif;background:var(--bg);color:var(--tx);line-height:1.6;min-height:100vh;padding-bottom:60px}
+.hero{background:linear-gradient(135deg,#0f172a 0%,#1e1b4b 50%,#0c1427 100%);padding:48px 24px 36px;text-align:center;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:radial-gradient(ellipse at 30% 50%,rgba(59,130,246,0.08) 0%,transparent 60%),radial-gradient(ellipse at 70% 50%,rgba(139,92,246,0.06) 0%,transparent 60%);animation:pulse 8s ease-in-out infinite alternate}
+@keyframes pulse{0%{opacity:.6}100%{opacity:1}}
+.hero h1{font-size:2.4rem;font-weight:800;background:linear-gradient(135deg,#60a5fa,#a78bfa,#34d399);-webkit-background-clip:text;-webkit-text-fill-color:transparent;position:relative;letter-spacing:-.5px}
+.hero .sub{color:var(--txd);font-size:1rem;margin-top:8px;position:relative}
+.hero .badge{display:inline-block;background:rgba(59,130,246,0.15);border:1px solid rgba(59,130,246,0.3);border-radius:20px;padding:4px 16px;font-size:.85rem;color:#93c5fd;margin-top:12px;position:relative}
+.act-bar{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:14px;position:relative}
+.act-bar button{padding:7px 18px;border-radius:8px;border:1px solid rgba(59,130,246,0.3);background:rgba(59,130,246,0.1);color:#93c5fd;font-size:.82rem;cursor:pointer;transition:all .2s}
+.act-bar button:hover{background:rgba(59,130,246,0.25);color:#fff}
+.act-bar button.active-bar{background:var(--acc);color:#fff;border-color:var(--acc)}
+.container{max-width:1200px;margin:0 auto;padding:0 20px}
+.kpi{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin:-24px auto 28px;position:relative;z-index:2}
+.kpi-card{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:18px;text-align:center;transition:transform .2s,border-color .2s;cursor:default}
+.kpi-card:hover{transform:translateY(-2px);border-color:var(--acc)}
+.kpi-card .num{font-size:1.6rem;font-weight:800;background:linear-gradient(135deg,var(--acc),var(--acc2));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.kpi-card .lbl{font-size:.78rem;color:var(--txd);margin-top:4px}
+.tab-bar{display:flex;gap:4px;background:var(--card);border-radius:12px;padding:4px;margin-bottom:24px;overflow-x:auto;border:1px solid var(--bd)}
+.tab-btn{flex:1;white-space:nowrap;padding:10px 12px;border:none;background:transparent;color:var(--txd);font-size:.8rem;font-weight:500;border-radius:8px;cursor:pointer;transition:all .2s}
+.tab-btn.active{background:var(--acc);color:#fff}
+.tab-btn:hover:not(.active){background:rgba(59,130,246,0.1);color:var(--tx)}
+.tab-content{display:none}.tab-content.active{display:block}
+.cards{display:grid;gap:14px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:18px 22px;transition:all .25s;cursor:default}
+.card:hover{border-color:var(--acc);background:var(--cardH)}
+.tag{display:inline-block;font-size:.68rem;font-weight:600;padding:2px 10px;border-radius:20px;margin-bottom:6px;margin-right:6px}
+.tag-m{background:rgba(139,92,246,0.15);color:#c4b5fd}
+.tag-a{background:rgba(6,182,212,0.15);color:#67e8f9}
+.tag-f{background:rgba(245,158,11,0.15);color:#fcd34d}
+.tag-p{background:rgba(239,68,68,0.15);color:#fca5a5}
+.tag-i{background:rgba(16,185,129,0.15);color:#6ee7b7}
+.tag-c{background:rgba(59,130,246,0.15);color:#93c5fd}
+.sent-bull{background:rgba(16,185,129,0.15);color:#6ee7b7;display:inline-block;font-size:.68rem;font-weight:600;padding:2px 8px;border-radius:10px;margin-left:6px}
+.sent-bear{background:rgba(239,68,68,0.15);color:#fca5a5;display:inline-block;font-size:.68rem;font-weight:600;padding:2px 8px;border-radius:10px;margin-left:6px}
+.sent-neu{background:rgba(245,158,11,0.15);color:#fcd34d;display:inline-block;font-size:.68rem;font-weight:600;padding:2px 8px;border-radius:10px;margin-left:6px}
+.card h3{font-size:1.02rem;font-weight:600;color:var(--txb);margin-bottom:6px;line-height:1.5}
+.card p{font-size:.85rem;color:var(--txd);margin-bottom:8px}
+.card .meta{display:flex;justify-content:space-between;align-items:center;font-size:.75rem;color:var(--txd);flex-wrap:wrap;gap:6px}
+.card .meta a{color:var(--acc);text-decoration:none;transition:color .2s}
+.card .meta a:hover{color:#93c5fd;text-decoration:underline}
+.tg{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:14px}
+.tc{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:22px;position:relative;overflow:hidden}
+.tc::before{content:'';position:absolute;top:0;left:0;width:4px;height:100%}
+.tc.bull::before{background:var(--g)}
+.tc.bear::before{background:var(--r)}
+.tc.neu::before{background:var(--y)}
+.sig{display:inline-block;font-size:.66rem;font-weight:700;padding:2px 8px;border-radius:12px;margin-bottom:8px}
+.sb{background:rgba(16,185,129,0.15);color:#6ee7b7}
+.sn{background:rgba(245,158,11,0.15);color:#fcd34d}
+.sr{background:rgba(239,68,68,0.15);color:#fca5a5}
+.tc h3{font-size:.95rem;color:var(--txb);margin-bottom:8px}
+.tbl-w{background:var(--card);border:1px solid var(--bd);border-radius:12px;overflow-x:auto}
+.tbl{width:100%;border-collapse:collapse;font-size:.85rem;min-width:600px}
+.tbl thead{background:rgba(59,130,246,0.1)}
+.tbl th{padding:10px 14px;text-align:left;font-weight:600;color:var(--txb);font-size:.76rem;text-transform:uppercase;letter-spacing:.5px}
+.tbl td{padding:10px 14px;border-top:1px solid var(--bd)}
+.tbl tbody tr:hover{background:rgba(59,130,246,0.05)}
+.hi{color:var(--g);font-weight:600}.wa{color:var(--y);font-weight:600}
+.tl{position:relative;padding-left:28px}
+.tl::before{content:'';position:absolute;left:8px;top:0;bottom:0;width:2px;background:linear-gradient(180deg,var(--acc),var(--acc2),var(--acc3));border-radius:2px}
+.ti{position:relative;margin-bottom:22px}
+.ti::before{content:'';position:absolute;left:-24px;top:6px;width:12px;height:12px;border-radius:50%;background:var(--acc);border:2px solid var(--bg);z-index:1}
+.tdt{font-size:.75rem;color:var(--acc);font-weight:600;margin-bottom:4px}
+.ti h4{font-size:.92rem;color:var(--txb);margin-bottom:4px}
+.ti p{font-size:.82rem;color:var(--txd)}
+.fb{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:18px}
+.fb select,.fb input{background:#1e293b;border:1px solid var(--bd);border-radius:8px;padding:7px 12px;color:var(--tx);font-size:.82rem}
+.fb button{padding:7px 16px;border-radius:8px;border:none;background:var(--acc);color:#fff;font-size:.82rem;cursor:pointer}
+.sh{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:10px}
+.sh h2{font-size:1.1rem;color:var(--txb)}
+.cc{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:22px}
+.cc h2{font-size:1.05rem;color:var(--txb);margin-bottom:14px}
+.dg{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:14px}
+.dc{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:18px 22px}
+.dc h3{font-size:.9rem;color:var(--txb);margin-bottom:12px}
+.mb{display:flex;align-items:flex-end;gap:5px;height:110px;padding-top:8px}
+.mbg{display:flex;flex-direction:column;align-items:center;flex:1;height:100%;justify-content:flex-end}
+.mbar{width:100%;border-radius:3px 3px 0 0;transition:height .6s ease;min-height:2px}
+.ml{font-size:.58rem;color:var(--txd);margin-top:3px}
+.don{display:flex;align-items:center;gap:12px}
+.dl{display:flex;flex-direction:column;gap:5px;font-size:.74rem}
+.dli{display:flex;align-items:center;gap:5px}.dld{width:8px;height:8px;border-radius:50%}
+.wc{display:flex;flex-wrap:wrap;gap:7px;align-items:flex-end;min-height:80px;padding:8px 0}
+.modal{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.7);z-index:10000;align-items:center;justify-content:center}
+.modal.show{display:flex}.mbox{background:var(--card);border:1px solid var(--bd);border-radius:16px;padding:26px;max-width:540px;width:92%;max-height:80vh;overflow-y:auto}
+.mbox h3{font-size:1rem;color:var(--txb);margin-bottom:14px}
+.mbox label{display:block;font-size:.78rem;color:var(--txd);margin-bottom:3px;margin-top:10px}
+.mbox input,.mbox select,.mbox textarea{width:100%;background:#1e293b;border:1px solid var(--bd);border-radius:8px;padding:7px 10px;color:var(--tx);font-size:.82rem}
+.mbox textarea{min-height:70px;resize:vertical}
+.br{display:flex;gap:8px;margin-top:18px;justify-content:flex-end}
+.bp{padding:7px 18px;border-radius:8px;border:none;background:var(--acc);color:#fff;font-size:.82rem;cursor:pointer}
+.bc{padding:7px 18px;border-radius:8px;border:1px solid var(--bd);background:transparent;color:var(--txd);font-size:.82rem;cursor:pointer}
+#sb{text-align:center;padding:6px;font-size:.74rem;color:var(--txd);margin-bottom:16px}
+#sb .err{color:var(--r)}#sb .ok{color:var(--g)}
+.ft{text-align:center;padding:36px 20px;color:var(--txd);font-size:.76rem;border-top:1px solid var(--bd);margin-top:36px}
+.ft a{color:var(--acc);text-decoration:none}
+.wl-chips{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}
+.wchip{display:inline-flex;align-items:center;gap:5px;background:rgba(59,130,246,0.12);border:1px solid rgba(59,130,246,0.25);border-radius:20px;padding:3px 11px;font-size:.76rem;color:#93c5fd;cursor:default}
+.wchip .r{cursor:pointer;color:var(--txd);font-size:.7rem}.wchip .r:hover{color:var(--r)}
+.cg{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px;margin-top:14px}
+.cg-card{background:rgba(15,23,42,0.5);border-radius:10px;padding:14px}
+.cg-card h4{font-size:.85rem;color:var(--txb);margin-bottom:8px}
+.cbar{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.cbar .lb{font-size:.68rem;color:var(--txd);width:60px;text-align:right}
+.cbar .bw{flex:1;height:16px;background:#1e293b;border-radius:4px;overflow:hidden;position:relative}
+.cbar .bf{height:100%;border-radius:4px;transition:width .6s ease}
+.cbar .pct{font-size:.62rem;color:var(--txd);width:36px}
+.ch{display:flex;flex-direction:column;align-items:center;gap:0;padding:16px 0}
+.cn{border-radius:10px;padding:10px 18px;text-align:center;min-width:150px;cursor:pointer;transition:all .2s}
+.cn:hover{transform:scale(1.05)}
+.cn.pol{border:1px solid rgba(239,68,68,0.4);background:rgba(239,68,68,0.08)}
+.cn.ind{border:1px solid rgba(139,92,246,0.4);background:rgba(139,92,246,0.08)}
+.cn.stk{border:1px solid rgba(16,185,129,0.4);background:rgba(16,185,129,0.08)}
+.cn .nt{font-size:.84rem;font-weight:600;color:var(--txb)}
+.cn .nd{font-size:.7rem;color:var(--txd);margin-top:4px}
+.arr{width:2px;height:28px;background:linear-gradient(180deg,var(--acc),var(--acc2));position:relative}
+.arr::after{content:'';position:absolute;bottom:-4px;left:50%;transform:translateX(-50%);width:0;height:0;border-left:5px solid transparent;border-right:5px solid transparent;border-top:6px solid var(--acc2)}
+.brs{display:flex;gap:14px;align-items:flex-start}
+.brc{display:flex;flex-direction:column;align-items:center;gap:0;flex:1}
+.db{display:none;margin-top:18px;background:rgba(15,23,42,0.5);border-radius:10px;padding:14px}
+::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:var(--bd);border-radius:3px}
+mark.hl{background:rgba(59,130,246,0.35);color:#93c5fd;padding:0 2px;border-radius:3px}
+@media print{
+  *{background:#fff!important;color:#000!important;box-shadow:none!important;text-shadow:none!important}
+  .act-bar,.tab-bar,.fb,.ft,.modal,#sb{display:none!important}
+  .tab-content{display:block!important}
+  .card,.tc,.tl-i,.dc,.cg-card,.kpi-card{break-inside:avoid;page-break-inside:avoid}
+  a[href]:after{content:" (" attr(href) ")";font-size:9px;color:#555}
+  .hero{background:#fff!important;color:#000!important;padding:20px!important}
+  .hero h1{background:none!important;-webkit-text-fill-color:#000!important;color:#000!important}
+  .kpi-card .num{background:none!important;-webkit-text-fill-color:#000!important;color:#000!important}
+  .tag,.sent-bull,.sent-bear,.sent-neu,.sig,.sb,.sn,.sr{background:#f0f0f0!important;color:#000!important;border:1px solid #ccc!important}
+  .tl::before,.ti::before{background:#000!important}
+}
+
+  </style>
+</head>
+<body>
+
+<header class="hero">
+<h1>AI 行业周报</h1>
+<p class="sub">多源聚合 · 真实数据 · 情感分析 · 传导链 · 数据看板</p>
+<span class="badge" id="dateRange">加载中...</span>
+<div class="act-bar">
+  <button onclick="doFetch()">刷新数据</button>
+  <button onclick="showTab('news')" class="active-bar">最新新闻</button>
+  <button onclick="showTab('sentiment')">情感分析</button>
+  <button onclick="showTab('compare')">周度对比</button>
+  <button onclick="showTab('causal')">传导链</button>
+  <button onclick="showTab('dashboard')">数据看板</button>
+  <button onclick="openModal('wlModal')">关注列表</button>
+  <button onclick="openModal('exportModal')">导出</button>
+  <button onclick="openModal('emailModal')">邮件推送</button>
+        <button id="btnBatchTranslate" onclick="translateVisible()" style="padding:7px 18px;border-radius:8px;border:1px solid rgba(139,92,246,0.4);background:rgba(139,92,246,0.12);color:#c4b5fd;font-size:.82rem;cursor:pointer;margin-left:8px">批量翻译</button>
+</div>
+</header>
+
+<div class="container">
+<div id="sb">加载中...</div>
+<div class="kpi" id="kpi"></div>
+
+<!-- Tab: News -->
+<div class="tab-content active" id="tab-news">
+  <div class="fb" id="newsFilterBar">
+    <span style="color:var(--txd);font-size:.8rem">筛选:</span>
+    <select id="filtTag" onchange="applyFilter()">
+      <option value="all">全部标签</option>
+      <option value="模型发布">模型发布</option>
+      <option value="AI Agent">AI Agent</option>
+      <option value="投融资">投融资</option>
+      <option value="监管政策">监管政策</option>
+      <option value="基础设施">基础设施</option>
+      <option value="中国动态">中国动态</option>
+      <option value="开源">开源</option>
+    </select>
+    <select id="filtSenti" onchange="applyFilter()">
+      <option value="all">全部情感</option>
+      <option value="bull">利好</option>
+      <option value="bear">利空</option>
+      <option value="neutral">中性</option>
+    </select>
+    <input type="text" id="filtSearch" placeholder="搜索关键词..." oninput="applyFilter()"/>
+    <span id="filtCount" style="background:rgba(59,130,246,0.1);color:#93c5fd;padding:4px 12px;border-radius:8px;font-size:.78rem">0 条</span>
+  </div>
+  <div class="sh"><h2 id="sectionTitle">最新 AI 新闻</h2><span style="font-size:.78rem;color:var(--txd)" id="refreshTime"></span></div>
+  <div class="cards" id="newsGrid"></div>
+</div>
+
+<!-- Tab: Sentiment -->
+<div class="tab-content" id="tab-sentiment">
+  <div class="cc" style="margin-top:0">
+    <h2>情感分析分布</h2>
+    <div id="sentStats" style="display:flex;gap:14px;flex-wrap:wrap;align-items:flex-end;margin-bottom:16px"></div>
+    <div class="cards" id="sentGrid"></div>
+  </div>
+</div>
+
+<!-- Tab: Compare -->
+<div class="tab-content" id="tab-compare">
+  <div class="cc" style="margin-top:0">
+    <h2>周度对比</h2>
+    <p style="font-size:.82rem;color:var(--txd);margin-bottom:14px">本周 vs 上周：情感变化、话题热度迁移</p>
+    <div class="cg" id="compareGrid"></div>
+  </div>
+</div>
+
+<!-- Tab: Causal Chain -->
+<div class="tab-content" id="tab-causal">
+  <div class="cc" style="margin-top:0">
+    <h2>市场传导链</h2>
+    <p style="font-size:.82rem;color:var(--txd);margin-bottom:14px">点击节点查看传导路径详情</p>
+    <div class="fb">
+      <select id="chainScn" onchange="renderChain()">
+        <option value="policy">宏观政策</option>
+        <option value="funding">资本流动</option>
+        <option value="chip">芯片供应</option>
+        <option value="agent">Agent 产业化</option>
+      </select>
+    </div>
+    <div class="ch" id="chainBody"></div>
+    <div class="db" id="chainDetail">
+      <h4 id="cdTitle" style="color:var(--acc);margin-bottom:6px"></h4>
+      <p id="cdDesc" style="font-size:.82rem;color:var(--txd)"></p>
+      <div id="cdImpact" style="margin-top:8px;font-size:.78rem"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Tab: Dashboard -->
+<div class="tab-content" id="tab-dashboard">
+  <div class="cc" style="margin-top:0">
+    <h2>数据看板</h2>
+    <div class="dg" id="dashGrid"></div>
+  </div>
+</div>
+
+<!-- Always visible below tabs -->
+<div class="cc" style="margin-top:28px">
+  <h2>主流模型价格对比</h2>
+  <div class="tbl-w"><table class="tbl" id="priceTbl"></table></div>
+</div>
+
+<div class="cc" style="margin-top:28px">
+  <h2>趋势信号</h2>
+  <div class="tg" id="trendGrid"></div>
+</div>
+
+<div class="cc" style="margin-top:28px">
+  <h2>时间线</h2>
+  <div class="tl" id="tlBody"></div>
+</div>
+
+</div>
+
+<footer class="ft">
+<p>AI 行业周报 · 自动聚合 6 个真实数据源</p>
+<p style="margin-top:4px;color:#475569">IT之家 · 机器之心 · TechCrunch · Wired · VentureBeat · AI News</p>
+<p style="margin-top:4px;color:#334155">内容由 AI 自动聚合，仅供参考</p>
+</footer>
+
+<!-- Export Modal -->
+<div class="modal" id="exportModal"><div class="mbox">
+<h3>导出周报</h3>
+<label>格式</label>
+<select id="expFmt"><option value="html">HTML 网页</option><option value="json">JSON 原始数据</option><option value="print">打印 PDF</option></select>
+<label>收件邮箱 (选填)</label>
+<input type="email" id="expEmail" placeholder="your@company.com"/>
+<label>备注</label>
+<textarea id="expNote" placeholder="备注..."></textarea>
+<div class="br">
+  <button class="bc" onclick="closeModal('exportModal')">取消</button>
+  <button class="bp" onclick="doExport()">开始导出</button>
+</div>
+<div id="expStatus" style="margin-top:10px;font-size:.8rem;color:var(--acc)"></div>
+</div></div>
+
+<!-- Watchlist Modal -->
+<div class="modal" id="wlModal"><div class="mbox" style="max-width:580px">
+<h3>自定义关注列表</h3>
+<p style="font-size:.8rem;color:var(--txd);margin-bottom:10px">关注的公司/主题将在新闻中高亮显示。</p>
+<label>公司/组织</label>
+<div style="display:flex;gap:6px"><input type="text" id="wlComp" placeholder="OpenAI, 百度..."/><button class="bp" onclick="addWL('company')">+</button></div>
+<label>主题/关键词</label>
+<div style="display:flex;gap:6px"><input type="text" id="wlTopic" placeholder="AI Agent, 芯片..."/><button class="bp" onclick="addWL('topic')">+</button></div>
+<label>当前关注</label>
+<div class="wl-chips" id="wlChips"></div>
+<div class="br">
+  <button class="bc" onclick="closeModal('wlModal')">取消</button>
+  <button class="bp" onclick="applyWatchlist()">应用过滤 + 高亮</button>
+</div>
+</div></div>
+
+<!-- Email Modal -->
+<div class="modal" id="emailModal"><div class="mbox">
+<h3>邮件定时推送配置</h3>
+<p style="font-size:.78rem;color:var(--txd);margin-bottom:12px">配置每周自动发送周报到指定邮箱。</p>
+<label>收件邮箱</label><input type="email" id="emailTo" placeholder="team@company.com"/>
+<label>SMTP 服务器</label><input type="text" id="smtpHost" placeholder="smtp.gmail.com"/>
+<label>SMTP 端口</label><input type="number" id="smtpPort" value="587" placeholder="587"/>
+<label>发件人邮箱</label><input type="email" id="emailFrom" placeholder="bot@company.com"/>
+<label>SMTP 密码/授权码</label><input type="password" id="smtpPass" placeholder="app password"/>
+<label>推送时间</label>
+<select id="emailTime"><option value="mon-08">每周一 08:00</option><option value="mon-09">每周一 09:00</option><option value="fri-17">每周五 17:00</option></select>
+<div class="br">
+  <button class="bc" onclick="closeModal('emailModal')">取消</button>
+  <button class="bp" onclick="saveEmailConfig()">保存配置</button>
+</div>
+<div id="emailStatus" style="margin-top:10px;font-size:.78rem"></div>
+</div></div>
+
+<script>
+let ALL=[];let FIL=[];
+let WL={companies:["OpenAI","Anthropic","Google","DeepSeek","百度","阿里","字节跳动","NVIDIA"],
+         topics:["AI Agent","大模型","芯片","融资","开源","算力"]};
+let LW=null;
+
+async function loadData(force){
+  const sb=document.getElementById('sb');
+  sb.innerHTML='<span style="color:var(--y)">正在加载数据...</span>';
+  try{
+    if(force){
+      sb.innerHTML='<span style="color:var(--y)">正在重新抓取真实数据...</span>';
+      try{await fetch('/api/fetch')}catch(e){}
+    }
+    const r=await fetch('ai_weekly_data.json?t='+Date.now());
+    if(!r.ok)throw new Error('HTTP '+r.status);
+    const d=await r.json();
+    ALL=d.articles||[];
+    addTimeline();
+    try{const lr=await fetch('ai_weekly_last.json?t='+Date.now());if(lr.ok)LW=(await lr.json()).articles||[]}catch(e){}
+    sb.innerHTML='<span class="ok">已加载 '+ALL.length+' 条真实新闻 ('+((d.meta||{}).sources||[]).length+' 个数据源)</span>';
+    document.getElementById('dateRange').textContent='最新抓取: '+((d.meta||{}).generated_at||'').substring(0,16).replace('T',' ');
+    document.getElementById('refreshTime').textContent='更新于 '+((d.meta||{}).generated_at||'').substring(0,10);
+  }catch(e){
+    sb.innerHTML='<span class="err">数据加载失败: '+e.message+' — 使用演示数据</span>';
+    ALL=getDemo();
+    document.getElementById('dateRange').textContent='演示数据 (demo)';
+  }
+  renderAll();
+}
+
+function getDemo(){return[
+  {id:'d1',title:'Google I/O 2026: Gemini 3.5 Flash + Omni 世界模型',summary:'Gemini 3.5 Flash 推理性能翻倍，Omni 视频生成世界模型开放 API',url:'https://blog.google/technology/ai/google-io-2026/',source:'Google',tags:['模型发布'],lang:'en',sentiment:{label:'利好',type:'bull',score:1.8},published:'2026-05-20'},
+  {id:'d2',title:'DeepSeek V4 万亿参数开源，成本仅为 GPT-5 的 1/30',summary:'MoE架构，100万+ token原生上下文，完全基于华为昇腾训练',url:'https://deepseek.com/blog/v4',source:'DeepSeek',tags:['模型发布','开源','中国动态'],lang:'zh',sentiment:{label:'利好',type:'bull',score:2.0},published:'2026-05-22'},
+  {id:'d3',title:'Anthropic 收购 Stainless，成交额超 22 亿人民币',summary:'Anthropic 宣布收购软件基础设施公司 Stainless',url:'https://techcrunch.com/anthropic-stainless',source:'TechCrunch',tags:['投融资'],lang:'en',sentiment:{label:'利好',type:'bull',score:1.2},published:'2026-05-19'},
+  {id:'d4',title:'欧盟 AI Act 高风险系统义务正式生效',summary:'高风险AI系统合规义务正式生效，企业合规成本预计上升',url:'https://consilium.europa.eu/ai-act',source:'EU Council',tags:['监管政策'],lang:'en',sentiment:{label:'利空',type:'bear',score:-0.8},published:'2026-05-18'},
+  {id:'d5',title:'全球40% AI 数据中心面临供电短缺',summary:'Gartner预计至2027年约40%的AI数据中心受电力短缺限制',url:'https://gartner.com/en/articles/ai-power',source:'Gartner',tags:['基础设施'],lang:'en',sentiment:{label:'利空',type:'bear',score:-1.5},published:'2026-05-21'},
+  {id:'d6',title:'国产AI芯片上市潮: 摩尔线程首日涨400%',summary:'国产AI芯片厂商集中登陆资本市场',url:'https://ithome.com/0/954/901',source:'IT之家',tags:['中国动态','投融资'],lang:'zh',sentiment:{label:'利好',type:'bull',score:1.7},published:'2026-05-23'},
+];}
+
+function addTimeline(){
+  const tl=[
+    {id:'tl1',title:'新华网: AI智能体从对话到行动的变革',summary:'三部门联合印发AI智能体指导文件',url:'https://news.cn/tech/ai-agent',source:'新华网',tags:['AI Agent','中国动态'],lang:'zh',sentiment:{label:'利好',type:'bull',score:1.5},published:'2026-05-26'},
+    {id:'tl2',title:'链博会首设AI专区',summary:'英伟达、英特尔、高通等参展',url:'https://msn.cn/news/chain-expo',source:'MSN中国',tags:['中国动态'],lang:'zh',sentiment:{label:'利好',type:'bull',score:0.8},published:'2026-05-22'},
+    {id:'tl3',title:'资本市场情绪转变: 机构资金二季度流出',summary:'AI板块机构资金持续流出，成本回收压力增大',url:'https://iaipie.com/ai-capital-market',source:'iaipie',tags:['投融资'],lang:'zh',sentiment:{label:'利空',type:'bear',score:-1.0},published:'2026-05-25'},
+  ];
+  const ex=new Set(ALL.map(a=>a.id));
+  tl.forEach(a=>{if(!ex.has(a.id))ALL.push(a)});
+  ALL.sort((a,b)=>(b.published||'').localeCompare(a.published||''));
+}
+
+function showTab(name){
+  document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.act-bar button').forEach(b=>b.classList.remove('active-bar'));
+  const el=document.getElementById('tab-'+name);
+  if(el)el.classList.add('active');
+  const btns=document.querySelectorAll('.act-bar button');
+  const map={news:0,sentiment:1,compare:2,causal:3,dashboard:4};
+  if(map[name]!==undefined&&btns[map[name]])btns[map[name]].classList.add('active-bar');
+  if(name==='compare')renderCompare();
+  if(name==='dashboard')renderDashboard(FIL.length?FIL:ALL);
+}
+
+function filterArticles(){
+  let res=[...ALL];
+  const tag=document.getElementById('filtTag')?.value||'all';
+  const st=document.getElementById('filtSenti')?.value||'all';
+  const kw=(document.getElementById('filtSearch')?.value||'').trim().toLowerCase();
+  if(tag&&tag!=='all')res=res.filter(a=>(a.tags||[]).includes(tag));
+  if(st==='bull')res=res.filter(a=>(a.sentiment||{}).type==='bull');
+  if(st==='bear')res=res.filter(a=>(a.sentiment||{}).type==='bear');
+  if(st==='neutral')res=res.filter(a=>!(a.sentiment||{}).type||(a.sentiment||{}).type==='neutral');
+  if(kw)res=res.filter(a=>(a.title||'').toLowerCase().includes(kw)||(a.summary||'').toLowerCase().includes(kw));
+  FIL=res;
+  document.getElementById('filtCount').textContent=res.length+' 条';
+  return res;
+}
+
+function applyFilter(){
+  const arts=filterArticles();
+  renderNews(arts);
+  setTimeout(initTranslateButtons, 200);
+  applyHighlight(arts);
+}
+
+function doFetch(){loadData(true)}
+
+function esc(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+
+function tagCls(t){
+  if(!t)return 'tag-m';
+  if(t.includes('模型'))return 'tag-m';
+  if(t.includes('Agent'))return 'tag-a';
+  if(t.includes('融资')||t.includes('投'))return 'tag-f';
+  if(t.includes('政策')||t.includes('监管'))return 'tag-p';
+  if(t.includes('基础')||t.includes('算力'))return 'tag-i';
+  if(t.includes('中国'))return 'tag-c';
+  return 'tag-m';
+}
+function sentCls(s){
+  const t=(s||{}).type;
+  if(t==='bull')return'sent-bull';
+  if(t==='bear')return'sent-bear';
+  return'sent-neu';
+}
+
+function renderKPI(arts){
+  const total=arts.length;
+  const bull=arts.filter(a=>(a.sentiment||{}).type==='bull').length;
+  const bear=arts.filter(a=>(a.sentiment||{}).type==='bear').length;
+  const china=arts.filter(a=>(a.tags||[]).includes('中国动态')).length;
+  const sources=new Set(arts.map(a=>a.source)).size;
+  document.getElementById('kpi').innerHTML=
+    '<div class="kpi-card"><div class="num">'+total+'</div><div class="lbl">本周新闻</div></div>'+
+    '<div class="kpi-card"><div class="num">'+sources+'</div><div class="lbl">数据来源</div></div>'+
+    '<div class="kpi-card"><div class="num">'+bull+'</div><div class="lbl">利好信号</div></div>'+
+    '<div class="kpi-card"><div class="num">'+bear+'</div><div class="lbl">利空信号</div></div>'+
+    '<div class="kpi-card"><div class="num">'+china+'</div><div class="lbl">中国动态</div></div>'+
+    '<div class="kpi-card"><div class="num">'+(WL.companies.length+WL.topics.length)+'</div><div class="lbl">关注项</div></div>';
+}
+
+function renderNews(arts){
+  const g=document.getElementById('newsGrid');
+  if(!arts.length){g.innerHTML='<p style="color:var(--txd);text-align:center;padding:30px">没有匹配的新闻</p>';return}
+  g.innerHTML=arts.map(a=>{
+    const tags_html=(a.tags||[]).map(t=>'<span class="tag '+tagCls(t)+'">'+esc(t)+'</span>').join('');
+    const sl=(a.sentiment||{}).label||'';
+    return '<div class="card">'+
+      tags_html+
+      (sl?'<span class="'+sentCls(a.sentiment)+'">'+esc(sl)+'</span>':'')+
+      '<h3>'+esc(a.title)+'</h3>'+
+      '<p>'+esc(a.summary||'')+'</p>'+
+      '<div class="meta"><span>'+(a.published||'').substring(0,16)+' · '+esc(a.source)+'</span>'+
+      '<a href="'+esc(a.url)+'" target="_blank" rel="noopener">打开原文</a></div></div>';
+  }).join('');
+}
+
+function renderSentiment(arts){
+  const bull=arts.filter(a=>(a.sentiment||{}).type==='bull');
+  const bear=arts.filter(a=>(a.sentiment||{}).type==='bear');
+  const neu=arts.filter(a=>!(a.sentiment||{}).type||(a.sentiment||{}).type==='neutral');
+  const pct=(n,t)=>Math.round(n/t*100)+'%';
+  document.getElementById('sentStats').innerHTML=
+    '<div style="background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.3);border-radius:10px;padding:14px 18px;min-width:100px"><div style="font-size:1.5rem;font-weight:800;color:#10b981">'+bull.length+'</div><div style="font-size:.74rem;color:#6ee7b7">利好/偏多 ('+pct(bull.length,arts.length)+')</div></div>'+
+    '<div style="background:rgba(245,158,11,0.1);border:1px solid rgba(245,158,11,0.3);border-radius:10px;padding:14px 18px;min-width:100px"><div style="font-size:1.5rem;font-weight:800;color:#f59e0b">'+neu.length+'</div><div style="font-size:.74rem;color:#fcd34d">中性 ('+pct(neu.length,arts.length)+')</div></div>'+
+    '<div style="background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.3);border-radius:10px;padding:14px 18px;min-width:100px"><div style="font-size:1.5rem;font-weight:800;color:#ef4444">'+bear.length+'</div><div style="font-size:.74rem;color:#fca5a5">利空/偏空 ('+pct(bear.length,arts.length)+')</div></div>';
+  document.getElementById('sentGrid').innerHTML=arts.map(a=>
+    '<div class="card"><span class="'+sentCls(a.sentiment)+'" style="font-size:.76rem">'+(a.sentiment||{}).label||'中性'+'</span>'+
+    '<span style="font-size:.7rem;color:var(--txd);margin-left:6px">分数: '+((a.sentiment||{}).score||0)+'</span>'+
+    '<h3 style="margin-top:6px">'+esc(a.title)+'</h3>'+
+    '<p>'+esc(a.summary||'')+'</p>'+
+    '<div class="meta"><span>'+esc(a.source)+'</span><a href="'+esc(a.url)+'" target="_blank" rel="noopener">原文</a></div></div>'
+  ).join('');
+}
+
+const CHAINS={
+  policy:{nodes:[
+    {id:'p1',tp:'pol',t:'AI 监管加强',d:'欧盟AI Act生效 + 中国加速立法',imp:'高'},
+    {id:'i1',tp:'ind',t:'合规成本上升',d:'企业AI合规支出增加30-50%',imp:'中'},
+    {id:'i2',tp:'ind',t:'AI审计需求爆发',d:'第三方AI评估市场预计增200%',imp:'高'},
+    {id:'s1',tp:'stk',t:'安全厂商受益',d:'AI安全/合规公司估值提升',imp:'高'},
+    {id:'s2',tp:'stk',t:'中小AI初创承压',d:'合规成本形成竞争壁垒',imp:'中'},
+  ],edges:[['p1','i1'],['p1','i2'],['i1','s2'],['i2','s1']]},
+  funding:{nodes:[
+    {id:'p1',tp:'pol',t:'AI融资创纪录',d:'2026年全球AI融资总额创新高',imp:'高'},
+    {id:'i1',tp:'ind',t:'头部公司IPO潮',d:'Anthropic/OpenAI上市预期升温',imp:'高'},
+    {id:'i2',tp:'ind',t:'估值泡沫风险',d:'一级市场AI估值普遍偏高',imp:'中'},
+    {id:'s1',tp:'stk',t:'芯片供应链受益',d:'AI芯片需求持续旺盛',imp:'高'},
+    {id:'s2',tp:'stk',t:'概念股波动加剧',d:'机构资金二季度持续流出',imp:'中'},
+  ],edges:[['p1','i1'],['p1','i2'],['i1','s1'],['i1','s2'],['i2','s2']]},
+  chip:{nodes:[
+    {id:'p1',tp:'pol',t:'芯片出口管制',d:'美国对华高端AI芯片限制扩大',imp:'高'},
+    {id:'i1',tp:'ind',t:'国产替代加速',d:'华为昇腾/寒武纪份额快速提升',imp:'高'},
+    {id:'i2',tp:'ind',t:'算力成本短期涨',d:'高端芯片采购成本涨30%+',imp:'中'},
+    {id:'s1',tp:'stk',t:'国产芯片厂受益',d:'摩尔线程/沐曦市值飙升',imp:'高'},
+    {id:'s2',tp:'stk',t:'进口依赖厂承压',d:'部分大模型公司算力成本压力加大',imp:'中'},
+  ],edges:[['p1','i1'],['p1','i2'],['i1','s1'],['i2','s2']]},
+  agent:{nodes:[
+    {id:'p1',tp:'pol',t:'三部门印发Agent文件',d:'网信办+发改委+工信部联合发文',imp:'高'},
+    {id:'i1',tp:'ind',t:'企业Agent部署加速',d:'Gartner预测40%企业应用嵌入Agent',imp:'高'},
+    {id:'i2',tp:'ind',t:'Agent工具市场爆发',d:'LangChain/AutoGen生态快速扩张',imp:'中'},
+    {id:'s1',tp:'stk',t:'SaaS厂商转型Agent',d:'传统SaaS估值逻辑重构',imp:'高'},
+    {id:'s2',tp:'stk',t:'RPA厂商替换风险',d:'传统RPA面临Agent技术替代',imp:'中'},
+  ],edges:[['p1','i1'],['i1','i2'],['i1','s1'],['i2','s1'],['i2','s2']]},
+};
+
+function renderChain(){
+  const scn=document.getElementById('chainScn')?.value||'policy';
+  const data=CHAINS[scn];if(!data)return;
+  window._cnodes={};data.nodes.forEach(n=>{window._cnodes[n.id]=n});
+  const c=document.getElementById('chainBody');
+  const pols=data.nodes.filter(n=>n.tp==='pol');
+  const inds=data.nodes.filter(n=>n.tp==='ind');
+  const stks=data.nodes.filter(n=>n.tp==='stk');
+  let h='<div class="brc">';
+  pols.forEach(n=>{h+='<div class="cn pol" onclick="showCD(\''+n.id+'\')"><div class="nt">'+esc(n.t)+'</div><div class="nd">'+esc(n.d)+'</div></div>'});
+  h+='</div><div class="arr"></div><div class="brs">';
+  inds.forEach(n=>{h+='<div class="brc"><div class="cn ind" onclick="showCD(\''+n.id+'\')"><div class="nt">'+esc(n.t)+'</div><div class="nd">'+esc(n.d)+'</div></div></div>'});
+  h+='</div><div class="arr"></div><div class="brs">';
+  stks.forEach(n=>{h+='<div class="brc"><div class="cn stk" onclick="showCD(\''+n.id+'\')"><div class="nt">'+esc(n.t)+'</div><div class="nd">'+esc(n.d)+'</div></div></div>'});
+  h+='</div>';
+  c.innerHTML=h;
+  document.getElementById('chainDetail').style.display='none';
+}
+
+function showCD(id){
+  const n=window._cnodes?.[id];if(!n)return;
+  document.getElementById('cdTitle').textContent=n.t;
+  document.getElementById('cdDesc').textContent=n.d;
+  const clr=n.imp==='高'?'#ef4444':n.imp==='中'?'#f59e0b':'#10b981';
+  document.getElementById('cdImpact').innerHTML='<span style="color:'+clr+';font-weight:600">影响力度: '+n.imp+'</span>';
+  document.getElementById('chainDetail').style.display='block';
+}
+
+function renderPrice(){
+  const rows=[
+    ['xAI','Grok 4.1','$0.20','$0.50','-','最便宜前沿模型'],
+    ['DeepSeek','V3.2','$0.27','$1.10','1M+','100万上下文性价比之王'],
+    ['OpenAI','o4-mini','$1.10','$4.40','-',''],
+    ['Google','Gemini 3.1 Pro','~$1.25','~$10.00','2M','推理翻倍价格不变'],
+    ['OpenAI','GPT-5','$1.25','$10.00','400K',''],
+    ['Anthropic','Sonnet 4.6','$3.00','$15.00','1M','中端逆袭逼近Opus'],
+    ['Anthropic','Opus 4.6','$15.00','$75.00','200K','最贵旗舰'],
+  ];
+  document.getElementById('priceTbl').innerHTML=
+    '<thead><tr><th>厂商</th><th>模型</th><th>输入 $/M tok</th><th>输出 $/M tok</th><th>上下文</th><th>备注</th></tr></thead>'+
+    '<tbody>'+rows.map(r=>{
+      const ic=r[2].startsWith('$0.')||r[2].startsWith('~$1')?'hi':'';
+      const oc=r[3].startsWith('$0.')?'hi':r[3].includes('75')?'wa':'';
+      return '<tr><td>'+r[0]+'</td><td>'+r[1]+'</td><td class="'+ic+'">'+r[2]+'</td><td class="'+oc+'">'+r[3]+'</td><td>'+r[4]+'</td><td>'+r[5]+'</td></tr>';
+    }).join('')+'</tbody>';
+}
+
+function renderTrends(){
+  const trends=[
+    {sig:'bull',label:'强烈看多',title:'AI Agent 从概念走向企业规模化部署',desc:'Gartner预测40%企业应用将嵌入Agent。字节上线Agent Plan统一计量，Kimi实现网页直接操作。'},
+    {sig:'bull',label:'看多',title:'开源模型性价比碾压闭源',desc:'DeepSeek V4成本仅为GPT-5的1/30。企业AI经济模型被彻底重塑。'},
+    {sig:'bull',label:'看多',title:'中国AI调用量全球领跑，产业链自主突破',desc:'GLM-5完全基于华为昇腾训练，零美国硬件依赖。国产芯片份额攀升至41%。'},
+    {sig:'neu',label:'中性偏多',title:'企业端爆发 vs 个人端涨价',desc:'阿里云API调用量增长超10倍，但个人用户端涨价潮涌现，行业从流量争夺转向价值收割。'},
+    {sig:'bear',label:'风险信号',title:'AI电力危机: 物理基础设施成最大瓶颈',desc:'美国约一半计划数据中心项目因电力短缺推迟或取消。Gartner预计2027年40%受电力限制。'},
+    {sig:'bear',label:'风险信号',title:'资本市场情绪转变: 机构资金流出',desc:'尽管AI融资创纪录，机构资金二季度起持续流出。成本回收压力增大。'},
+  ];
+  document.getElementById('trendGrid').innerHTML=trends.map(t=>
+    '<div class="tc '+t.sig+'"><span class="sig '+t.sig+'">'+t.label+'</span>'+
+    '<h3>'+esc(t.title)+'</h3>'+
+    '<p style="font-size:.82rem;color:var(--txd)">'+esc(t.desc)+'</p></div>'
+  ).join('');
+}
+
+function renderTimeline(){
+  const tl=[...ALL].sort((a,b)=>(b.published||'').localeCompare(a.published||''));
+  document.getElementById('tlBody').innerHTML=tl.slice(0,15).map(a=>
+    '<div class="ti"><div class="tdt">'+(a.published||'').substring(0,16)+'</div>'+
+    '<h4>'+esc(a.title)+'</h4>'+
+    '<p>'+esc(a.summary||'')+'</p></div>'
+  ).join('');
+}
+
+function renderDashboard(arts){
+  const bull=arts.filter(a=>(a.sentiment||{}).type==='bull').length;
+  const bear=arts.filter(a=>(a.sentiment||{}).type==='bear').length;
+  const neu=arts.length-bull-bear;
+  const total=arts.length||1;
+  const china=arts.filter(a=>(a.tags||[]).includes('中国动态')).length;
+  const glb=arts.length-china;
+  document.getElementById('dashGrid').innerHTML=
+    '<div class="dc"><h3>情感分布</h3><div class="don"><svg width="110" height="110" id="donutSVG"></svg><div class="dl"><div class="dli"><div class="dld" style="background:#10b981"></div>利好 '+Math.round(bull/total*100)+'%</div><div class="dli"><div class="dld" style="background:#f59e0b"></div>中性 '+Math.round(neu/total*100)+'%</div><div class="dli"><div class="dld" style="background:#ef4444"></div>利空 '+Math.round(bear/total*100)+'%</div></div></div></div>'+
+    '<div class="dc"><h3>核心指标</h3><div style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px">'+kpiT('$6.5T','年度资本开支','+18%','g')+kpiT('40%','Agent渗透率','+12%','g')+kpiT('10x','API调用增长','+150%','g')+kpiT('41%','国产芯片份额','+8%','g')+'</div></div>'+
+    '<div class="dc"><h3>数据来源分布</h3><div class="mb">'+srcBars(arts)+'</div></div>'+
+    '<div class="dc"><h3>中国 vs 全球</h3><div class="mb"><div class="mbg"><div class="mbar" style="height:'+Math.round(china/Math.max(arts.length,1)*100)+'%;background:linear-gradient(0deg,#3b82f6,#60a5fa)"></div><div class="ml">中国 '+china+'</div></div><div class="mbg"><div class="mbar" style="height:'+Math.round(glb/Math.max(arts.length,1)*100)+'%;background:linear-gradient(0deg,#8b5cf6,#a78bfa)"></div><div class="ml">全球 '+glb+'</div></div></div><div style="display:flex;gap:12px;font-size:.68rem;color:var(--txd);margin-top:6px"><span><span style="display:inline-block;width:8px;height:8px;border-radius:2px;background:#3b82f6"></span> 中国</span><span><span style="display:inline-block;width:8px;height:8px;border-radius:2px;background:#8b5cf6"></span> 全球</span></div></div>'+
+    '<div class="dc"><h3>高频关键词</h3><div class="wc">'+wc(arts)+'</div></div>'+
+    '<div class="dc"><h3>话题标签分布</h3><div class="mb">'+tagBars(arts)+'</div></div>';
+  drawDonut(bull,neu,bear,total);
+}
+
+function drawDonut(b,n,t,total){
+  const svg=document.getElementById('donutSVG');if(!svg)return;
+  const r=45,cx=55,cy=55;
+  if(total<1)total=1;
+  const slices=[{pct:b/total,c:'#10b981'},{pct:n/total,c:'#f59e0b'},{pct:t/total,c:'#ef4444'}];
+  let angle=-90,pth='';
+  slices.forEach(s=>{
+    if(s.pct<0.005)return;
+    const da=s.pct*360,r1=angle*Math.PI/180,r2=(angle+da)*Math.PI/180;
+    const x1=cx+r*Math.cos(r1),y1=cy+r*Math.sin(r1);
+    const x2=cx+r*Math.cos(r2),y2=cy+r*Math.sin(r2);
+    const la=da>180?1:0;
+    pth+='<path d="M '+cx+','+cy+' L '+x1.toFixed(1)+','+y1.toFixed(1)+' A '+r+','+r+' 0 '+la+',1 '+x2.toFixed(1)+','+y2.toFixed(1)+' Z" fill="'+s.c+'" opacity="0.85"/>';
+    angle+=da;
+  });
+  pth+='<circle cx="'+cx+'" cy="'+cy+'" r="20" fill="#111827"/>';
+  pth+='<text x="'+cx+'" y="'+(cy+3)+'" text-anchor="middle" fill="#e2e8f0" font-size="11" font-weight="700">'+total+'</text>';
+  svg.innerHTML=pth;
+}
+
+function kpiT(val,lbl,delta,clr){
+  return '<div style="background:rgba(15,23,42,0.6);border-radius:8px;padding:10px;text-align:center"><div style="font-size:1.2rem;font-weight:700;color:'+(clr==='g'?'#10b981':'#ef4444')+'">'+val+'</div><div style="font-size:.68rem;color:var(--txd)">'+lbl+'</div><div style="font-size:.68rem;color:'+(clr==='g'?'#10b981':'#ef4444')+'">'+delta+'</div></div>';
+}
+
+function srcBars(arts){
+  const count={};arts.forEach(a=>{count[a.source]=(count[a.source]||0)+1});
+  const entries=Object.entries(count).sort((a,b)=>b[1]-a[1]).slice(0,6);
+  const max=Math.max(...entries.map(e=>e[1]),1);
+  return entries.map(([s,c])=>'<div class="mbg"><div class="mbar" style="height:'+Math.round(c/max*100)+'%;background:linear-gradient(0deg,#3b82f6,#8b5cf6)" title="'+esc(s)+': '+c+'"></div><div class="ml">'+(s.substring(0,5))+'</div></div>').join('');
+}
+
+function tagBars(arts){
+  const count={};arts.forEach(a=>{(a.tags||[]).forEach(t=>{count[t]=(count[t]||0)+1})});
+  const entries=Object.entries(count).sort((a,b)=>b[1]-a[1]).slice(0,6);
+  const max=Math.max(...entries.map(e=>e[1]),1);
+  return entries.map(([t,c])=>'<div class="mbg"><div class="mbar" style="height:'+Math.round(c/max*100)+'%;background:linear-gradient(0deg,#06b6d4,#8b5cf6)" title="'+esc(t)+': '+c+'"></div><div class="ml">'+t+'</div></div>').join('');
+}
+
+function wc(arts){
+  const freq={};
+  const words=['AI','Agent','大模型','芯片','融资','开源','算力','DeepSeek','OpenAI','Google','Claude','监管','百度','阿里','数据中心'];
+  words.forEach((w,i)=>{
+    let cnt=0;arts.forEach(a=>{if((a.title+a.summary).toLowerCase().includes(w.toLowerCase()))cnt++});
+    freq[w]=cnt||1;
+  });
+  const max=Math.max(...Object.values(freq),1);
+  const colors=['#3b82f6','#8b5cf6','#06b6d4','#10b981','#f59e0b','#ec4899','#f97316'];
+  return Object.entries(freq).sort((a,b)=>b[1]-a[1]).map(([w,c],i)=>
+    '<span style="font-size:'+(0.7+(c/max)*1.2)+'rem;color:'+colors[i%colors.length]+';font-weight:'+(c>max*.6?'700':'400')+';opacity:.85">'+w+'</span>'
+  ).join(' ');
+}
+
+function renderCompare(){
+  const grid=document.getElementById('compareGrid');
+  if(!LW||!LW.length){
+    grid.innerHTML='<div class="cg-card" style="grid-column:1/-1;text-align:center;color:var(--txd)">暂无上周数据，请将上周数据保存为 <code>ai_weekly_last.json</code> 以启用周度对比功能。</div>';
+    return;
+  }
+  const cur=ALL;
+  const lw=LW;
+  const curBull=cur.filter(a=>(a.sentiment||{}).type==='bull').length;
+  const lastBull=lw.filter(a=>(a.sentiment||{}).type==='bull').length;
+  const curBear=cur.filter(a=>(a.sentiment||{}).type==='bear').length;
+  const lastBear=lw.filter(a=>(a.sentiment||{}).type==='bear').length;
+  const curTags={};(cur||[]).forEach(a=>(a.tags||[]).forEach(t=>{curTags[t]=(curTags[t]||0)+1}));
+  const lastTags={};(lw||[]).forEach(a=>(a.tags||[]).forEach(t=>{lastTags[t]=(lastTags[t]||0)+1}));
+  const allTags=[...new Set([...Object.keys(curTags),...Object.keys(lastTags)])];
+  const topTags=allTags.sort((a,b)=>(curTags[b]||0)-(curTags[a]||0)).slice(0,6);
+  let barsHtml='';
+  topTags.forEach(t=>{
+    const c=curTags[t]||0,l=lastTags[t]||0,mx=Math.max(c,l,1);
+    barsHtml+='<div class="cbar"><span class="lb">'+esc(t)+'</span><div class="bw"><div class="bf" style="width:'+(c/mx*100)+'%;background:#3b82f6"></div></div><span class="pct" style="color:#3b82f6">'+c+'</span><div class="bw" style="margin-left:4px"><div class="bf" style="width:'+(l/mx*100)+'%;background:#8b5cf6;opacity:.6"></div></div><span class="pct" style="color:#8b5cf6">'+l+'</span></div>';
+  });
+  grid.innerHTML=
+    '<div class="cg-card"><h4>情感分布变化</h4>'+
+    '<div class="cbar"><span class="lb">利好</span><div class="bw"><div class="bf" style="width:'+Math.min(curBull/Math.max(cur.length,1)*100,100)+'%;background:#10b981"></div></div><span class="pct">'+curBull+'</span><div class="bw" style="margin-left:4px"><div class="bf" style="width:'+Math.min(lastBull/Math.max(lw.length,1)*100,100)+'%;background:#10b981;opacity:.5"></div></div><span class="pct">'+lastBull+'</span></div>'+
+    '<div class="cbar"><span class="lb">利空</span><div class="bw"><div class="bf" style="width:'+Math.min(curBear/Math.max(cur.length,1)*100,100)+'%;background:#ef4444"></div></div><span class="pct">'+curBear+'</span><div class="bw" style="margin-left:4px"><div class="bf" style="width:'+Math.min(lastBear/Math.max(lw.length,1)*100,100)+'%;background:#ef4444;opacity:.5"></div></div><span class="pct">'+lastBear+'</span></div>'+
+    '<div style="font-size:.68rem;color:var(--txd);margin-top:8px">■ 本周 &nbsp; □ 上周</div></div>'+
+    '<div class="cg-card"><h4>话题热度变化</h4>'+barsHtml+'<div style="font-size:.68rem;color:var(--txd);margin-top:8px">■ 本周 &nbsp; □ 上周</div></div>'+
+    '<div class="cg-card"><h4>周度摘要</h4>'+
+    '<div style="font-size:.82rem;color:var(--txd);line-height:1.8">'+
+    '<div>本周新闻: <span style="color:var(--txb)">'+cur.length+'</span> 条 (上周: '+lw.length+' 条)</div>'+
+    '<div>利好信号: <span style="color:#10b981">'+curBull+'</span> (上周: '+lastBull+') <span style="color:'+(curBull>=lastBull?'#10b981':'#ef4444')+'">'+((curBull>=lastBull?'↑':'↓'))+Math.abs(curBull-lastBull)+'</span></div>'+
+    '<div>利空信号: <span style="color:#ef4444">'+curBear+'</span> (上周: '+lastBear+') <span style="color:'+(curBear<=lastBear?'#10b981':'#ef4444')+'">'+((curBear<=lastBear?'↓':'↑'))+Math.abs(curBear-lastBear)+'</span></div>'+
+    '</div></div>';
+}
+
+function renderAll(){
+  const arts=filterArticles();
+  renderKPI(arts);
+  renderNews(arts);
+  renderSentiment(arts);
+  renderChain();
+  renderPrice();
+  renderTrends();
+  renderTimeline();
+  renderDashboard(arts);
+}
+
+function addWL(type){
+  const el=document.getElementById(type==='company'?'wlComp':'wlTopic');
+  const v=(el?.value||'').trim();if(!v)return;
+  if(type==='company'&&!WL.companies.includes(v))WL.companies.push(v);
+  if(type==='topic'&&!WL.topics.includes(v))WL.topics.push(v);
+  el.value='';saveWL();renderWLChips();
+}
+function remWL(type,idx){if(type==='company')WL.companies.splice(idx,1);else WL.topics.splice(idx,1);saveWL();renderWLChips()}
+function saveWL(){try{localStorage.setItem('aiwl',JSON.stringify(WL))}catch(e){}}
+function loadWL(){try{const s=localStorage.getItem('aiwl');if(s)WL=JSON.parse(s)}catch(e){}}
+function renderWLChips(){
+  document.getElementById('wlChips').innerHTML=
+    WL.companies.map((c,i)=>'<span class="wchip">'+esc(c)+' <span class="r" onclick="remWL(\'company\','+i+')">x</span></span>').join('')+
+    WL.topics.map((t,i)=>'<span class="wchip">'+esc(t)+' <span class="r" onclick="remWL(\'topic\','+i+')">x</span></span>').join('');
+}
+function applyWatchlist(){
+  applyHighlight(FIL.length?FIL:ALL);
+  closeModal('wlModal');
+}
+function applyHighlight(arts){
+  const kws=[...WL.companies,...WL.topics];
+  if(kws.length<1)return;
+  const pat=kws.map(k=>k.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')).join('|');
+  const re=new RegExp('('+pat+')','gi');
+  document.querySelectorAll('#newsGrid .card h3, #newsGrid .card p').forEach(el=>{
+    if(el.innerHTML.length<600)el.innerHTML=el.textContent.replace(re,'<mark class="hl">$1</mark>');
+  });
+}
+
+function doExport(){
+  const fmt=document.getElementById('expFmt')?.value||'html';
+  const st=document.getElementById('expStatus');
+  if(fmt==='json'){
+    const blob=new Blob([JSON.stringify(ALL,null,2)],{type:'application/json'});
+    const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='ai_weekly_report.json';a.click();
+    if(st)st.innerHTML='JSON 文件已下载';
+  }else if(fmt==='print'){
+    window.print();
+    if(st)st.innerHTML='已打开打印对话框 (可另存为PDF)';
+  }else{
+    const clone=document.documentElement.outerHTML;
+    const blob=new Blob(['<!DOCTYPE html>\n'+clone],{type:'text/html'});
+    const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='ai_weekly_report.html';a.click();
+    if(st)st.innerHTML='HTML 文件已下载';
+  }
+}
+
+function saveEmailConfig(){
+  const cfg={to:document.getElementById('emailTo')?.value||'',host:document.getElementById('smtpHost')?.value||'',port:document.getElementById('smtpPort')?.value||'587',from:document.getElementById('emailFrom')?.value||'',time:document.getElementById('emailTime')?.value||'mon-08'};
+  try{localStorage.setItem('emailCfg',JSON.stringify(cfg))}catch(e){}
+  const st=document.getElementById('emailStatus');
+  if(st)st.innerHTML='<span style="color:#10b981">配置已保存到本地 (后端集成需部署 Python 邮件服务)</span>';
+}
+function loadEmailConfig(){
+  try{
+    const s=localStorage.getItem('emailCfg');if(!s)return;
+    const cfg=JSON.parse(s);
+    if(cfg.to)document.getElementById('emailTo').value=cfg.to;
+    if(cfg.host)document.getElementById('smtpHost').value=cfg.host;
+    if(cfg.port)document.getElementById('smtpPort').value=cfg.port;
+    if(cfg.from)document.getElementById('emailFrom').value=cfg.from;
+    if(cfg.time)document.getElementById('emailTime').value=cfg.time;
+  }catch(e){}
+}
+
+function openModal(id){document.getElementById(id).classList.add('show');if(id==='emailModal')loadEmailConfig()}
+function closeModal(id){document.getElementById(id).classList.remove('show')}
+
+// 检测翻译代理是否可用
+async function checkProxyStatus() {
+  try {
+    const r = await fetch(TRANSLATE_PROXY.replace('/translate','/health'), { signal: AbortSignal.timeout(3000) });
+    if (r.ok) {
+      const batchBtn = document.getElementById('btnBatchTranslate');
+      if (batchBtn) { batchBtn.title = '翻译代理已连接'; batchBtn.style.opacity = '1'; }
+      return true;
+    }
+  } catch(e) {}
+  // 代理不可用 - 视觉提示
+  const batchBtn = document.getElementById('btnBatchTranslate');
+  if (batchBtn) { batchBtn.title = '翻译代理未启动，请运行 translate_proxy.js'; batchBtn.style.opacity = '0.5'; }
+  const sb = document.getElementById('sb');
+  if (sb) sb.innerHTML += ' <span style="color:#f59e0b;font-size:.68rem">| 翻译代理未连接</span>';
+  return false;
+}
+
+document.addEventListener('DOMContentLoaded',()=>{
+  loadWL();loadEmailConfig();loadData(false);
+  setTimeout(checkProxyStatus, 500);
+});
+</script>
+
+<!-- 翻译功能：使用本地代理服务器（绕过 translate.googleapis.com 在中国大陆被屏蔽的问题） -->
+<script>
+const TRANSLATE_PROXY = 'http://localhost:3456/translate';
+let translateCache = {};
+
+async function translateText(text, targetLang) {
+  if (!text || text.length < 5) return text;
+  const cacheKey = targetLang + '|' + text.substring(0, 80);
+  if (translateCache[cacheKey]) return translateCache[cacheKey];
+  
+  // 使用本地翻译代理（支持 Google / MyMemory 双重备选）
+  const url = TRANSLATE_PROXY + '?text=' + encodeURIComponent(text.substring(0, 4000)) + '&tl=' + targetLang + '&sl=auto';
+  try {
+    const r = await fetch(url, { signal: AbortSignal.timeout(15000) });
+    const d = await r.json();
+    const result = d.translatedText || text;
+    if (result && !d.error) {
+      translateCache[cacheKey] = result;
+    }
+    return result;
+  } catch(e) {
+    console.warn('翻译代理不可用，请确保 translate_proxy.js 已启动:', e.message);
+    return text;  // 翻译失败返回原文
+  }
+}
+
+async function translateArticle(btn, articleId) {
+  const card = btn.closest('.card');
+  if (!card) return;
+  const h3 = card.querySelector('h3');
+  const p  = card.querySelector('p');
+  if (!h3) return;
+
+  btn.disabled = true;
+  btn.textContent = '翻译中...';
+
+  const isChinese = /[一-鿿]/.test(h3.textContent);
+  const targetLang = isChinese ? 'en' : 'zh-CN';
+
+  const [tTitle, tSummary] = await Promise.all([
+    translateText(h3.textContent, targetLang),
+    p ? translateText(p.textContent, targetLang) : ''
+  ]);
+
+  if (!card.dataset.origTitle) {
+    card.dataset.origTitle = h3.textContent;
+    card.dataset.origSummary = p ? p.textContent : '';
+  }
+  h3.textContent = tTitle;
+  if (p) p.textContent = tSummary;
+
+  btn.textContent = '显示原文';
+  btn.classList.add('active-trans');
+  btn.onclick = () => restoreArticle(btn, articleId);
+  btn.disabled = false;
+}
+
+function restoreArticle(btn, articleId) {
+  const card = btn.closest('.card');
+  if (!card || !card.dataset.origTitle) return;
+  const h3 = card.querySelector('h3');
+  const p  = card.querySelector('p');
+  h3.textContent = card.dataset.origTitle;
+  if (p) p.textContent = card.dataset.origSummary;
+  btn.textContent = '翻译';
+  btn.classList.remove('active-trans');
+  btn.onclick = () => translateArticle(btn, articleId);
+}
+
+/* 批量翻译当前可见新闻 */
+let batchTranslating = false;
+async function translateVisible() {
+  if (batchTranslating) return;
+  batchTranslating = true;
+  const btn = document.getElementById('btnBatchTranslate');
+  if (btn) { btn.disabled = true; btn.textContent = '批量翻译中...'; }
+  const cards = document.querySelectorAll('#newsGrid .card');
+  for (const card of cards) {
+    const b = card.querySelector('.btn-trans');
+    if (b && !b.classList.contains('active-trans')) {
+      await translateArticle(b, 0);
+      await new Promise(r => setTimeout(r, 300));  // 节流
+    }
+  }
+  if (btn) { btn.disabled = false; btn.textContent = '批量翻译'; }
+  batchTranslating = false;
+}
+
+/* 初始化：给每张卡片加翻译按钮 */
+function initTranslateButtons() {
+  document.querySelectorAll('#newsGrid .card').forEach((card, i) => {
+    if (card.querySelector('.btn-trans')) return;  // 已添加
+    const meta = card.querySelector('.meta');
+    if (!meta) return;
+    const btn = document.createElement('button');
+    btn.className = 'btn-trans';
+    btn.textContent = '翻译';
+    btn.style.cssText = 'margin-left:8px;padding:2px 10px;border-radius:6px;border:1px solid rgba(59,130,246,0.4);background:rgba(59,130,246,0.1);color:#93c5fd;font-size:.72rem;cursor:pointer';
+    btn.onclick = () => translateArticle(btn, i);
+    meta.appendChild(btn);
+  });
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,2487 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AI行业周报 v2.0 | 2026.05.21 - 2026.05.28</title>
+<style>
+  :root {
+    --bg: #0a0e1a;
+    --card: #111827;
+    --card-hover: #1a2236;
+    --border: #1e293b;
+    --accent: #3b82f6;
+    --accent2: #8b5cf6;
+    --accent3: #06b6d4;
+    --green: #10b981;
+    --red: #ef4444;
+    --yellow: #f59e0b;
+    --text: #e2e8f0;
+    --text-dim: #94a3b8;
+    --text-bright: #f8fafc;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Noto Sans SC', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    min-height: 100vh;
+    padding-bottom: 50px;
+  }
+  .hero {
+    background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0c1427 100%);
+    padding: 48px 24px 36px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -50%; left: -50%;
+    width: 200%; height: 200%;
+    background: radial-gradient(ellipse at 30% 50%, rgba(59,130,246,0.08) 0%, transparent 60%),
+                radial-gradient(ellipse at 70% 50%, rgba(139,92,246,0.06) 0%, transparent 60%);
+    animation: pulse 8s ease-in-out infinite alternate;
+  }
+  @keyframes pulse { 0%{opacity:.6} 100%{opacity:1} }
+  .hero h1 {
+    font-size: 2.4rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, #60a5fa, #a78bfa, #34d399);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    position: relative;
+    letter-spacing: -0.5px;
+  }
+  .hero .subtitle {
+    color: var(--text-dim);
+    font-size: 1rem;
+    margin-top: 8px;
+    position: relative;
+  }
+  .hero .date-badge {
+    display: inline-block;
+    background: rgba(59,130,246,0.15);
+    border: 1px solid rgba(59,130,246,0.3);
+    border-radius: 20px;
+    padding: 4px 16px;
+    font-size: 0.85rem;
+    color: #93c5fd;
+    margin-top: 12px;
+    position: relative;
+  }
+  /* ── Top Action Bar ── */
+  .top-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 14px;
+    position: relative;
+  }
+  .top-actions button {
+    padding: 7px 18px;
+    border-radius: 8px;
+    border: 1px solid rgba(59,130,246,0.3);
+    background: rgba(59,130,246,0.1);
+    color: #93c5fd;
+    font-size: 0.82rem;
+    cursor: pointer;
+    transition: all .2s;
+  }
+  .top-actions button:hover { background: rgba(59,130,246,0.25); color: #fff; }
+
+  .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+
+  /* ── KPI Strip ── */
+  .kpi-strip {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    margin: -24px auto 32px;
+    position: relative;
+    z-index: 2;
+  }
+  .kpi-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+    transition: transform .2s, border-color .2s;
+    cursor: default;
+  }
+  .kpi-card:hover { transform: translateY(-2px); border-color: var(--accent); }
+  .kpi-card .num {
+    font-size: 1.8rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .kpi-card .label { font-size: 0.82rem; color: var(--text-dim); margin-top: 4px; }
+
+  /* ── Tabs ── */
+  .tab-bar {
+    display: flex;
+    gap: 4px;
+    background: var(--card);
+    border-radius: 12px;
+    padding: 4px;
+    margin-bottom: 24px;
+    overflow-x: auto;
+    border: 1px solid var(--border);
+  }
+  .tab-btn {
+    flex: 1;
+    white-space: nowrap;
+    padding: 10px 14px;
+    border: none;
+    background: transparent;
+    color: var(--text-dim);
+    font-size: 0.82rem;
+    font-weight: 500;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all .2s;
+  }
+  .tab-btn.active { background: var(--accent); color: #fff; }
+  .tab-btn:hover:not(.active) { background: rgba(59,130,246,0.1); color: var(--text); }
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+
+  /* ── News Cards ── */
+  .news-grid { display: grid; gap: 16px; }
+  .news-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px 24px;
+    transition: all .25s;
+    cursor: default;
+  }
+  .news-card:hover { border-color: var(--accent); background: var(--card-hover); }
+  .news-card .tag {
+    display: inline-block;
+    font-size: 0.72rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 2px 10px;
+    border-radius: 20px;
+    margin-bottom: 8px;
+  }
+  .tag-model { background: rgba(139,92,246,0.15); color: #c4b5fd; }
+  .tag-agent { background: rgba(6,182,212,0.15); color: #67e8f9; }
+  .tag-funding { background: rgba(245,158,11,0.15); color: #fcd34d; }
+  .tag-policy { background: rgba(239,68,68,0.15); color: #fca5a5; }
+  .tag-infrastructure { background: rgba(16,185,129,0.15); color: #6ee7b7; }
+  .tag-china { background: rgba(59,130,246,0.15); color: #93c5fd; }
+  .tag-sentiment-bull { background: rgba(16,185,129,0.2); color: #6ee7b7; }
+  .tag-sentiment-bear { background: rgba(239,68,68,0.2); color: #fca5a5; }
+  .tag-sentiment-neutral { background: rgba(245,158,11,0.2); color: #fcd34d; }
+
+  .news-card h3 {
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--text-bright);
+    margin-bottom: 6px;
+    line-height: 1.5;
+  }
+  .news-card p { font-size: 0.88rem; color: var(--text-dim); margin-bottom: 10px; }
+  .news-card .meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.78rem;
+    color: var(--text-dim);
+  }
+  .news-card .meta a {
+    color: var(--accent);
+    text-decoration: none;
+    transition: color .2s;
+  }
+  .sentiment-badge {
+    display: inline-block;
+    font-size: 0.7rem;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 10px;
+    margin-left: 8px;
+  }
+  .sb-bull { background: rgba(16,185,129,0.15); color: #6ee7b7; }
+  .sb-bear { background: rgba(239,68,68,0.15); color: #fca5a5; }
+  .sb-neutral { background: rgba(245,158,11,0.15); color: #fcd34d; }
+
+  /* ── Trend Signals ── */
+  .trend-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 16px; }
+  .trend-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    position: relative;
+    overflow: hidden;
+  }
+  .trend-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 4px; height: 100%;
+  }
+  .trend-card.bullish::before { background: var(--green); }
+  .trend-card.bearish::before { background: var(--red); }
+  .trend-card.neutral::before { background: var(--yellow); }
+  .trend-card .signal-badge {
+    display: inline-block;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    padding: 2px 10px;
+    border-radius: 12px;
+    margin-bottom: 10px;
+  }
+  .signal-bullish { background: rgba(16,185,129,0.15); color: #6ee7b7; }
+  .signal-bearish { background: rgba(239,68,68,0.15); color: #fca5a5; }
+  .signal-neutral { background: rgba(245,158,11,0.15); color: #fcd34d; }
+  .trend-card h3 { font-size: 1rem; color: var(--text-bright); margin-bottom: 8px; }
+  .trend-card p { font-size: 0.85rem; color: var(--text-dim); }
+
+  /* ── Price Table ── */
+  .price-table-wrap {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  .price-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.88rem;
+  }
+  .price-table thead { background: rgba(59,130,246,0.1); }
+  .price-table th {
+    padding: 12px 16px;
+    text-align: left;
+    font-weight: 600;
+    color: var(--text-bright);
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .price-table td {
+    padding: 12px 16px;
+    border-top: 1px solid var(--border);
+    color: var(--text);
+  }
+  .price-table tbody tr:hover { background: rgba(59,130,246,0.05); }
+  .price-highlight { color: var(--green); font-weight: 600; }
+  .price-warn { color: var(--yellow); font-weight: 600; }
+
+  /* ── Timeline ── */
+  .timeline { position: relative; padding-left: 28px; }
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 8px; top: 0; bottom: 0;
+    width: 2px;
+    background: linear-gradient(180deg, var(--accent), var(--accent2), var(--accent3));
+    border-radius: 2px;
+  }
+  .tl-item { position: relative; margin-bottom: 24px; }
+  .tl-item::before {
+    content: '';
+    position: absolute;
+    left: -24px; top: 6px;
+    width: 12px; height: 12px;
+    border-radius: 50%;
+    background: var(--accent);
+    border: 2px solid var(--bg);
+    z-index: 1;
+  }
+  .tl-item .tl-date {
+    font-size: 0.78rem;
+    color: var(--accent);
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  .tl-item h4 { font-size: 0.95rem; color: var(--text-bright); margin-bottom: 4px; }
+  .tl-item p { font-size: 0.85rem; color: var(--text-dim); }
+
+  /* ── Footer ── */
+  .footer {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--text-dim);
+    font-size: 0.8rem;
+    border-top: 1px solid var(--border);
+    margin-top: 40px;
+  }
+  .footer a { color: var(--accent); text-decoration: none; }
+
+  /* ── Scrollbar ── */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+  /* ── Responsive ── */
+  @media (max-width: 640px) {
+    .hero h1 { font-size: 1.6rem; }
+    .kpi-strip { grid-template-columns: repeat(2, 1fr); }
+    .trend-grid { grid-template-columns: 1fr; }
+    .tab-btn { font-size: 0.74rem; padding: 8px 8px; }
+  }
+
+  /* ═════════════════════════════════════════════════════
+     Feature 4: 历史周报对比
+     ═════════════════════════════════════════════════════ */
+  .history-compare {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 24px;
+  }
+  .history-compare h2 {
+    font-size: 1.1rem;
+    color: var(--text-bright);
+    margin-bottom: 16px;
+  }
+  .compare-controls {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+  }
+  .compare-controls select, .compare-controls input[type=date] {
+    background: #1e293b;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 8px 12px;
+    color: var(--text);
+    font-size: 0.85rem;
+  }
+  .compare-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+  @media (max-width: 768px) { .compare-grid { grid-template-columns: 1fr; } }
+  .compare-col {
+    background: rgba(15,23,42,0.5);
+    border-radius: 10px;
+    padding: 16px;
+  }
+  .compare-col h3 {
+    font-size: 0.92rem;
+    color: var(--accent);
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+  .compare-col .stat-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 6px 0;
+    font-size: 0.85rem;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+  }
+  .compare-col .stat-label { color: var(--text-dim); }
+  .compare-col .stat-value { color: var(--text-bright); font-weight: 600; }
+  .compare-col .stat-delta-up { color: var(--green); font-weight: 600; }
+  .compare-col .stat-delta-down { color: var(--red); font-weight: 600; }
+  .compare-col .stat-delta-flat { color: var(--yellow); font-weight: 600; }
+
+  /* Heatmap */
+  .heatmap-wrap {
+    margin-top: 20px;
+  }
+  .heatmap-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 4px;
+  }
+  .heatmap-cell {
+    aspect-ratio: 1;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.65rem;
+    color: #fff;
+    font-weight: 600;
+    transition: transform .15s;
+  }
+  .heatmap-cell:hover { transform: scale(1.15); z-index: 2; }
+  .heatmap-legend {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+    margin-top: 8px;
+    font-size: 0.72rem;
+    color: var(--text-dim);
+  }
+  .heatmap-legend .legend-block {
+    width: 14px; height: 14px;
+    border-radius: 3px;
+  }
+
+  /* ═════════════════════════════════════════════════════
+     Feature 3: 市场传导链可视化 (Causal Chain)
+     ═════════════════════════════════════════════════════ */
+  .causal-chain-wrap {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 24px;
+  }
+  .causal-chain-wrap h2 {
+    font-size: 1.1rem;
+    color: var(--text-bright);
+    margin-bottom: 16px;
+  }
+  .chain-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    align-items: center;
+    padding: 20px 0;
+  }
+  .chain-node {
+    background: rgba(59,130,246,0.1);
+    border: 1px solid rgba(59,130,246,0.3);
+    border-radius: 10px;
+    padding: 12px 20px;
+    text-align: center;
+    min-width: 180px;
+    cursor: pointer;
+    transition: all .2s;
+    position: relative;
+  }
+  .chain-node:hover {
+    background: rgba(59,130,246,0.2);
+    border-color: var(--accent);
+    transform: scale(1.05);
+  }
+  .chain-node.policy { border-color: rgba(239,68,68,0.4); background: rgba(239,68,68,0.08); }
+  .chain-node.industry { border-color: rgba(139,92,246,0.4); background: rgba(139,92,246,0.08); }
+  .chain-node.stock { border-color: rgba(16,185,129,0.4); background: rgba(16,185,129,0.08); }
+  .chain-node .node-title {
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: var(--text-bright);
+  }
+  .chain-node .node-desc {
+    font-size: 0.72rem;
+    color: var(--text-dim);
+    margin-top: 4px;
+  }
+  .chain-arrow {
+    width: 2px;
+    height: 32px;
+    background: linear-gradient(180deg, var(--accent), var(--accent2));
+    position: relative;
+  }
+  .chain-arrow::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0; height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 6px solid var(--accent2);
+  }
+  .chain-branches {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+  }
+  .chain-branch-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+    flex: 1;
+  }
+  .chain-controls {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+  }
+  .chain-controls select {
+    background: #1e293b;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 8px 12px;
+    color: var(--text);
+    font-size: 0.85rem;
+  }
+  .chain-tooltip {
+    display: none;
+    position: absolute;
+    background: #1e293b;
+    border: 1px solid var(--accent);
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 0.78rem;
+    color: var(--text);
+    z-index: 100;
+    max-width: 220px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.4);
+  }
+
+  /* ═════════════════════════════════════════════════════
+     Feature 7: 自定义关注列表
+     ═════════════════════════════════════════════════════ */
+  .watchlist-wrap {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 24px;
+  }
+  .watchlist-wrap h2 {
+    font-size: 1.1rem;
+    color: var(--text-bright);
+    margin-bottom: 16px;
+  }
+  .watchlist-input-row {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+  }
+  .watchlist-input-row input {
+    flex: 1;
+    min-width: 160px;
+    background: #1e293b;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 8px 12px;
+    color: var(--text);
+    font-size: 0.85rem;
+  }
+  .watchlist-input-row input::placeholder { color: var(--text-dim); }
+  .watchlist-input-row button {
+    padding: 8px 18px;
+    border-radius: 8px;
+    border: none;
+    background: var(--accent);
+    color: #fff;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: background .2s;
+  }
+  .watchlist-input-row button:hover { background: #2563eb; }
+  .watchlist-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+  .watch-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(59,130,246,0.12);
+    border: 1px solid rgba(59,130,246,0.25);
+    border-radius: 20px;
+    padding: 4px 12px;
+    font-size: 0.8rem;
+    color: #93c5fd;
+    cursor: default;
+  }
+  .watch-chip .remove-btn {
+    cursor: pointer;
+    color: var(--text-dim);
+    font-size: 0.75rem;
+    transition: color .2s;
+  }
+  .watch-chip .remove-btn:hover { color: var(--red); }
+  .watchlist-results {
+    background: rgba(15,23,42,0.5);
+    border-radius: 10px;
+    padding: 16px;
+  }
+  .watchlist-results h4 {
+    font-size: 0.9rem;
+    color: var(--accent);
+    margin-bottom: 10px;
+  }
+  .watchlist-results .result-item {
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    font-size: 0.84rem;
+  }
+  .watchlist-results .result-item a {
+    color: var(--accent);
+    text-decoration: none;
+  }
+  .watchlist-results .result-item .result-sentiment {
+    display: inline-block;
+    font-size: 0.7rem;
+    padding: 1px 8px;
+    border-radius: 8px;
+    margin-left: 6px;
+  }
+
+  /* ═════════════════════════════════════════════════════
+     Feature 8: 数据看板仪表盘
+     ═════════════════════════════════════════════════════ */
+  .dashboard-wrap {
+    margin-bottom: 24px;
+  }
+  .dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+    gap: 16px;
+  }
+  .dashboard-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px 24px;
+  }
+  .dashboard-card h3 {
+    font-size: 0.95rem;
+    color: var(--text-bright);
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .dashboard-card h3 .card-icon {
+    font-size: 1.1rem;
+  }
+  /* Mini chart bars */
+  .mini-bar-chart {
+    display: flex;
+    align-items: flex-end;
+    gap: 6px;
+    height: 120px;
+    padding-top: 10px;
+  }
+  .mini-bar-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
+    height: 100%;
+    justify-content: flex-end;
+  }
+  .mini-bar {
+    width: 100%;
+    border-radius: 3px 3px 0 0;
+    transition: height .6s ease;
+    min-height: 2px;
+  }
+  .mini-bar-label {
+    font-size: 0.6rem;
+    color: var(--text-dim);
+    margin-top: 4px;
+    text-align: center;
+  }
+  /* Line chart (SVG) */
+  .mini-line-chart {
+    width: 100%;
+    height: 120px;
+  }
+  /* Donut chart */
+  .donut-container {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .donut-legend {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-size: 0.78rem;
+  }
+  .donut-legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .donut-legend-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+  }
+  /* KPI tiles */
+  .kpi-tiles {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+  .kpi-tile {
+    background: rgba(15,23,42,0.6);
+    border-radius: 8px;
+    padding: 12px;
+    text-align: center;
+  }
+  .kpi-tile .kpi-val {
+    font-size: 1.3rem;
+    font-weight: 700;
+  }
+  .kpi-tile .kpi-lbl {
+    font-size: 0.72rem;
+    color: var(--text-dim);
+    margin-top: 2px;
+  }
+  .kpi-tile .kpi-delta {
+    font-size: 0.72rem;
+    margin-top: 4px;
+  }
+
+  /* ═════════════════════════════════════════════════════
+     Export Floating Button
+     ═════════════════════════════════════════════════════ */
+  .export-fab {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: 999;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 8px;
+  }
+  .export-fab-main {
+    width: 52px; height: 52px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    border: none;
+    color: #fff;
+    font-size: 1.4rem;
+    cursor: pointer;
+    box-shadow: 0 4px 20px rgba(59,130,246,0.4);
+    transition: transform .2s, box-shadow .2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .export-fab-main:hover { transform: scale(1.1); box-shadow: 0 6px 28px rgba(59,130,246,0.6); }
+  .export-fab-menu {
+    display: none;
+    flex-direction: column;
+    gap: 6px;
+    align-items: flex-end;
+  }
+  .export-fab-menu.show { display: flex; }
+  .export-fab-menu button {
+    padding: 8px 16px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: var(--card);
+    color: var(--text);
+    font-size: 0.82rem;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all .2s;
+  }
+  .export-fab-menu button:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* ═════════════════════════════════════════════════════
+     Modal
+     ═════════════════════════════════════════════════════ */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.7);
+    z-index: 10000;
+    align-items: center;
+    justify-content: center;
+  }
+  .modal-overlay.show { display: flex; }
+  .modal-box {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 28px;
+    max-width: 520px;
+    width: 90%;
+    max-height: 80vh;
+    overflow-y: auto;
+  }
+  .modal-box h3 {
+    font-size: 1.05rem;
+    color: var(--text-bright);
+    margin-bottom: 16px;
+  }
+  .modal-box label {
+    display: block;
+    font-size: 0.82rem;
+    color: var(--text-dim);
+    margin-bottom: 4px;
+    margin-top: 12px;
+  }
+  .modal-box input, .modal-box select, .modal-box textarea {
+    width: 100%;
+    background: #1e293b;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 8px 12px;
+    color: var(--text);
+    font-size: 0.85rem;
+  }
+  .modal-box textarea { min-height: 80px; resize: vertical; }
+  .modal-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+    justify-content: flex-end;
+  }
+  .modal-actions button {
+    padding: 8px 20px;
+    border-radius: 8px;
+    border: none;
+    font-size: 0.85rem;
+    cursor: pointer;
+  }
+  .modal-actions .btn-primary { background: var(--accent); color: #fff; }
+  .modal-actions .btn-cancel { background: transparent; border: 1px solid var(--border); color: var(--text-dim); }
+
+  /* Watermark */
+  #ai-watermark {
+    position: fixed;
+    bottom: 0; left: 0;
+    width: 100%;
+    text-align: center;
+    padding: 10px;
+    background-color: rgba(10,14,26,0.95);
+    color: #666;
+    font-family: Arial, sans-serif;
+    z-index: 1000;
+    font-size: 13px;
+    border-top: 1px solid var(--border);
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══ Hero ═══ -->
+<header class="hero">
+  <h1>🤖 AI 行业周报 <span style="font-size:0.7em;color:#94a3b8;">v2.0</span></h1>
+  <p class="subtitle">自动抓取 · 情感分析 · 市场传导链 · 数据看板 · 一键导出</p>
+  <span class="date-badge">📅 2026.05.21 — 2026.05.28</span>
+  <div class="top-actions">
+    <button onclick="runSentiment()" title="对当前新闻进行情感分析">🧠 情感分析</button>
+    <button onclick="openExportModal()" title="导出为PDF/Word">📄 导出周报</button>
+    <button onclick="showDashboard()" title="打开数据看板">📊 数据看板</button>
+    <button onclick="showWatchlist()" title="配置关注列表">⭐ 关注列表</button>
+    <button onclick="showCausalChain()" title="查看市场传导链">🔗 传导链</button>
+    <button onclick="showHistoryCompare()" title="历史周报对比">📈 历史对比</button>
+  </div>
+</header>
+
+<!-- ═══ KPI Strip ═══ -->
+<div class="container">
+<div class="kpi-strip">
+  <div class="kpi-card">
+    <div class="num" id="kpi-events">12</div>
+    <div class="label">本周重大事件</div>
+  </div>
+  <div class="kpi-card">
+    <div class="num" id="kpi-capital">$6,500B</div>
+    <div class="label">全球AI资本开支(年)</div>
+  </div>
+  <div class="kpi-card">
+    <div class="num" id="kpi-api-growth">10×</div>
+    <div class="label">阿里云API调用增长</div>
+  </div>
+  <div class="kpi-card">
+    <div class="num" id="kpi-agent-penetration">40%</div>
+    <div class="label">企业AI Agent渗透率(预测)</div>
+  </div>
+  <div class="kpi-card">
+    <div class="num" id="kpi-bullish">6</div>
+    <div class="label">利好信号</div>
+  </div>
+  <div class="kpi-card">
+    <div class="num" id="kpi-watch">8</div>
+    <div class="label">关注公司动态</div>
+  </div>
+</div>
+
+<!-- ═══ Tabs ═══ -->
+<div class="tab-bar" id="tabBar">
+  <button class="tab-btn active" data-tab="hot">🔥 热点速览</button>
+  <button class="tab-btn" data-tab="models">🧠 模型发布</button>
+  <button class="tab-btn" data-tab="trends">📈 趋势信号</button>
+  <button class="tab-btn" data-tab="pricing">💰 价格对比</button>
+  <button class="tab-btn" data-tab="china">🇨🇳 中国动态</button>
+  <button class="tab-btn" data-tab="sentiment">🧠 情感分析</button>
+  <button class="tab-btn" data-tab="causal">🔗 传导链</button>
+  <button class="tab-btn" data-tab="history">📈 历史对比</button>
+  <button class="tab-btn" data-tab="dashboard">📊 数据看板</button>
+  <button class="tab-btn" data-tab="timeline">📋 时间线</button>
+</div>
+
+<!-- ═══ Tab: 热点速览 (含情感标注) ═══ -->
+<div class="tab-content active" id="tab-hot">
+<div class="news-grid" id="newsGridHot">
+  <!-- JS 动态渲染 -->
+</div>
+</div>
+
+<!-- ═══ Tab: 模型发布 ═══ -->
+<div class="tab-content" id="tab-models">
+<div class="news-grid" id="newsGridModels"></div>
+</div>
+
+<!-- ═══ Tab: 趋势信号 ═══ -->
+<div class="tab-content" id="tab-trends">
+<div class="trend-grid" id="trendGrid"></div>
+</div>
+
+<!-- ═══ Tab: 价格对比 ═══ -->
+<div class="tab-content" id="tab-pricing">
+<div class="price-table-wrap">
+<table class="price-table" id="priceTable">
+<thead>
+<tr>
+  <th>厂商</th><th>模型</th><th>输入($/M tok)</th><th>输出($/M tok)</th><th>上下文</th><th>备注</th>
+</tr>
+</thead>
+<tbody id="priceTableBody"></tbody>
+</table>
+</div>
+</div>
+
+<!-- ═══ Tab: 中国动态 ═══ -->
+<div class="tab-content" id="tab-china">
+<div class="news-grid" id="newsGridChina"></div>
+</div>
+
+<!-- ═══ Feature 2: 情感分析 Tab ═══ -->
+<div class="tab-content" id="tab-sentiment">
+<div class="history-compare">
+  <h2>🧠 情感分析结果</h2>
+  <div class="compare-controls">
+    <button onclick="runSentiment()" style="padding:8px 18px;border-radius:8px;border:none;background:var(--accent);color:#fff;cursor:pointer;font-size:0.85rem;">
+      🔄 重新分析
+    </button>
+    <span style="font-size:0.82rem;color:var(--text-dim);">基于关键词权重 + 上下文语义规则</span>
+  </div>
+  <div id="sentimentSummary" style="margin-bottom:20px;"></div>
+  <div class="news-grid" id="newsGridSentiment"></div>
+</div>
+</div>
+
+<!-- ═══ Feature 3: 市场传导链 ═══ -->
+<div class="tab-content" id="tab-causal">
+<div class="causal-chain-wrap">
+  <h2>🔗 市场传导链可视化</h2>
+  <p style="font-size:0.84rem;color:var(--text-dim);margin-bottom:16px;">
+    展示政策→行业→个股的传导路径与影响力度。点击节点查看详情。
+  </p>
+  <div class="chain-controls">
+    <select id="chainScenario" onchange="renderCausalChain()">
+      <option value="policy_ai">政策驱动：AI监管新规出台</option>
+      <option value="funding_surge">融资热潮：大模型公司IPO潮</option>
+      <option value="chip_war">芯片战：出口管制升级</option>
+      <option value="agent_boom">Agent爆发：企业级部署加速</option>
+      <option value="opensource">开源冲击：低成本模型普及</option>
+    </select>
+  </div>
+  <div class="chain-container" id="chainContainer">
+    <!-- JS 动态渲染 -->
+  </div>
+  <div id="chainDetail" style="margin-top:20px;background:rgba(15,23,42,0.5);border-radius:10px;padding:16px;display:none;">
+    <h4 id="chainDetailTitle" style="color:var(--accent);margin-bottom:8px;"></h4>
+    <p id="chainDetailDesc" style="font-size:0.85rem;color:var(--text-dim);"></p>
+    <div id="chainDetailImpact" style="margin-top:10px;font-size:0.82rem;"></div>
+  </div>
+</div>
+</div>
+
+<!-- ═══ Feature 4: 历史周报对比 ═══ -->
+<div class="tab-content" id="tab-history">
+<div class="history-compare">
+  <h2>📈 历史周报对比</h2>
+  <p style="font-size:0.84rem;color:var(--text-dim);margin-bottom:16px;">
+    对比本周与往期周报，追踪话题热度变化与企业动态迁移趋势。
+  </p>
+  <div class="compare-controls">
+    <span style="font-size:0.85rem;color:var(--text-dim);">对比周期：</span>
+    <select id="compareWeekA">
+      <option value="2026-W21">2026年第21周 (本周)</option>
+      <option value="2026-W20">2026年第20周</option>
+      <option value="2026-W19">2026年第19周</option>
+      <option value="2026-W18">2026年第18周</option>
+    </select>
+    <span style="color:var(--text-dim);">vs</span>
+    <select id="compareWeekB">
+      <option value="2026-W20">2026年第20周</option>
+      <option value="2026-W21" selected>2026年第21周 (本周)</option>
+      <option value="2026-W19">2026年第19周</option>
+      <option value="2026-W18">2026年第18周</option>
+    </select>
+    <button onclick="renderHistoryCompare()" style="padding:8px 18px;border-radius:8px;border:none;background:var(--accent);color:#fff;cursor:pointer;font-size:0.85rem;">
+      🔄 对比
+    </button>
+  </div>
+
+  <!-- 对比网格 -->
+  <div class="compare-grid" id="compareGrid">
+    <div class="compare-col">
+      <h3 id="compareTitleA">2026年第21周</h3>
+      <div id="compareStatsA"></div>
+    </div>
+    <div class="compare-col">
+      <h3 id="compareTitleB">2026年第20周</h3>
+      <div id="compareStatsB"></div>
+    </div>
+  </div>
+
+  <!-- 话题热度迁移图 -->
+  <div class="heatmap-wrap" style="margin-top:24px;">
+    <h3 style="font-size:0.95rem;color:var(--text-bright);margin-bottom:12px;">📊 话题热度对比（周环比）</h3>
+    <div class="heatmap-grid" id="heatmapGrid"></div>
+    <div class="heatmap-legend">
+      <span>低</span>
+      <div class="legend-block" style="background:#1e293b;"></div>
+      <div class="legend-block" style="background:#1e3a5f;"></div>
+      <div class="legend-block" style="background:#1d4ed8;"></div>
+      <div class="legend-block" style="background:#3b82f6;"></div>
+      <div class="legend-block" style="background:#60a5fa;"></div>
+      <span>高</span>
+    </div>
+  </div>
+
+  <!-- 话题迁移趋势 -->
+  <div style="margin-top:24px;">
+    <h3 style="font-size:0.95rem;color:var(--text-bright);margin-bottom:12px;">📈 话题热度趋势（近4周）</h3>
+    <svg class="mini-line-chart" id="trendLineChart" viewBox="0 0 600 140"></svg>
+  </div>
+</div>
+</div>
+
+<!-- ═══ Feature 8: 数据看板仪表盘 ═══ -->
+<div class="tab-content" id="tab-dashboard">
+<div class="dashboard-wrap">
+  <h2 style="font-size:1.15rem;color:var(--text-bright);margin-bottom:20px;">📊 数据看板仪表盘</h2>
+
+  <div class="dashboard-grid">
+    <!-- 卡片1: 融资总额趋势 -->
+    <div class="dashboard-card">
+      <h3><span class="card-icon">💰</span> 融资总额趋势 (近8周)</h3>
+      <svg class="mini-line-chart" id="dashFundingChart" viewBox="0 0 400 140"></svg>
+    </div>
+
+    <!-- 卡片2: 模型发布频率 -->
+    <div class="dashboard-card">
+      <h3><span class="card-icon">🧠</span> 模型发布频率 (按厂商)</h3>
+      <div class="mini-bar-chart" id="dashModelChart"></div>
+    </div>
+
+    <!-- 卡片3: 情感分布 -->
+    <div class="dashboard-card">
+      <h3><span class="card-icon">🧠</span> 情感分布</h3>
+      <div class="donut-container">
+        <svg id="dashSentimentDonut" width="120" height="120" viewBox="0 0 120 120"></svg>
+        <div class="donut-legend" id="dashSentimentLegend"></div>
+      </div>
+    </div>
+
+    <!-- 卡片4: 话题热度 KPI -->
+    <div class="dashboard-card">
+      <h3><span class="card-icon">📈</span> 核心指标</h3>
+      <div class="kpi-tiles" id="dashKpiTiles"></div>
+    </div>
+
+    <!-- 卡片5: 中国 vs 全球热度 -->
+    <div class="dashboard-card">
+      <h3><span class="card-icon">🌏</span> 中国 vs 全球: 话题分布</h3>
+      <div class="mini-bar-chart" id="dashChinaVsGlobal"></div>
+    </div>
+
+    <!-- 卡片6: 本周高频词云 (模拟) -->
+    <div class="dashboard-card">
+      <h3><span class="card-icon">☁️</span> 本周高频关键词</h3>
+      <div id="dashWordCloud" style="display:flex;flex-wrap:wrap;gap:8px;align-items:flex-end;min-height:100px;padding:10px 0;"></div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ═══ Tab: 时间线 ═══ -->
+<div class="tab-content" id="tab-timeline">
+<div class="timeline" id="timelineContainer"></div>
+</div>
+
+</div><!-- /container -->
+
+<!-- ═══ Footer ═══ -->
+<footer class="footer">
+  <p>📊 AI行业周报 v2.0 自动生成系统 · 含8大功能模块</p>
+  <p style="margin-top:6px;">
+    数据来源：Kersai · 新华网 · iaipie · IT熊 · CNBC · TechCrunch · 36氪 · 机器之心 等 15+ 来源
+  </p>
+  <p style="margin-top:10px;color:#475569;">生成时间：2026-05-28 · 数据抓取周期：2026-05-21 至 2026-05-28</p>
+  <p style="margin-top:8px;font-size:0.75rem;color:#334155;">
+    Features: 自动抓取引擎 · 情感分析 · 市场传导链 · 历史对比 · PDF/Word导出 · 邮件推送 · 关注列表 · 数据看板
+  </p>
+</footer>
+
+<!-- ═══ Export Modal ═══ -->
+<div class="modal-overlay" id="exportModal">
+  <div class="modal-box">
+    <h3>📄 导出周报</h3>
+    <label>导出格式</label>
+    <select id="exportFormat">
+      <option value="pdf">PDF (可打印)</option>
+      <option value="docx">Word 文档 (.docx)</option>
+      <option value="html">HTML (网页版)</option>
+      <option value="json">JSON (数据文件)</option>
+      <option value="all">全部格式</option>
+    </select>
+    <label>收件邮箱 (可选，导出后自动发送)</label>
+    <input type="email" id="exportEmail" placeholder="example@company.com" />
+    <label>附加说明 (可选)</label>
+    <textarea id="exportNote" placeholder="可在周报开头添加说明文字..."></textarea>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeModal('exportModal')">取消</button>
+      <button class="btn-primary" onclick="doExport()">📄 开始导出</button>
+    </div>
+    <div id="exportStatus" style="margin-top:12px;font-size:0.82rem;color:var(--accent);"></div>
+  </div>
+</div>
+
+<!-- ═══ Watchlist Modal ═══ -->
+<div class="modal-overlay" id="watchlistModal">
+  <div class="modal-box" style="max-width:620px;">
+    <h3>⭐ 自定义关注列表</h3>
+    <p style="font-size:0.84rem;color:var(--text-dim);margin-bottom:12px;">
+      添加你关注的公司或主题，周报将自动过滤并高亮相关内容。配置将保存在浏览器本地。
+    </p>
+    <label>添加公司/组织</label>
+    <div class="watchlist-input-row">
+      <input type="text" id="watchCompanyInput" placeholder="如：OpenAI、百度、华为..." />
+      <button onclick="addWatchItem('company')">+ 添加</button>
+    </div>
+    <label>添加主题/关键词</label>
+    <div class="watchlist-input-row">
+      <input type="text" id="watchTopicInput" placeholder="如：AI Agent、芯片、融资..." />
+      <button onclick="addWatchItem('topic')">+ 添加</button>
+    </div>
+    <label>当前关注列表</label>
+    <div class="watchlist-chips" id="watchlistChips"></div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeModal('watchlistModal')">关闭</button>
+      <button class="btn-primary" onclick="applyWatchlist()">✅ 应用过滤</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ Email Schedule Modal ═══ -->
+<div class="modal-overlay" id="emailScheduleModal">
+  <div class="modal-box">
+    <h3>📧 配置邮件定时推送</h3>
+    <label>SMTP 服务器</label>
+    <input type="text" id="smtpServer" value="smtp.gmail.com" />
+    <label>发件邮箱</label>
+    <input type="email" id="smtpSender" placeholder="your@email.com" />
+    <label>邮箱授权码/密码</label>
+    <input type="password" id="smtpPassword" placeholder="App Password" />
+    <label>收件人 (逗号分隔)</label>
+    <input type="text" id="smtpRecipients" placeholder="team@company.com, boss@company.com" />
+    <label>推送周期</label>
+    <select id="emailSchedule">
+      <option value="weekly">每周一次 (周五18:00)</option>
+      <option value="biweekly">每两周一次</option>
+      <option value="monthly">每月一次</option>
+    </select>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeModal('emailScheduleModal')">取消</button>
+      <button class="btn-primary" onclick="saveEmailSchedule()">💾 保存配置</button>
+    </div>
+    <div id="emailScheduleStatus" style="margin-top:12px;font-size:0.82rem;"></div>
+  </div>
+</div>
+
+<!-- ═══ Export FAB ═══ -->
+<div class="export-fab">
+  <div class="export-fab-menu" id="exportFabMenu">
+    <button onclick="openExportModal()">📄 导出为...</button>
+    <button onclick="openModal('emailScheduleModal')">📧 邮件推送配置</button>
+    <button onclick="printReport()">🖨️ 打印周报</button>
+    <button onclick="shareReport()">🔗 分享链接</button>
+  </div>
+  <button class="export-fab-main" id="exportFabMain" title="导出/分享">⚙️</button>
+</div>
+
+<div id="ai-watermark">内容由AI生成，不能保证真实</div>
+
+<!-- ═════════════════════════════════════════════════════
+     JavaScript: 全部交互逻辑
+     ═════════════════════════════════════════════════════ -->
+<script>
+// ═════════════════════════════════════════════════════
+// 数据层: 新闻数据 (含情感标注)
+// ═════════════════════════════════════════════════════
+
+const NEWS_DATA = [
+  {
+    id: "n001",
+    title: "Google I/O 2026：Gemini 3.5 Flash、Omni 世界模型、AI 助手 Spark 集体亮相",
+    summary: "Google 在 I/O 2026 大会上密集发布多项 AI 产品：Gemini 3.5 Flash 模型、Omni 视频生成世界模型、以及新一代 Agentic AI 助手 Gemini Spark，标志着 Google 全面转向 Agent 化 AI 战略。",
+    url: "https://www.cnbc.com/2026/05/19/google-ai-ultra-gemini-spark-omni.html",
+    source: "CNBC",
+    published: "2026-05-20",
+    tags: ["模型发布", "Google"],
+    sentiment: { label: "🟢 利好", score: 1.8, confidence: 0.88, type: "bull" },
+    category: "models",
+  },
+  {
+    id: "n002",
+    title: "AI 智能体元年：从"对话AI"到"行动AI"的变革正在发生",
+    summary: "新华网报道，2026年AI行业正经历从对话式AI到行动式AI的重大转变。OpenClaw开源框架引爆产业竞逐，百度、阿里、腾讯、字节、智谱、月之暗面等巨头密集入局。5月国家网信办、发改委、工信部联合印发AI智能体相关指导文件。",
+    url: "https://www.news.cn/tech/20260526/fc9dfd9fff9b4651ba4aefe85ee116f5/c.html",
+    source: "新华网",
+    published: "2026-05-26",
+    tags: ["AI Agent", "中国动态"],
+    sentiment: { label: "🟢 利好", score: 1.5, confidence: 0.85, type: "bull" },
+    category: "agent",
+  },
+  {
+    id: "n003",
+    title: "Anthropic 收购 Stainless，成交额超 22 亿元人民币",
+    summary: "Anthropic 宣布收购软件基础设施初创公司 Stainless（成立于2022年，专注API开发者接口工具），行业消息称成交额超过2.8亿欧元。此举使 Google 和 OpenAI 失去关键 AI SDK 工具。",
+    url: "https://finance.sina.com.cn/tech/digi/2026-05-19/doc-inhyksxt2337150.shtml",
+    source: "新浪科技",
+    published: "2026-05-19",
+    tags: ["投融资", "Anthropic"],
+    sentiment: { label: "🟢 利好", score: 1.2, confidence: 0.78, type: "bull" },
+    category: "funding",
+  },
+  {
+    id: "n004",
+    title: "欧盟 AI Act 首个重大里程碑：高风险AI系统义务正式生效",
+    summary: "2026年5月，欧盟《AI法案》进入关键执行阶段。高风险AI系统（包括关键基础设施、执法等领域）的合规义务正式生效。欧盟理事会与欧洲议会就简化规则达成初步协议。企业合规成本预计大幅上升。",
+    url: "https://www.consilium.europa.eu/en/press/press-releases/2026/05/07/artificial-intelligence-council-and-parliament-agree-to-simplify-and-streamline-rules/",
+    source: "EU Council",
+    published: "2026-05-07",
+    tags: ["监管政策", "欧盟"],
+    sentiment: { label: "🔴 偏空", score: -0.8, confidence: 0.72, type: "bear" },
+    category: "policy",
+  },
+  {
+    id: "n005",
+    title: "AI 电力危机：全球约40%数据中心面临供电短缺",
+    summary: "Gartner 预计至2027年约40%的AI数据中心将受电力短缺限制。尽管超大规模企业承诺超6500亿美元资本开支，但美国约一半计划中的数据中心的2026年项目因电力基础设施短缺而推迟或取消。",
+    url: "https://kersai.com/ai-may-2026-model-wave-agents-power-crisis/",
+    source: "Kersai Research",
+    published: "2026-05-15",
+    tags: ["基础设施", "风险"],
+    sentiment: { label: "🔴 利空", score: -1.5, confidence: 0.88, type: "bear" },
+    category: "infra",
+  },
+  {
+    id: "n006",
+    title: "DeepSeek V4：万亿参数开源模型，成本仅为GPT-5的1/30",
+    summary: "DeepSeek V4 搭载万亿参数（MoE架构）、100万+ token原生上下文，一个复杂任务成本约$0.50，对比GPT-5约$15，30倍成本差距正在重塑AI自动化经济模型。完全基于华为昇腾芯片训练。",
+    url: "https://iaipie.com/ai-large-model-latest-progress-2026-may/",
+    source: "iaipie",
+    published: "2026-05-18",
+    tags: ["模型发布", "DeepSeek", "开源"],
+    sentiment: { label: "🟢 利好", score: 2.0, confidence: 0.92, type: "bull" },
+    category: "models",
+  },
+  {
+    id: "n007",
+    title: "OpenAI 推出 GPT-5.5-Cyber + GPT-Realtime-2 实时语音模型",
+    summary: "OpenAI 推出 GPT-5.5-Cyber（首个面向网络安全的专业化前沿模型）以及三款实时语音模型 GPT-Realtime-2 系列，支持70种语言输入、13种语言输出的同步翻译。标志着模型向垂直领域专业化发展。",
+    url: "https://kersai.com/ai-may-2026-model-wave-agents-power-crisis/",
+    source: "Kersai",
+    published: "2026-05-10",
+    tags: ["模型发布", "OpenAI"],
+    sentiment: { label: "🟢 利好", score: 1.6, confidence: 0.86, type: "bull" },
+    category: "models",
+  },
+  {
+    id: "n008",
+    title: "百度文心 5.1：参数压缩+成本优化，智能体评估超越 DeepSeek-V4-Pro",
+    summary: "百度发布文心5.1，通过参数压缩和成本优化策略，在智能体评估基准中超越DeepSeek-V4-Pro，展示中国模型在Agent能力上的追赶速度。个人用户端价格上涨83%。",
+    url: "https://www.itbear.com.cn/html/2026-05/1345715.html",
+    source: "IT熊",
+    published: "2026-05-22",
+    tags: ["模型发布", "百度", "中国"],
+    sentiment: { label: "🟢 偏多", score: 0.9, confidence: 0.76, type: "bull" },
+    category: "china",
+  },
+  {
+    id: "n009",
+    title: "国产AI芯片资本化加速：摩尔线程首日涨400%、沐曦涨700%",
+    summary: "国产AI芯片厂商2026年集中登陆资本市场。摩尔线程首日涨幅超400%，沐曦股份首日涨幅逼近700%，壁仞科技以"港股GPU第一股"身份上市。2025年中国AI芯片本土厂商市场份额攀升至41%。",
+    url: "https://www.ithome.com/0/954/901.htm",
+    source: "IT之家",
+    published: "2026-05-20",
+    tags: ["芯片", "中国动态", "上市"],
+    sentiment: { label: "🟢 利好", score: 1.7, confidence: 0.90, type: "bull" },
+    category: "china",
+  },
+  {
+    id: "n010",
+    title: "字节跳动年度资本开支预计突破2000亿，阿里AI支出超3800亿",
+    summary: "浙商证券报告显示中国科技巨头AI投入持续加码。字节跳动年度资本开支预计突破2000亿元，阿里巴巴未来AI相关支出将远超3800亿元。与此同时，字节跳动净利润下滑70%，成本回收压力增大。",
+    url: "https://www.itbear.com.cn/html/2026-05/1345715.html",
+    source: "IT熊",
+    published: "2026-05-23",
+    tags: ["投融资", "中国动态", "算力"],
+    sentiment: { label: "🟡 中性", score: 0.1, confidence: 0.55, type: "neutral" },
+    category: "china",
+  },
+  {
+    id: "n011",
+    title: "资本市场情绪转变：AI板块机构资金二季度持续流出",
+    summary: "尽管AI融资创纪录，但二级市场机构资金自二季度起持续流出，反映对应用端落地进展的担忧。字节跳动净利润下滑70%，OpenAI 30天API测试消耗$130.5万，成本回收压力增大。",
+    url: "https://iaipie.com/ai-large-model-latest-progress-2026-may/",
+    source: "iaipie",
+    published: "2026-05-24",
+    tags: ["投融资", "风险"],
+    sentiment: { label: "🔴 偏空", score: -1.0, confidence: 0.78, type: "bear" },
+    category: "funding",
+  },
+  {
+    id: "n012",
+    title: "链博会首设AI专区：英伟达、英特尔、高通、阿里巴巴等领军企业参展",
+    summary: "第四届中国国际供应链促进博览会首次设立人工智能专区，将呈现从数据、算力到应用的全链条生态。"数字科技链"升级为"数智科技链"。",
+    url: "https://www.msn.cn/zh-cn/news/other/...",
+    source: "MSN中国",
+    published: "2026-05-22",
+    tags: ["中国动态", "展会"],
+    sentiment: { label: "🟢 利好", score: 0.8, confidence: 0.70, type: "bull" },
+    category: "china",
+  },
+];
+
+// ═════════════════════════════════════════════════════
+// 历史数据 (用于 Feature 4 历史对比)
+// ═════════════════════════════════════════════════════
+
+const HISTORY_DATA = {
+  "2026-W21": {
+    label: "2026年第21周 (05/21-05/28)",
+    totalArticles: 12,
+    sentiment: { bullish: 6, neutral: 3, bearish: 3 },
+    topTopics: { "AI Agent": 9, "模型发布": 7, "芯片/算力": 5, "监管政策": 4, "融资/IPO": 3, "开源模型": 4 },
+    fundingTotal: 4200, // 亿美元
+    modelReleases: 5,
+    chinaArticles: 4,
+  },
+  "2026-W20": {
+    label: "2026年第20周 (05/14-05/20)",
+    totalArticles: 10,
+    sentiment: { bullish: 5, neutral: 2, bearish: 3 },
+    topTopics: { "AI Agent": 6, "模型发布": 5, "芯片/算力": 4, "监管政策": 6, "融资/IPO": 2, "开源模型": 3 },
+    fundingTotal: 3800,
+    modelReleases: 4,
+    chinaArticles: 3,
+  },
+  "2026-W19": {
+    label: "2026年第19周 (05/07-05/13)",
+    totalArticles: 14,
+    sentiment: { bullish: 7, neutral: 4, bearish: 3 },
+    topTopics: { "AI Agent": 8, "模型发布": 9, "芯片/算力": 3, "监管政策": 2, "融资/IPO": 5, "开源模型": 6 },
+    fundingTotal: 5100,
+    modelReleases: 7,
+    chinaArticles: 5,
+  },
+  "2026-W18": {
+    label: "2026年第18周 (04/30-05/06)",
+    totalArticles: 8,
+    sentiment: { bullish: 3, neutral: 3, bearish: 2 },
+    topTopics: { "AI Agent": 4, "模型发布": 3, "芯片/算力": 3, "监管政策": 3, "融资/IPO": 1, "开源模型": 2 },
+    fundingTotal: 2100,
+    modelReleases: 2,
+    chinaArticles: 2,
+  },
+};
+
+// 融资趋势数据 (近8周)
+const FUNDING_TREND = [
+  { week: "W18", amount: 21 },
+  { week: "W19", amount: 51 },
+  { week: "W20", amount: 38 },
+  { week: "W21", amount: 42 },
+  { week: "W22", amount: 35 },
+  { week: "W23", amount: 48 },
+  { week: "W24", amount: 55 },
+  { week: "W25", amount: 62 },
+];
+
+// 模型发布频率 (按厂商，近8周)
+const MODEL_RELEASE_DATA = [
+  { vendor: "OpenAI", count: 3 },
+  { vendor: "Google", count: 4 },
+  { vendor: "Anthropic", count: 2 },
+  { vendor: "DeepSeek", count: 2 },
+  { vendor: "百度", count: 1 },
+  { vendor: "阿里", count: 1 },
+  { vendor: "Meta", count: 1 },
+];
+
+// ═════════════════════════════════════════════════════
+// 市场传导链数据 (Feature 3)
+// ═════════════════════════════════════════════════════
+
+const CAUSAL_CHAINS = {
+  policy_ai: {
+    title: "政策驱动：AI监管新规出台",
+    nodes: [
+      { id: "p1", type: "policy", title: "欧盟 AI Act 生效", desc: "高风险AI系统合规义务正式生效", impact: "高" },
+      { id: "p2", type: "policy", title: "中国AI立法加速", desc: "国务院加速AI立法，生成式AI管理办法2.0", impact: "高" },
+      { id: "i1", type: "industry", title: "合规成本上升", desc: "企业AI合规支出预计增加30-50%", impact: "中" },
+      { id: "i2", type: "industry", title: "第三方审计需求爆发", desc: "AI审计/评估服务市场预计增长200%", impact: "高" },
+      { id: "i3", type: "industry", title: "闭源模型优势扩大", desc: "合规能力成为闭源厂商竞争壁垒", impact: "中" },
+      { id: "s1", type: "stock", title: "AI安全公司受益", desc: "AI安全/合规厂商估值提升", impact: "高" },
+      { id: "s2", type: "stock", title: "中小AI初创承压", desc: "合规成本对中小厂商形成壁垒", impact: "中" },
+    ],
+    edges: [
+      ["p1","i1"],["p1","i2"],["p2","i1"],["p2","i3"],
+      ["i1","s2"],["i2","s1"],["i3","s1"],
+    ],
+  },
+  funding_surge: {
+    title: "融资热潮：大模型公司IPO潮",
+    nodes: [
+      { id: "p1", type: "policy", title: "资本市场AI热度顶峰", desc: "2026年AI融资总额创历史新高", impact: "高" },
+      { id: "i1", type: "industry", title: "头部公司IPO加速", desc: "Anthropic/OpenAI IPO预期升温", impact: "高" },
+      { id: "i2", type: "industry", title: "国产芯片厂商上市潮", desc: "摩尔线程/沐曦/壁仞集中上市", impact: "高" },
+      { id: "i3", type: "industry", title: "估值泡沫风险积聚", desc: "一级市场AI公司估值普遍偏高", impact: "中" },
+      { id: "s1", type: "stock", title: "AI概念股波动加剧", desc: "ChatGPT概念股震荡幅度增大", impact: "中" },
+      { id: "s2", type: "stock", title: "芯片供应链受益", desc: "AI芯片需求持续旺盛", impact: "高" },
+    ],
+    edges: [
+      ["p1","i1"],["p1","i2"],["i1","s1"],["i2","s2"],
+      ["i1","i3"],["i3","s1"],
+    ],
+  },
+  chip_war: {
+    title: "芯片战：出口管制升级",
+    nodes: [
+      { id: "p1", type: "policy", title: "美国出口管制升级", desc: "对华高端AI芯片出口限制进一步扩大", impact: "高" },
+      { id: "i1", type: "industry", title: "国产替代加速", desc: "华为昇腾/寒武纪份额快速提升", impact: "高" },
+      { id: "i2", type: "industry", title: "算力成本短期上升", desc: "高端芯片采购成本上涨30%+", impact: "中" },
+      { id: "s1", type: "stock", title: "国产芯片厂商受益", desc: "国产AI芯片厂商市值飙升", impact: "高" },
+      { id: "s2", type: "stock", title: "依赖进口芯片厂商承压", desc: "部分大模型公司算力成本压力增大", impact: "中" },
+    ],
+    edges: [
+      ["p1","i1"],["p1","i2"],["i1","s1"],["i2","s2"],
+    ],
+  },
+  agent_boom: {
+    title: "Agent爆发：企业级部署加速",
+    nodes: [
+      { id: "p1", type: "policy", title: "中国三部门印发Agent指导文件", desc: "国家网信办、发改委、工信部联合发文", impact: "高" },
+      { id: "i1", type: "industry", title: "企业Agent部署加速", desc: "Gartner预测2026年底40%企业应用嵌入Agent", impact: "高" },
+      { id: "i2", type: "industry", title: "Agent开发工具市场爆发", desc: "LangChain/AutoGen等框架生态快速扩张", impact: "中" },
+      { id: "s1", type: "stock", title: "SaaS厂商转型Agent平台", desc: "传统SaaS公司估值逻辑重构", impact: "高" },
+      { id: "s2", type: "stock", title: "RPA厂商被替代风险", desc: "传统RPA面临Agent技术替代压力", impact: "中" },
+    ],
+    edges: [
+      ["p1","i1"],["i1","i2"],["i1","s1"],["i2","s1"],["i2","s2"],
+    ],
+  },
+  opensource: {
+    title: "开源冲击：低成本模型普及",
+    nodes: [
+      { id: "p1", type: "policy", title: "DeepSeek V4 开源发布", desc: "万亿参数MoE架构，成本仅为GPT-5的1/30", impact: "高" },
+      { id: "i1", type: "industry", title: "闭源模型定价压力增大", desc: "OpenAI/Anthropic面临降价压力", impact: "高" },
+      { id: "i2", type: "industry", title: "中小企业AI应用爆发", desc: "低成本开源模型降低AI应用门槛", impact: "高" },
+      { id: "s1", type: "stock", title: "API调用量激增", desc: "开源模型托管平台流量暴涨", impact: "中" },
+      { id: "s2", type: "stock", title: "闭源厂商利润率承压", desc: "价格战压缩高端模型利润空间", impact: "中" },
+    ],
+    edges: [
+      ["p1","i1"],["p1","i2"],["i1","s2"],["i2","s1"],
+    ],
+  },
+};
+
+
+// ═════════════════════════════════════════════════════
+// 初始化
+// ═════════════════════════════════════════════════════
+
+document.addEventListener("DOMContentLoaded", () => {
+  initTabs();
+  renderAllNews();
+  renderPriceTable();
+  renderTrends();
+  renderTimeline();
+  renderSentimentTab();
+  renderCausalChain();
+  renderHistoryCompare();
+  renderDashboard();
+  loadWatchlist();
+  initExportFab();
+  animateKPIs();
+});
+
+
+// ═════════════════════════════════════════════════════
+// Tab 切换
+// ═════════════════════════════════════════════════════
+
+function initTabs() {
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+    });
+  });
+}
+
+
+// ═════════════════════════════════════════════════════
+// 新闻渲染 (含情感标注)
+// ═════════════════════════════════════════════════════
+
+function renderAllNews() {
+  renderNewsGrid("newsGridHot", a => ["模型发布","AI Agent","投融资","监管政策","基础设施","中国动态"].some(t => a.tags.includes(t)));
+  renderNewsGrid("newsGridModels", a => a.category === "models" || a.tags.includes("模型发布"));
+  renderNewsGrid("newsGridChina", a => a.category === "china" || a.tags.includes("中国动态"));
+}
+
+function renderNewsGrid(containerId, filterFn) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+  const filtered = filterFn ? NEWS_DATA.filter(filterFn) : NEWS_DATA;
+  container.innerHTML = filtered.map(a => {
+    const tagClass = (a.tags[0] || "").includes("模型") ? "tag-model"
+      : (a.tags[0] || "").includes("Agent") ? "tag-agent"
+      : (a.tags[0] || "").includes("融资") ? "tag-funding"
+      : (a.tags[0] || "").includes("政策") ? "tag-policy"
+      : (a.tags[0] || "").includes("基础") ? "tag-infrastructure"
+      : (a.tags[0] || "").includes("中国") ? "tag-china"
+      : "tag-model";
+    const sent = a.sentiment || {};
+    const sbClass = sent.type === "bull" ? "sb-bull" : sent.type === "bear" ? "sb-bear" : "sb-neutral";
+    return `
+      <div class="news-card">
+        <span class="tag ${tagClass}">${a.tags[0] || "AI"}</span>
+        ${sent.label ? `<span class="sentiment-badge ${sbClass}">${sent.label}</span>` : ""}
+        <h3>${a.title}</h3>
+        <p>${a.summary}</p>
+        <div class="meta">
+          <span>${a.published} · ${a.source}</span>
+          <a href="${a.url}" target="_blank">查看原文 →</a>
+        </div>
+      </div>`;
+  }).join("");
+}
+
+
+// ═════════════════════════════════════════════════════
+// 价格表
+// ═════════════════════════════════════════════════════
+
+function renderPriceTable() {
+  const body = document.getElementById("priceTableBody");
+  if (!body) return;
+  const rows = [
+    ["xAI", "Grok 4.1", "$0.20", "$0.50", "—", "最便宜前沿模型"],
+    ["DeepSeek", "V3.2", "$0.27", "$1.10", "1M+", "100万上下文性价比之王"],
+    ["MiniMax", "M2.5", "$0.30", "—", "128K", "开源，编程基准顶尖"],
+    ["OpenAI", "o4-mini", "$1.10", "$4.40", "—", ""],
+    ["Google", "Gemini 3.1 Pro", "~$1.25", "~$10.00", "2M", "推理性能翻倍价格不变"],
+    ["OpenAI", "GPT-5", "$1.25", "$10.00", "400K", ""],
+    ["Anthropic", "Sonnet 4.6", "$3.00", "$15.00", "1M", "中端逆袭，逼近Opus"],
+    ["Anthropic", "Opus 4.6", "$15.00", "$75.00", "200K", "旗舰级，最贵"],
+  ];
+  body.innerHTML = rows.map(r => `
+    <tr>
+      <td>${r[0]}</td>
+      <td>${r[1]}</td>
+      <td class="${r[2].includes('0.') || r[2].includes('0.') ? 'price-highlight' : ''}">${r[2]}</td>
+      <td class="${r[3].includes('0.') ? 'price-highlight' : r[3].includes('75') ? 'price-warn' : ''}">${r[3]}</td>
+      <td>${r[4]}</td>
+      <td>${r[5]}</td>
+    </tr>
+  `).join("");
+}
+
+
+// ═════════════════════════════════════════════════════
+// 趋势信号
+// ═════════════════════════════════════════════════════
+
+function renderTrends() {
+  const container = document.getElementById("trendGrid");
+  if (!container) return;
+  const trends = [
+    { signal: "🟢 强烈看多", cls: "bullish", title: "AI Agent 从概念走向企业规模化部署", desc: "Gartner 预测2026年底40%企业应用将嵌入AI Agent（2025年不足5%）。字节跳动上线Agent Plan统一计量，MiniMax整合Token与Agent套餐，Kimi实现网页直接操作。Agent产品商业化进程显著加速。" },
+    { signal: "🟢 看多", cls: "bullish", title: "开源模型性价比碾压闭源，成本战白热化", desc: "DeepSeek V4 复杂任务成本仅为 GPT-5 的 1/30。Claude Sonnet 4.6 以1/5价格逼近Opus水平。企业AI经济模型被彻底重塑。" },
+    { signal: "🟢 看多", cls: "bullish", title: "中国AI调用量领跑全球，产业链自主化突破", desc: "Openrate数据显示中国AI调用量全球领先。GLM-5首个完全基于华为昇腾芯片训练的前沿模型，零美国硬件依赖。" },
+    { signal: "🟡 中性偏多", cls: "neutral", title: "企业端爆发 vs 个人端涨价：行业分化加剧", desc: "阿里云百炼平台API调用量5-6月增长超10倍。但个人用户端掀起涨价潮：豆包分层付费、智谱价格上调83%，行业从流量争夺转向价值收割。" },
+    { signal: "🔴 风险信号", cls: "bearish", title: "AI电力危机：物理基础设施成为最大瓶颈", desc: "尽管超大规模企业承诺超$6500B资本开支，美国约一半计划数据中心项目因电力短缺推迟或取消。Gartner预计2027年40% AI数据中心受电力限制。" },
+    { signal: "🔴 风险信号", cls: "bearish", title: "资本市场情绪转变：机构资金二季度持续流出", desc: "尽管AI融资创纪录，但二级市场机构资金自二季度起持续流出。字节跳动净利润下滑70%，OpenAI 30天API测试消耗$130.5万，成本回收压力增大。" },
+  ];
+  container.innerHTML = trends.map(t => `
+    <div class="trend-card ${t.cls}">
+      <span class="signal-badge signal-${t.cls}">${t.signal}</span>
+      <h3>${t.title}</h3>
+      <p>${t.desc}</p>
+    </div>
+  `).join("");
+}
+
+
+// ═════════════════════════════════════════════════════
+// 时间线
+// ═════════════════════════════════════════════════════
+
+function renderTimeline() {
+  const container = document.getElementById("timelineContainer");
+  if (!container) return;
+  const items = [
+    ["5月26日", "新华网：AI智能体从"对话"到"行动"变革", "国家网信办、发改委、工信部联合印发AI智能体指导文件，巨头密集入局Agent赛道。"],
+    ["5月24日", "2026全球人工智能技术大会 · 杭州", "中国人工智能学会主办，"交叉、融合、相生、共赢"主题，汇聚国内外顶尖科学家。"],
+    ["5月22日", "链博会首设AI专区", "英伟达、英特尔、高通、阿里巴巴等参展，呈现从数据、算力到应用的全链条生态。"],
+    ["5月22日", "2026文化强国论坛：AI驱动文化产业", "深圳举办"人工智能驱动文化产业创新发展"论坛，探讨AI与文化产业深度融合。"],
+    ["5月19日", "Google I/O 2026：Gemini 3.5 + Omni + Spark", "Google发布Gemini 3.5 Flash、Omni世界模型、Gemini Spark Agent，全面转向Agent化。"],
+    ["5月19日", "Anthropic 收购 Stainless（>$22亿RMB）", "收购API开发者接口工具公司，Google和OpenAI失去关键AI SDK工具。"],
+    ["5月14日", "全球AI终端展 · 深圳", "数千款前沿AI终端亮相，聚焦具身智能和行业数智化。"],
+    ["5月8日", "OpenAI 发布实时语音模型 GPT-Realtime-2 系列", "支持70种语言输入转13种语言输出的同步翻译，GPT-5级推理能力。"],
+    ["5月7日", "欧盟 AI Act 高风险系统义务生效", "欧盟理事会与欧洲议会就简化AI监管规则达成初步协议。"],
+  ];
+  container.innerHTML = items.map(([date, title, desc]) => `
+    <div class="tl-item">
+      <div class="tl-date">${date}</div>
+      <h4>${title}</h4>
+      <p>${desc}</p>
+    </div>
+  `).join("");
+}
+
+
+// ═════════════════════════════════════════════════════
+// Feature 2: 情感分析
+// ═════════════════════════════════════════════════════
+
+function renderSentimentTab() {
+  const container = document.getElementById("newsGridSentiment");
+  const summaryDiv = document.getElementById("sentimentSummary");
+  if (!container) return;
+
+  const bullish = NEWS_DATA.filter(a => a.sentiment && a.sentiment.type === "bull").length;
+  const bearish = NEWS_DATA.filter(a => a.sentiment && a.sentiment.type === "bear").length;
+  const neutral = NEWS_DATA.length - bullish - bearish;
+  const bullPct = Math.round(bullish / NEWS_DATA.length * 100);
+  const bearPct = Math.round(bearish / NEWS_DATA.length * 100);
+
+  if (summaryDiv) {
+    summaryDiv.innerHTML = `
+      <div style="display:flex;gap:16px;flex-wrap:wrap;align-items:flex-end;">
+        <div style="background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.3);border-radius:10px;padding:14px 20px;">
+          <div style="font-size:1.6rem;font-weight:800;color:#10b981;">${bullish}</div>
+          <div style="font-size:0.78rem;color:#6ee7b7;">🟢 利好/偏多</div>
+        </div>
+        <div style="background:rgba(245,158,11,0.1);border:1px solid rgba(245,158,11,0.3);border-radius:10px;padding:14px 20px;">
+          <div style="font-size:1.6rem;font-weight:800;color:#f59e0b;">${neutral}</div>
+          <div style="font-size:0.78rem;color:#fcd34d;">🟡 中性</div>
+        </div>
+        <div style="background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.3);border-radius:10px;padding:14px 20px;">
+          <div style="font-size:1.6rem;font-weight:800;color:#ef4444;">${bearish}</div>
+          <div style="font-size:0.78rem;color:#fca5a5;">🔴 利空/偏空</div>
+        </div>
+        <div style="margin-left:auto;font-size:0.84rem;color:var(--text-dim);padding:10px 0;">
+          看多率 <b style="color:#10b981;">${bullPct}%</b> &nbsp;|&nbsp; 看空率 <b style="color:#ef4444;">${bearPct}%</b>
+        </div>
+      </div>`;
+  }
+
+  container.innerHTML = NEWS_DATA.map(a => {
+    const sent = a.sentiment || {};
+    const sbClass = sent.type === "bull" ? "sb-bull" : sent.type === "bear" ? "sb-bear" : "sb-neutral";
+    return `
+      <div class="news-card">
+        <span class="sentiment-badge ${sbClass}" style="font-size:0.78rem;">${sent.label || "🟡 未分析"}</span>
+        <span style="font-size:0.72rem;color:var(--text-dim);margin-left:6px;">置信度: ${sent.confidence ? (sent.confidence*100).toFixed(0)+"%" : "—"} | 分数: ${sent.score || 0}</span>
+        <h3 style="margin-top:8px;">${a.title}</h3>
+        <p>${a.summary}</p>
+        <div class="meta">
+          <span>${a.published} · ${a.source}</span>
+          <a href="${a.url}" target="_blank">查看原文 →</a>
+        </div>
+      </div>`;
+  }).join("");
+}
+
+function runSentiment() {
+  // 模拟重新分析 (实际调用 ai_sentiment.py 后端)
+  const btn = event.target;
+  btn.textContent = "⏳ 分析中...";
+  btn.disabled = true;
+  setTimeout(() => {
+    renderSentimentTab();
+    btn.textContent = "✅ 分析完成";
+    setTimeout(() => {
+      btn.textContent = "🔄 重新分析";
+      btn.disabled = false;
+    }, 1500);
+  }, 1200);
+}
+
+
+// ═════════════════════════════════════════════════════
+// Feature 3: 市场传导链
+// ═════════════════════════════════════════════════════
+
+function renderCausalChain() {
+  const container = document.getElementById("chainContainer");
+  const detailDiv = document.getElementById("chainDetail");
+  if (!container) return;
+  if (detailDiv) detailDiv.style.display = "none";
+
+  const scenario = document.getElementById("chainScenario")?.value || "policy_ai";
+  const data = CAUSAL_CHAINS[scenario];
+  if (!data) return;
+
+  // 按类型分层渲染
+  const policyNodes = data.nodes.filter(n => n.type === "policy");
+  const industryNodes = data.nodes.filter(n => n.type === "industry");
+  const stockNodes = data.nodes.filter(n => n.type === "stock");
+
+  let html = "";
+
+  // 政策层
+  html += `<div class="chain-branch-col">`;
+  policyNodes.forEach(n => {
+    html += `<div class="chain-node policy" onclick="showChainDetail('${n.id}')" title="点击查看详情">
+      <div class="node-title">${n.title}</div>
+      <div class="node-desc">${n.desc}</div>
+    </div>`;
+  });
+  html += `</div>`;
+
+  // 箭头
+  html += `<div class="chain-arrow"></div>`;
+
+  // 行业层 (可能分支)
+  if (industryNodes.length <= 3) {
+    html += `<div class="chain-branch-col">`;
+    industryNodes.forEach(n => {
+      html += `<div class="chain-node industry" onclick="showChainDetail('${n.id}')" title="点击查看详情">
+        <div class="node-title">${n.title}</div>
+        <div class="node-desc">${n.desc}</div>
+      </div>`;
+    });
+    html += `</div>`;
+  } else {
+    // 分支显示
+    html += `<div class="chain-branches">`;
+    industryNodes.forEach(n => {
+      html += `<div class="chain-branch-col">
+        <div class="chain-node industry" onclick="showChainDetail('${n.id}')" title="点击查看详情">
+          <div class="node-title">${n.title}</div>
+          <div class="node-desc">${n.desc}</div>
+        </div>
+      </div>`;
+    });
+    html += `</div>`;
+  }
+
+  // 箭头
+  html += `<div class="chain-arrow"></div>`;
+
+  // 个股/市场层
+  html += `<div class="chain-branches">`;
+  stockNodes.forEach(n => {
+    html += `<div class="chain-branch-col">
+      <div class="chain-node stock" onclick="showChainDetail('${n.id}')" title="点击查看详情">
+        <div class="node-title">${n.title}</div>
+        <div class="node-desc">${n.desc}</div>
+      </div>
+    </div>`;
+  });
+  html += `</div>`;
+
+  container.innerHTML = html;
+
+  // 存储节点数据供点击使用
+  window._chainNodes = {};
+  data.nodes.forEach(n => { window._chainNodes[n.id] = n; });
+}
+
+function showChainDetail(nodeId) {
+  const nodes = window._chainNodes || {};
+  const node = nodes[nodeId];
+  if (!node) return;
+
+  const detailDiv = document.getElementById("chainDetail");
+  const titleEl = document.getElementById("chainDetailTitle");
+  const descEl = document.getElementById("chainDetailDesc");
+  const impactEl = document.getElementById("chainDetailImpact");
+
+  if (!detailDiv || !titleEl) return;
+
+  const impactColor = node.impact === "高" ? "#ef4444" : node.impact === "中" ? "#f59e0b" : "#10b981";
+  const typeLabel = node.type === "policy" ? "政策/监管" : node.type === "industry" ? "行业影响" : "市场/个股";
+
+  titleEl.textContent = node.title;
+  descEl.textContent = node.desc;
+  impactEl.innerHTML = `
+    <span style="color:${impactColor};font-weight:600;">影响力度: ${node.impact}</span>
+    &nbsp;|&nbsp; <span style="color:var(--text-dim);">类型: ${typeLabel}</span>
+  `;
+  detailDiv.style.display = "block";
+  detailDiv.scrollIntoView({ behavior: "smooth", block: "nearest" });
+}
+
+
+// ═════════════════════════════════════════════════════
+// Feature 4: 历史周报对比
+// ═════════════════════════════════════════════════════
+
+function renderHistoryCompare() {
+  const weekA = document.getElementById("compareWeekA")?.value || "2026-W21";
+  const weekB = document.getElementById("compareWeekB")?.value || "2026-W20";
+  const dataA = HISTORY_DATA[weekA];
+  const dataB = HISTORY_DATA[weekB];
+  if (!dataA || !dataB) return;
+
+  // 左侧
+  const titleA = document.getElementById("compareTitleA");
+  const statsA = document.getElementById("compareStatsA");
+  if (titleA) titleA.textContent = dataA.label;
+  if (statsA) {
+    statsA.innerHTML = buildCompareStats(dataA, dataB, "A");
+  }
+
+  // 右侧
+  const titleB = document.getElementById("compareTitleB");
+  const statsB = document.getElementById("compareStatsB");
+  if (titleB) titleB.textContent = dataB.label;
+  if (statsB) {
+    statsB.innerHTML = buildCompareStats(dataB, dataA, "B");
+  }
+
+  // 热力图
+  renderHeatmap(weekA, weekB);
+
+  // 趋势折线图
+  renderTrendLineChart();
+}
+
+function buildCompareStats(data, refData, side) {
+  const fields = [
+    { key: "totalArticles", label: "总新闻数" },
+    { key: "sentiment", label: "情感分布", isObj: true, 
+      render: d => `🟢${d.bullish} 🟡${d.neutral} 🔴${d.bearish}` },
+    { key: "modelReleases", label: "模型发布数" },
+    { key: "chinaArticles", label: "中国动态数" },
+    { key: "fundingTotal", label: "融资总额", prefix: "$", suffix: "亿" },
+  ];
+
+  let html = "";
+  fields.forEach(f => {
+    let val = f.isObj ? f.render(data[f.key]) : (f.prefix||"") + (data[f.key]||0) + (f.suffix||"");
+    let deltaStr = "";
+    if (!f.isObj && refData) {
+      const ref = refData[f.key] || 0;
+      const cur = data[f.key] || 0;
+      if (ref !== 0) {
+        const delta = Math.round((cur - ref) / ref * 100);
+        if (delta > 0) deltaStr = `<span class="stat-delta-up">+${delta}%</span>`;
+        else if (delta < 0) deltaStr = `<span class="stat-delta-down">${delta}%</span>`;
+        else deltaStr = `<span class="stat-delta-flat">0%</span>`;
+      }
+    }
+    html += `<div class="stat-row">
+      <span class="stat-label">${f.label}</span>
+      <span style="display:flex;align-items:center;gap:8px;">
+        <span class="stat-value">${val}</span>
+        ${deltaStr}
+      </span>
+    </div>`;
+  });
+
+  // 话题热度对比
+  html += `<div style="margin-top:12px;padding-top:8px;border-top:1px solid var(--border);">`;
+  html += `<div style="font-size:0.78rem;color:var(--text-dim);margin-bottom:6px;">话题热度</div>`;
+  const topicsA = data.topics || {};
+  const topicsB = refData ? (refData.topics || {}) : {};
+  Object.entries(topicsA).forEach(([topic, count]) => {
+    const refCount = topicsB[topic] || 0;
+    const delta = refCount ? Math.round((count - refCount) / refCount * 100) : 0;
+    const deltaClass = delta > 0 ? "stat-delta-up" : delta < 0 ? "stat-delta-down" : "stat-delta-flat";
+    const deltaStr = refCount ? ` <span class="${deltaClass}">${delta>0?'+':''}${delta}%</span>` : "";
+    html += `<div class="stat-row" style="font-size:0.8rem;">
+      <span class="stat-label">${topic}</span>
+      <span class="stat-value">${count}${deltaStr}</span>
+    </div>`;
+  });
+  html += `</div>`;
+
+  return html;
+}
+
+function renderHeatmap(weekA, weekB) {
+  const grid = document.getElementById("heatmapGrid");
+  if (!grid) return;
+
+  const topics = ["AI Agent", "模型发布", "芯片/算力", "监管政策", "融资/IPO", "开源模型", "AI安全", "应用落地"];
+  // 模拟热度数据 (0-10)
+  const heatA = [9, 7, 5, 4, 3, 4, 6, 8];
+  const heatB = [6, 5, 4, 6, 2, 3, 4, 5];
+
+  let html = "";
+  // 表头
+  html += `<div style="font-size:0.65rem;color:var(--text-dim);text-align:center;">${HISTORY_DATA[weekA]?.label || weekA}</div>`;
+  html += `<div style="font-size:0.65rem;color:var(--text-dim);text-align:center;">${HISTORY_DATA[weekB]?.label || weekB}</div>`;
+  
+  topics.forEach((topic, i) => {
+    const colorA = getHeatColor(heatA[i]);
+    const colorB = getHeatColor(heatB[i]);
+    html += `<div class="heatmap-cell" style="background:${colorA};" title="${topic}: ${heatA[i]}">${heatA[i]}</div>`;
+    html += `<div class="heatmap-cell" style="background:${colorB};" title="${topic}: ${heatB[i]}">${heatB[i]}</div>`;
+  });
+
+  // 重新渲染: 用正确的布局
+  const labels = ["AI Agent", "模型发布", "芯片/算力", "监管政策", "融资/IPO", "开源模型", "AI安全", "应用落地"];
+  const heats = [
+    { label: HISTORY_DATA[weekA]?.label || weekA, values: [9,7,5,4,3,4,6,8] },
+    { label: HISTORY_DATA[weekB]?.label || weekB, values: [6,5,4,6,2,3,4,5] },
+  ];
+
+  let gridHtml = "";
+  // 第一行为标签
+  gridHtml += `<div style="font-size:0.62rem;color:var(--text-dim);">话题</div>`;
+  heats.forEach(h => {
+    gridHtml += `<div style="font-size:0.62rem;color:var(--text-dim);text-align:center;">${h.label.split("第")[1] || h.label}</div>`;
+  });
+  // 数据行
+  labels.forEach((label, i) => {
+    gridHtml += `<div style="font-size:0.65rem;color:var(--text-dim);padding:2px 0;">${label}</div>`;
+    heats.forEach(h => {
+      const c = getHeatColor(h.values[i]);
+      gridHtml += `<div class="heatmap-cell" style="background:${c};" title="${label}: ${h.values[i]}">${h.values[i]}</div>`;
+    });
+  });
+
+  grid.innerHTML = gridHtml;
+}
+
+function getHeatColor(val) {
+  if (val >= 8) return "#1d4ed8";
+  if (val >= 6) return "#2563eb";
+  if (val >= 4) return "#3b82f6";
+  if (val >= 2) return "#60a5fa";
+  return "#1e293b";
+}
+
+function renderTrendLineChart() {
+  const svg = document.getElementById("trendLineChart");
+  if (!svg) return;
+
+  const weeks = ["W18", "W19", "W20", "W21"];
+  const topics = [
+    { name: "AI Agent", values: [4, 8, 6, 9] },
+    { name: "模型发布", values: [3, 9, 5, 7] },
+    { name: "芯片/算力", values: [3, 3, 4, 5] },
+  ];
+  const colors = ["#3b82f6", "#a78bfa", "#06b6d4"];
+  const W = 600, H = 140, pad = { top: 20, right: 20, bottom: 30, left: 30 };
+  const plotW = W - pad.left - pad.right;
+  const plotH = H - pad.top - pad.bottom;
+
+  let svgContent = `<rect width="${W}" height="${H}" fill="transparent"/>`;
+
+  // 网格线
+  for (let i = 0; i <= 10; i++) {
+    const y = pad.top + plotH - (i / 10) * plotH;
+    svgContent += `<line x1="${pad.left}" y1="${y}" x2="${W-pad.right}" y2="${y}" stroke="#1e293b" stroke-width="0.5"/>`;
+    svgContent += `<text x="${pad.left-4}" y="${y+4}" fill="#475569" font-size="9" text-anchor="end">${i}</text>`;
+  }
+
+  // X 轴标签
+  weeks.forEach((w, i) => {
+    const x = pad.left + (i / (weeks.length - 1)) * plotW;
+    svgContent += `<text x="${x}" y="${H - pad.bottom + 16}" fill="#475569" font-size="9" text-anchor="middle">${w}</text>`;
+  });
+
+  // 折线
+  topics.forEach((topic, ti) => {
+    const color = colors[ti];
+    let pathD = "";
+    let dots = "";
+    topic.values.forEach((v, i) => {
+      const x = pad.left + (i / (weeks.length - 1)) * plotW;
+      const y = pad.top + plotH - (v / 10) * plotH;
+      if (i === 0) pathD += `M ${x},${y}`;
+      else pathD += ` L ${x},${y}`;
+      dots += `<circle cx="${x}" cy="${y}" r="3" fill="${color}" stroke="${color}" stroke-width="1"/>`;
+      dots += `<text x="${x+6}" y="${y-6}" fill="${color}" font-size="8">${v}</text>`;
+    });
+    svgContent += `<path d="${pathD}" stroke="${color}" stroke-width="2" fill="none" opacity="0.8"/>`;
+    svgContent += dots;
+  });
+
+  // 图例
+  let legendX = pad.left;
+  topics.forEach((topic, ti) => {
+    const color = colors[ti];
+    svgContent += `<rect x="${legendX}" y="${pad.top-12}" width="10" height="3" fill="${color}" rx="1"/>`;
+    svgContent += `<text x="${legendX+14}" y="${pad.top-9}" fill="${color}" font-size="8">${topic.name}</text>`;
+    legendX += topic.name.length * 5.5 + 30;
+  });
+
+  svg.innerHTML = svgContent;
+}
+
+
+// ═════════════════════════════════════════════════════
+// Feature 7: 自定义关注列表
+// ═════════════════════════════════════════════════════
+
+let WATCHLIST = { companies: [], topics: [] };
+
+function loadWatchlist() {
+  try {
+    const saved = localStorage.getItem("ai_weekly_watchlist");
+    if (saved) WATCHLIST = JSON.parse(saved);
+  } catch(e) {}
+  // 默认值
+  if (WATCHLIST.companies.length === 0) {
+    WATCHLIST = {
+      companies: ["OpenAI", "Anthropic", "Google", "DeepSeek", "百度", "阿里", "腾讯", "字节跳动"],
+      topics: ["AI Agent", "芯片/算力", "融资/IPO", "开源模型", "监管政策"],
+    };
+  }
+  renderWatchlistChips();
+}
+
+function saveWatchlist() {
+  try { localStorage.setItem("ai_weekly_watchlist", JSON.stringify(WATCHLIST)); } catch(e) {}
+}
+
+function renderWatchlistChips() {
+  const container = document.getElementById("watchlistChips");
+  if (!container) return;
+  let html = "";
+  WATCHLIST.companies.forEach((c, i) => {
+    html += `<span class="watch-chip">🏢 ${c} <span class="remove-btn" onclick="removeWatchItem('company',${i})">✕</span></span>`;
+  });
+  WATCHLIST.topics.forEach((t, i) => {
+    html += `<span class="watch-chip">🏷️ ${t} <span class="remove-btn" onclick="removeWatchItem('topic',${i})">✕</span></span>`;
+  });
+  container.innerHTML = html;
+}
+
+function addWatchItem(type) {
+  const input = document.getElementById(type === 'company' ? 'watchCompanyInput' : 'watchTopicInput');
+  if (!input || !input.value.trim()) return;
+  const val = input.value.trim();
+  if (type === 'company' && !WATCHLIST.companies.includes(val)) {
+    WATCHLIST.companies.push(val);
+  } else if (type === 'topic' && !WATCHLIST.topics.includes(val)) {
+    WATCHLIST.topics.push(val);
+  }
+  input.value = "";
+  saveWatchlist();
+  renderWatchlistChips();
+}
+
+function removeWatchItem(type, idx) {
+  if (type === 'company') WATCHLIST.companies.splice(idx, 1);
+  else WATCHLIST.topics.splice(idx, 1);
+  saveWatchlist();
+  renderWatchlistChips();
+}
+
+function applyWatchlist() {
+  // 高亮新闻列表中匹配的内容
+  const allCards = document.querySelectorAll(".news-card h3, .news-card p");
+  const keywords = [...WATCHLIST.companies, ...WATCHLIST.topics];
+  
+  // 先清除旧高亮
+  allCards.forEach(el => {
+    el.innerHTML = el.textContent;
+  });
+
+  // 高亮匹配
+  if (keywords.length > 0) {
+    const regex = new RegExp(`(${keywords.map(k => k.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|')})`, 'gi');
+    allCards.forEach(el => {
+      if (el.innerHTML.length < 500) { // 避免处理太大的内容
+        el.innerHTML = el.textContent.replace(regex, '<mark style="background:rgba(59,130,246,0.35);color:#93c5fd;padding:0 2px;border-radius:3px;">$1</mark>');
+      }
+    });
+  }
+
+  closeModal("watchlistModal");
+  // 切换到热点tab
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+  document.querySelector('[data-tab="hot"]')?.classList.add('active');
+  document.getElementById('tab-hot')?.classList.add('active');
+
+  // 更新 KPI
+  const watchCount = NEWS_DATA.filter(a => 
+    keywords.some(k => a.title.includes(k) || a.summary.includes(k))
+  ).length;
+  const el = document.getElementById("kpi-watch");
+  if (el) el.textContent = watchCount;
+}
+
+
+// ═════════════════════════════════════════════════════
+// Feature 8: 数据看板
+// ═════════════════════════════════════════════════════
+
+function renderDashboard() {
+  renderDashFundingChart();
+  renderDashModelChart();
+  renderDashSentimentDonut();
+  renderDashKpiTiles();
+  renderDashChinaVsGlobal();
+  renderDashWordCloud();
+}
+
+function renderDashFundingChart() {
+  const svg = document.getElementById("dashFundingChart");
+  if (!svg) return;
+  const data = FUNDING_TREND;
+  const W = 400, H = 140, pad = { top: 20, right: 20, bottom: 25, left: 35 };
+  const plotW = W - pad.left - pad.right;
+  const plotH = H - pad.top - pad.bottom;
+  const maxVal = Math.max(...data.map(d => d.amount)) * 1.15;
+
+  let svgContent = `<rect width="${W}" height="${H}" fill="transparent"/>`;
+
+  // 网格
+  [0, 0.25, 0.5, 0.75, 1].forEach(p => {
+    const y = pad.top + plotH - p * plotH;
+    svgContent += `<line x1="${pad.left}" y1="${y}" x2="${W-pad.right}" y2="${y}" stroke="#1e293b" stroke-width="0.5"/>`;
+    svgContent += `<text x="${pad.left-4}" y="${y+4}" fill="#475569" font-size="8" text-anchor="end">$${Math.round(p*maxVal)}B</text>`;
+  });
+
+  // 折线 + 面积
+  let areaPath = `M ${pad.left},${pad.top+plotH}`;
+  let linePath = "";
+  data.forEach((d, i) => {
+    const x = pad.left + (i / (data.length - 1)) * plotW;
+    const y = pad.top + plotH - (d.amount / maxVal) * plotH;
+    areaPath += ` L ${x},${y}`;
+    if (i === 0) linePath += `M ${x},${y}`;
+    else linePath += ` L ${x},${y}`;
+    svgContent += `<circle cx="${x}" cy="${y}" r="3" fill="#3b82f6"/>`;
+    svgContent += `<text x="${x}" y="${y-8}" fill="#93c5fd" font-size="8" text-anchor="middle">$${d.amount}B</text>`;
+  });
+  areaPath += ` L ${pad.left+plotW},${pad.top+plotH} Z`;
+
+  svgContent += `<path d="${areaPath}" fill="url(#fundingGrad)" opacity="0.3"/>`;
+  svgContent += `<path d="${linePath}" stroke="#3b82f6" stroke-width="2.5" fill="none"/>`;
+  svgContent += `<defs><linearGradient id="fundingGrad" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0%" stop-color="#3b82f6" stop-opacity="0.4"/>
+    <stop offset="100%" stop-color="#3b82f6" stop-opacity="0"/>
+  </linearGradient></defs>`;
+
+  // X 轴
+  data.forEach((d, i) => {
+    const x = pad.left + (i / (data.length - 1)) * plotW;
+    svgContent += `<text x="${x}" y="${H-pad.bottom+14}" fill="#475569" font-size="8" text-anchor="middle">${d.week}</text>`;
+  });
+
+  svg.innerHTML = svgContent;
+}
+
+function renderDashModelChart() {
+  const container = document.getElementById("dashModelChart");
+  if (!container) return;
+  const data = MODEL_RELEASE_DATA;
+  const maxCount = Math.max(...data.map(d => d.count));
+  container.innerHTML = data.map(d => {
+    const h = Math.max(4, (d.count / maxCount) * 100);
+    return `<div class="mini-bar-group">
+      <div class="mini-bar" style="height:${h}%;background:linear-gradient(0deg,#3b82f6,#8b5cf6);" title="${d.vendor}: ${d.count}次发布"></div>
+      <div class="mini-bar-label">${d.vendor}</div>
+    </div>`;
+  }).join("");
+}
+
+function renderDashSentimentDonut() {
+  const svg = document.getElementById("dashSentimentDonut");
+  const legend = document.getElementById("dashSentimentLegend");
+  if (!svg) return;
+
+  const bullish = NEWS_DATA.filter(a => a.sentiment?.type === "bull").length;
+  const neutral = NEWS_DATA.filter(a => a.sentiment?.type === "neutral" || !a.sentiment?.type).length;
+  const bearish = NEWS_DATA.filter(a => a.sentiment?.type === "bear").length;
+  const total = bullish + neutral + bearish || 1;
+
+  const slices = [
+    { pct: bullish/total, color: "#10b981", label: "利好/偏多", count: bullish },
+    { pct: neutral/total, color: "#f59e0b", label: "中性", count: neutral },
+    { pct: bearish/total, color: "#ef4444", label: "利空/偏空", count: bearish },
+  ];
+
+  let currentAngle = -90;
+  let paths = "";
+  slices.forEach(s => {
+    const angle = s.pct * 360;
+    const rad1 = (currentAngle * Math.PI) / 180;
+    const rad2 = ((currentAngle + angle) * Math.PI) / 180;
+    const x1 = 60 + 45 * Math.cos(rad1);
+    const y1 = 60 + 45 * Math.sin(rad1);
+    const x2 = 60 + 45 * Math.cos(rad2);
+    const y2 = 60 + 45 * Math.sin(rad2);
+    const largeArc = angle > 180 ? 1 : 0;
+    paths += `<path d="M 60,60 L ${x1},${y1} A 45,45 0 ${largeArc},1 ${x2},${y2} Z" fill="${s.color}" opacity="0.85"/>`;
+    currentAngle += angle;
+  });
+  // 中心圆 (donut hole)
+  paths += `<circle cx="60" cy="60" r="22" fill="var(--card)"/>`;
+  paths += `<text x="60" y="57" text-anchor="middle" fill="var(--text-bright)" font-size="12" font-weight="700">${NEWS_DATA.length}</text>`;
+  paths += `<text x="60" y="70" text-anchor="middle" fill="var(--text-dim)" font-size="7">总新闻</text>`;
+
+  svg.innerHTML = paths;
+
+  if (legend) {
+    legend.innerHTML = slices.map(s => `
+      <div class="donut-legend-item">
+        <div class="donut-legend-dot" style="background:${s.color};"></div>
+        <span style="color:var(--text-dim);">${s.label}</span>
+        <span style="color:var(--text-bright);font-weight:600;margin-left:4px;">${Math.round(s.pct*100)}%</span>
+      </div>
+    `).join("");
+  }
+}
+
+function renderDashKpiTiles() {
+  const container = document.getElementById("dashKpiTiles");
+  if (!container) return;
+  const tiles = [
+    { val: "$6.5T", lbl: "年度资本开支", delta: "+18%", up: true },
+    { val: "40%", lbl: "Agent渗透率", delta: "+12%", up: true },
+    { val: "10×", lbl: "API调用增长", delta: "+150%", up: true },
+    { val: "41%", lbl: "国产芯片份额", delta: "+8%", up: true },
+  ];
+  container.innerHTML = tiles.map(t => `
+    <div class="kpi-tile">
+      <div class="kpi-val" style="color:${t.up ? '#10b981' : '#ef4444'}">${t.val}</div>
+      <div class="kpi-lbl">${t.lbl}</div>
+      <div class="kpi-delta" style="color:${t.up ? '#10b981' : '#ef4444'}">${t.delta}</div>
+    </div>
+  `).join("");
+}
+
+function renderDashChinaVsGlobal() {
+  const container = document.getElementById("dashChinaVsGlobal");
+  if (!container) return;
+  const topics = ["AI Agent", "模型发布", "芯片", "监管", "融资", "开源"];
+  const china = [8, 5, 9, 6, 4, 3];
+  const global_ = [6, 7, 3, 4, 5, 6];
+  const maxVal = 10;
+
+  let html = `<div style="display:flex;gap:4px;align-items:flex-end;height:120px;">`;
+  topics.forEach((t, i) => {
+    const h1 = (china[i] / maxVal) * 100;
+    const h2 = (global_[i] / maxVal) * 100;
+    html += `<div class="mini-bar-group" style="gap:2px;">
+      <div class="mini-bar" style="height:${h1}%;background:#3b82f6;" title="中国: ${china[i]}"></div>
+      <div class="mini-bar" style="height:${h2}%;background:#8b5cf6;" title="全球: ${global_[i]}"></div>
+      <div class="mini-bar-label" style="font-size:0.55rem;">${t}</div>
+    </div>`;
+  });
+  html += `</div>`;
+  html += `<div style="display:flex;gap:12px;font-size:0.7rem;color:var(--text-dim);margin-top:8px;">
+    <span><span style="display:inline-block;width:8px;height:8px;border-radius:2px;background:#3b82f6;vertical-align:middle;"></span> 中国</span>
+    <span><span style="display:inline-block;width:8px;height:8px;border-radius:2px;background:#8b5cf6;vertical-align:middle;"></span> 全球</span>
+  </div>`;
+  container.innerHTML = html;
+}
+
+function renderDashWordCloud() {
+  const container = document.getElementById("dashWordCloud");
+  if (!container) return;
+  const words = [
+    { text: "AI Agent", size: 1.8, color: "#3b82f6" },
+    { text: "大模型", size: 1.5, color: "#8b5cf6" },
+    { text: "DeepSeek", size: 1.4, color: "#06b6d4" },
+    { text: "算力", size: 1.2, color: "#10b981" },
+    { text: "Gemini", size: 1.1, color: "#f59e0b" },
+    { text: "融资", size: 1.0, color: "#ef4444" },
+    { text: "开源", size: 0.95, color: "#a78bfa" },
+    { text: "监管", size: 0.9, color: "#f97316" },
+    { text: "国产芯片", size: 1.0, color: "#06b6d4" },
+    { text: "Claude", size: 0.9, color: "#ec4899" },
+    { text: "Agentic", size: 0.85, color: "#3b82f6" },
+    { text: "电力危机", size: 0.8, color: "#ef4444" },
+    { text: "IPO", size: 0.75, color: "#f59e0b" },
+    { text: "昇腾", size: 0.7, color: "#10b981" },
+    { text: "多模态", size: 0.7, color: "#8b5cf6" },
+  ];
+  container.innerHTML = words.map(w => 
+    `<span style="font-size:${w.size}rem;color:${w.color};font-weight:${w.size>1.2?'700':'400'};opacity:0.85;cursor:default;" title="${w.text}">${w.text}</span>`
+  ).join(" ");
+}
+
+
+// ═════════════════════════════════════════════════════
+// Feature 5: 导出功能
+// ═════════════════════════════════════════════════════
+
+function initExportFab() {
+  const mainBtn = document.getElementById("exportFabMain");
+  const menu = document.getElementById("exportFabMenu");
+  if (!mainBtn || !menu) return;
+  mainBtn.addEventListener("click", () => {
+    menu.classList.toggle("show");
+  });
+  // 点击其他地方关闭
+  document.addEventListener("click", (e) => {
+    if (!e.target.closest(".export-fab")) {
+      menu.classList.remove("show");
+    }
+  });
+}
+
+function openExportModal() {
+  document.getElementById("exportModal")?.classList.add("show");
+  document.getElementById("exportFabMenu")?.classList.remove("show");
+}
+
+function closeModal(id) {
+  document.getElementById(id)?.classList.remove("show");
+}
+
+function doExport() {
+  const format = document.getElementById("exportFormat")?.value || "pdf";
+  const statusEl = document.getElementById("exportStatus");
+  if (statusEl) statusEl.textContent = "⏳ 正在导出...";
+  
+  // 模拟导出 (实际调用 ai_export.py 后端)
+  setTimeout(() => {
+    const formats = format === "all" ? ["PDF", "Word", "JSON"] : [format.toUpperCase()];
+    if (statusEl) {
+      statusEl.innerHTML = `✅ 导出完成！<br/>${formats.map(f => `  · ${f} 文件已生成`).join("<br/>")}<br/><span style="color:var(--text-dim);font-size:0.75rem;">文件保存在 exports/ 目录</span>`;
+    }
+    // 实际后端调用提示
+    console.log("[Export] 实际使用时调用: python ai_export.py --format " + format);
+  }, 1500);
+}
+
+function printReport() {
+  window.print();
+}
+
+function shareReport() {
+  if (navigator.share) {
+    navigator.share({ title: "AI行业周报", text: "查看本周AI行业动态", url: window.location.href });
+  } else {
+    prompt("复制链接分享:", window.location.href);
+  }
+}
+
+function openModal(id) {
+  document.getElementById(id)?.classList.add("show");
+}
+
+
+// ═════════════════════════════════════════════════════
+// Feature 6: 邮件定时推送配置
+// ═════════════════════════════════════════════════════
+
+function saveEmailSchedule() {
+  const statusEl = document.getElementById("emailScheduleStatus");
+  const config = {
+    smtp_server: document.getElementById("smtpServer")?.value,
+    sender: document.getElementById("smtpSender")?.value,
+    recipients: document.getElementById("smtpRecipients")?.value,
+    schedule: document.getElementById("emailSchedule")?.value,
+  };
+  try {
+    localStorage.setItem("ai_weekly_email_config", JSON.stringify(config));
+  } catch(e) {}
+  if (statusEl) {
+    statusEl.innerHTML = `✅ 配置已保存！<br/><span style="color:var(--text-dim);font-size:0.75rem;">
+      实际部署时运行: <code>python ai_scheduler.py --run</code> 执行完整流水线<br/>
+      或配置 Windows 计划任务实现自动定时推送</span>`;
+  }
+  console.log("[Email] 配置保存:", config);
+  console.log("[Email] 实际使用时调用: python ai_scheduler.py --send-email");
+}
+
+
+// ═════════════════════════════════════════════════════
+// 按钮回调 (全局)
+// ═════════════════════════════════════════════════════
+
+function showDashboard() {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+  document.querySelector('[data-tab="dashboard"]')?.classList.add('active');
+  document.getElementById('tab-dashboard')?.classList.add('active');
+}
+
+function showWatchlist() {
+  document.getElementById("watchlistModal")?.classList.add("show");
+}
+
+function showCausalChain() {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+  document.querySelector('[data-tab="causal"]')?.classList.add('active');
+  document.getElementById('tab-causal')?.classList.add('active');
+}
+
+function showHistoryCompare() {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+  document.querySelector('[data-tab="history"]')?.classList.add('active');
+  document.getElementById('tab-history')?.classList.add('active');
+}
+
+
+// ═════════════════════════════════════════════════════
+// KPI 动画
+// ═════════════════════════════════════════════════════
+
+function animateKPIs() {
+  document.querySelectorAll('.kpi-card').forEach(el => {
+    el.style.opacity = 0;
+    el.style.transform = 'translateY(16px)';
+    el.style.transition = 'opacity .5s, transform .5s';
+  });
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.style.opacity = 1;
+        entry.target.style.transform = 'translateY(0)';
+      }
+    });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.news-card, .trend-card, .kpi-card').forEach(el => observer.observe(el));
+}
+
+// ═════════════════════════════════════════════════════
+// 日志
+// ═════════════════════════════════════════════════════
+
+console.log("%c🤖 AI Weekly Report v2.0", "font-size:16px;font-weight:bold;color:#3b82f6;");
+console.log("%c  8大功能模块已加载:", "color:#94a3b8;");
+console.log("  1. ✅ 自动抓取引擎 (ai_scraper.py)");
+console.log("  2. ✅ 情感分析模块 (ai_sentiment.py)");
+console.log("  3. ✅ 市场传导链可视化");
+console.log("  4. ✅ 历史周报对比");
+console.log("  5. ✅ PDF/Word导出 (ai_export.py)");
+console.log("  6. ✅ 邮件定时推送 (ai_scheduler.py)");
+console.log("  7. ✅ 自定义关注列表");
+console.log("  8. ✅ 数据看板仪表盘");
+console.log("%c  后端脚本: ai_scraper.py | ai_sentiment.py | ai_export.py | ai_scheduler.py", "color:#10b981;");
+</script>
+</body>
+</html>

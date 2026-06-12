@@ -1,0 +1,954 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>AI 行业周报</title>
+<style>
+:root{--bg:#0a0e1a;--card:#111827;--cardH:#1a2236;--bd:#1e293b;--acc:#3b82f6;--acc2:#8b5cf6;--acc3:#06b6d4;--g:#10b981;--r:#ef4444;--y:#f59e0b;--tx:#e2e8f0;--txd:#94a3b8;--txb:#f8fafc}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Noto Sans SC','Microsoft YaHei',sans-serif;background:var(--bg);color:var(--tx);line-height:1.6;min-height:100vh}
+
+/* ── Hero ── */
+.hero{background:linear-gradient(135deg,#0f172a 0%,#1e1b4b 50%,#0c1427 100%);padding:40px 24px 32px;text-align:center;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:radial-gradient(ellipse at 30% 50%,rgba(59,130,246,0.08) 0%,transparent 60%),radial-gradient(ellipse at 70% 50%,rgba(139,92,246,0.06) 0%,transparent 60%)}
+.hero h1{font-size:2.4rem;font-weight:800;background:linear-gradient(135deg,#60a5fa,#a78bfa,#34d399);-webkit-background-clip:text;-webkit-text-fill-color:transparent;position:relative;letter-spacing:-.5px}
+.hero .sub{color:var(--txd);font-size:1rem;margin-top:6px;position:relative}
+.hero .badge{display:inline-block;background:rgba(59,130,246,0.15);border:1px solid rgba(59,130,246,0.3);border-radius:20px;padding:4px 16px;font-size:.85rem;color:#93c5fd;margin-top:10px;position:relative}
+
+/* ── Toolbar ── */
+.toolbar{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:16px;position:relative}
+.toolbar button{padding:7px 16px;border-radius:8px;border:1px solid rgba(59,130,246,0.3);background:rgba(59,130,246,0.1);color:#93c5fd;font-size:.82rem;cursor:pointer;transition:all .2s;display:inline-flex;align-items:center;gap:5px;white-space:nowrap}
+.toolbar button:hover{background:rgba(59,130,246,0.25);color:#fff}
+.toolbar button.primary{background:var(--acc);color:#fff;border-color:var(--acc);font-weight:600}
+.toolbar button.primary:hover{background:#2563eb}
+.toolbar button.success{border-color:rgba(16,185,129,0.4);background:rgba(16,185,129,0.12);color:#6ee7b7}
+.toolbar button.success:hover{background:rgba(16,185,129,0.25)}
+.toolbar button.warning{border-color:rgba(245,158,11,0.4);background:rgba(245,158,11,0.12);color:#fcd34d}
+.toolbar button.warning:hover{background:rgba(245,158,11,0.25)}
+.toolbar button.purple{border-color:rgba(139,92,246,0.4);background:rgba(139,92,246,0.12);color:#c4b5fd}
+.toolbar button.purple:hover{background:rgba(139,92,246,0.25)}
+.toolbar button:disabled{opacity:.5;cursor:wait}
+.toolbar .sep{width:1px;height:28px;background:var(--bd);margin:0 4px;align-self:center}
+.spinner{display:inline-block;width:14px;height:14px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .6s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ── Nav Bar (sticky) ── */
+.nav-bar{position:sticky;top:0;z-index:100;background:rgba(10,14,26,0.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--bd);padding:8px 20px;display:flex;gap:6px;justify-content:center;flex-wrap:wrap}
+.nav-bar button{padding:5px 12px;border-radius:6px;border:1px solid transparent;background:transparent;color:var(--txd);font-size:.76rem;cursor:pointer;transition:all .2s}
+.nav-bar button:hover{color:var(--txb);background:rgba(59,130,246,0.1)}
+.nav-bar button.active{color:#93c5fd;background:rgba(59,130,246,0.15);border-color:rgba(59,130,246,0.3)}
+
+/* ── Status Bar ── */
+#statusBar{text-align:center;padding:8px;font-size:.8rem;color:var(--txd);margin-bottom:20px}
+#statusBar .ok{color:var(--g)}#statusBar .err{color:var(--r)}#statusBar .warn{color:var(--y)}
+
+/* ── Container ── */
+.container{max-width:1200px;margin:0 auto;padding:0 20px 60px}
+
+/* ── KPI ── */
+.kpi{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin:-20px auto 28px;position:relative;z-index:2}
+.kpi-card{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:16px;text-align:center}
+.kpi-card .num{font-size:1.5rem;font-weight:800;background:linear-gradient(135deg,var(--acc),var(--acc2));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.kpi-card .lbl{font-size:.78rem;color:var(--txd);margin-top:3px}
+
+/* ── Section ── */
+.section{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:24px;margin-bottom:24px;scroll-margin-top:50px}
+.section h2{font-size:1.15rem;color:var(--txb);margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.section h2 .icon{font-size:1.2rem}
+.section-desc{font-size:.82rem;color:var(--txd);margin-bottom:16px;margin-top:-10px}
+
+/* ── News Cards ── */
+.news-grid{display:grid;gap:14px}
+.news-card{background:rgba(15,23,42,0.5);border:1px solid var(--bd);border-radius:12px;padding:16px 20px;transition:all .2s;position:relative;border-left:3px solid var(--bd)}
+.news-card:hover{border-color:var(--acc);background:var(--cardH)}
+.news-card.bull{border-left-color:var(--g)}
+.news-card.bear{border-left-color:var(--r)}
+.news-card.neu{border-left-color:var(--y)}
+.tag{display:inline-block;font-size:.68rem;font-weight:600;padding:2px 10px;border-radius:20px;margin-bottom:6px;margin-right:6px}
+.tag-m{background:rgba(139,92,246,0.15);color:#c4b5fd}
+.tag-a{background:rgba(6,182,212,0.15);color:#67e8f9}
+.tag-f{background:rgba(245,158,11,0.15);color:#fcd34d}
+.tag-p{background:rgba(239,68,68,0.15);color:#fca5a5}
+.tag-i{background:rgba(16,185,129,0.15);color:#6ee7b7}
+.tag-c{background:rgba(59,130,246,0.15);color:#93c5fd}
+.sent-badge{display:inline-block;font-size:.68rem;font-weight:600;padding:2px 8px;border-radius:10px;margin-left:6px}
+.sent-bull{background:rgba(16,185,129,0.15);color:#6ee7b7}
+.sent-bear{background:rgba(239,68,68,0.15);color:#fca5a5}
+.sent-neu{background:rgba(245,158,11,0.15);color:#fcd34d}
+.news-card h3{font-size:.98rem;font-weight:600;color:var(--txb);margin-bottom:5px;line-height:1.5}
+.news-card p{font-size:.84rem;color:var(--txd);margin-bottom:8px}
+.news-card .meta{display:flex;justify-content:space-between;align-items:center;font-size:.74rem;color:var(--txd);flex-wrap:wrap;gap:6px}
+.news-card .meta a{color:var(--acc);text-decoration:none}
+.news-card .meta a:hover{text-decoration:underline}
+.trans-box{margin-top:8px;padding:10px 14px;background:rgba(59,130,246,0.06);border:1px solid rgba(59,130,246,0.15);border-radius:8px;font-size:.82rem;color:#93c5fd;display:none;line-height:1.7}
+.news-card .btn-trans{padding:3px 10px;border-radius:6px;border:1px solid rgba(59,130,246,0.4);background:rgba(59,130,246,0.1);color:#93c5fd;font-size:.72rem;cursor:pointer}
+.news-card .btn-trans:hover{background:rgba(59,130,246,0.25)}
+.news-card .btn-trans.done{border-color:rgba(139,92,246,0.4);color:#c4b5fd}
+
+/* ── Trend Signals ── */
+.trend-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:14px}
+.trend-card{background:rgba(15,23,42,0.5);border-radius:12px;padding:20px;position:relative;overflow:hidden}
+.trend-card::before{content:'';position:absolute;top:0;left:0;width:4px;height:100%}
+.trend-card.bull::before{background:var(--g)}
+.trend-card.bear::before{background:var(--r)}
+.trend-card.neu::before{background:var(--y)}
+.trend-sig{display:inline-block;font-size:.66rem;font-weight:700;padding:2px 8px;border-radius:12px;margin-bottom:8px}
+.sig-bull{background:rgba(16,185,129,0.15);color:#6ee7b7}
+.sig-neu{background:rgba(245,158,11,0.15);color:#fcd34d}
+.sig-bear{background:rgba(239,68,68,0.15);color:#fca5a5}
+.trend-card h3{font-size:.93rem;color:var(--txb);margin-bottom:6px}
+.trend-card p{font-size:.82rem;color:var(--txd)}
+
+/* ── Price Table ── */
+.tbl-w{overflow-x:auto}
+.tbl{width:100%;border-collapse:collapse;font-size:.84rem;min-width:600px}
+.tbl thead{background:rgba(59,130,246,0.1)}
+.tbl th{padding:10px 14px;text-align:left;font-weight:600;color:var(--txb);font-size:.76rem;text-transform:uppercase;letter-spacing:.5px}
+.tbl td{padding:10px 14px;border-top:1px solid var(--bd)}
+.tbl tbody tr:hover{background:rgba(59,130,246,0.05)}
+.hi{color:var(--g);font-weight:600}.wa{color:var(--y);font-weight:600}
+
+/* ── Timeline ── */
+.timeline{position:relative;padding-left:28px}
+.timeline::before{content:'';position:absolute;left:8px;top:0;bottom:0;width:2px;background:linear-gradient(180deg,var(--acc),var(--acc2),var(--acc3));border-radius:2px}
+.tl-item{position:relative;margin-bottom:20px}
+.tl-item::before{content:'';position:absolute;left:-24px;top:6px;width:12px;height:12px;border-radius:50%;background:var(--acc);border:2px solid var(--bg);z-index:1}
+.tl-date{font-size:.75rem;color:var(--acc);font-weight:600;margin-bottom:3px}
+.tl-item h4{font-size:.9rem;color:var(--txb);margin-bottom:3px}
+.tl-item p{font-size:.82rem;color:var(--txd)}
+
+/* ── Dashboard ── */
+.dash-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}
+.dash-card{background:rgba(15,23,42,0.5);border-radius:12px;padding:18px}
+.dash-card h3{font-size:.9rem;color:var(--txb);margin-bottom:12px}
+.bar-group{display:flex;align-items:flex-end;gap:5px;height:100px;padding-top:8px}
+.bar-item{display:flex;flex-direction:column;align-items:center;flex:1;height:100%;justify-content:flex-end}
+.bar{width:100%;border-radius:3px 3px 0 0;min-height:2px}
+.bar-label{font-size:.58rem;color:var(--txd);margin-top:3px}
+
+/* ── Compare (周度对比) ── */
+.compare-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:14px;margin-top:14px}
+.compare-card{background:rgba(15,23,42,0.5);border-radius:10px;padding:16px}
+.compare-card h4{font-size:.88rem;color:var(--txb);margin-bottom:10px}
+.cmp-bar{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.cmp-bar .lb{font-size:.72rem;color:var(--txd);width:70px;text-align:right}
+.cmp-bar .bw{flex:1;height:18px;background:#1e293b;border-radius:4px;overflow:hidden;position:relative}
+.cmp-bar .bf{height:100%;border-radius:4px;transition:width .6s ease}
+.cmp-bar .pct{font-size:.66rem;color:var(--txd);width:40px}
+.cmp-legend{font-size:.68rem;color:var(--txd);margin-top:8px;display:flex;gap:12px}
+.cmp-legend span{display:flex;align-items:center;gap:4px}
+.cmp-legend .dot{display:inline-block;width:10px;height:4px;border-radius:2px}
+.cmp-summary{font-size:.82rem;color:var(--txd);line-height:1.8}
+.cmp-summary .up{color:var(--g);font-weight:600}.cmp-summary .down{color:var(--r);font-weight:600}
+
+/* ── Causal Chain ── */
+.chain-body{display:flex;flex-direction:column;align-items:center;gap:0;padding:16px 0}
+.chain-node{border-radius:10px;padding:10px 18px;text-align:center;min-width:150px;cursor:pointer;transition:all .2s}
+.chain-node:hover{transform:scale(1.05)}
+.chain-node.pol{border:1px solid rgba(239,68,68,0.4);background:rgba(239,68,68,0.08)}
+.chain-node.ind{border:1px solid rgba(139,92,246,0.4);background:rgba(139,92,246,0.08)}
+.chain-node.stk{border:1px solid rgba(16,185,129,0.4);background:rgba(16,185,129,0.08)}
+.chain-node .nt{font-size:.84rem;font-weight:600;color:var(--txb)}
+.chain-node .nd{font-size:.7rem;color:var(--txd);margin-top:4px}
+.chain-arrow{width:2px;height:28px;background:linear-gradient(180deg,var(--acc),var(--acc2));position:relative}
+.chain-arrow::after{content:'';position:absolute;bottom:-4px;left:50%;transform:translateX(-50%);width:0;height:0;border-left:5px solid transparent;border-right:5px solid transparent;border-top:6px solid var(--acc2)}
+.chain-row{display:flex;gap:14px;align-items:flex-start}
+.chain-col{display:flex;flex-direction:column;align-items:center;gap:0;flex:1}
+.chain-detail{display:none;margin-top:18px;background:rgba(15,23,42,0.5);border-radius:10px;padding:14px}
+
+/* ── Sentiment Bar ── */
+.sent-stats{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:16px}
+.sent-stat-card{background:rgba(15,23,42,0.5);border-radius:10px;padding:14px 18px;min-width:100px}
+.sent-stat-card .num{font-size:1.5rem;font-weight:800}
+.sent-stat-card .lbl{font-size:.74rem}
+
+/* ── Footer ── */
+.footer{text-align:center;padding:30px 20px;color:var(--txd);font-size:.76rem;border-top:1px solid var(--bd);margin-top:10px}
+
+/* ── Filter Bar ── */
+.filter-bar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:16px}
+.filter-bar select,.filter-bar input{background:#1e293b;border:1px solid var(--bd);border-radius:8px;padding:7px 12px;color:var(--tx);font-size:.82rem}
+.filter-bar .count{background:rgba(59,130,246,0.1);color:#93c5fd;padding:4px 12px;border-radius:8px;font-size:.78rem}
+
+/* ── Scrollbar ── */
+::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:var(--bd);border-radius:3px}
+
+/* ── Toast ── */
+.toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%);background:var(--card);border:1px solid var(--bd);border-radius:10px;padding:10px 20px;font-size:.84rem;color:var(--txb);z-index:9999;opacity:0;transition:opacity .3s;pointer-events:none;box-shadow:0 8px 32px rgba(0,0,0,.4)}
+.toast.show{opacity:1}
+
+/* ── Back to Top ── */
+.back-top{position:fixed;bottom:30px;right:30px;width:44px;height:44px;border-radius:50%;border:1px solid rgba(59,130,246,0.4);background:rgba(10,14,26,0.85);backdrop-filter:blur(8px);color:#93c5fd;font-size:1.2rem;cursor:pointer;z-index:999;opacity:0;transform:translateY(20px);transition:all .3s;display:flex;align-items:center;justify-content:center}
+.back-top.show{opacity:1;transform:translateY(0)}
+.back-top:hover{background:var(--acc);color:#fff;border-color:var(--acc);transform:translateY(-2px)}
+
+/* ── Print ── */
+@media print{
+  body{background:#fff!important;color:#000!important}
+  .toolbar,.nav-bar,.filter-bar,.footer,.btn-trans{display:none!important}
+  .section{break-inside:avoid;page-break-inside:avoid;border-color:#ddd!important;background:#fff!important}
+  .hero{background:#fff!important;padding:16px!important}
+  .hero h1{background:none!important;-webkit-text-fill-color:#1a1a2e!important;color:#1a1a2e!important}
+  .kpi-card{border-color:#ddd!important;background:#f9f9f9!important}
+  .kpi-card .num{background:none!important;-webkit-text-fill-color:#3b82f6!important;color:#3b82f6!important}
+  .news-card,.trend-card,.dash-card,.compare-card{border-color:#eee!important;background:#fafafa!important}
+  .tag,.sent-badge,.trend-sig{background:#f0f0f0!important;color:#333!important;border:1px solid #ccc!important}
+  *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
+  a[href]:after{content:" (" attr(href) ")";font-size:9px;color:#555}
+  .timeline::before,.tl-item::before{background:#333!important}
+}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <h1>AI 行业周报</h1>
+  <p class="sub">多源聚合 · 真实数据 · 情感分析 · 周度对比 · 传导链 · 数据看板</p>
+  <span class="badge" id="dateRange">等待数据加载...</span>
+  <div class="toolbar">
+    <button class="primary" onclick="doFetch()" id="btnFetch">🔄 更新数据</button>
+    <div class="sep"></div>
+    <button onclick="scrollTo_('sec-news')">📰 新闻</button>
+    <button onclick="scrollTo_('sec-sentiment')">🧠 情感分析</button>
+    <button onclick="scrollTo_('sec-compare')">📊 周度对比</button>
+    <button onclick="scrollTo_('sec-trends')">📈 趋势</button>
+    <button onclick="scrollTo_('sec-chain')">🔗 传导链</button>
+    <button onclick="scrollTo_('sec-dashboard')">📊 数据看板</button>
+    <button onclick="scrollTo_('sec-timeline')">📅 时间线</button>
+    <div class="sep"></div>
+    <button class="purple" onclick="batchTranslate()" id="btnBatchTrans">🌐 批量翻译</button>
+    <button class="success" onclick="doExportPDF()" id="btnPDF">📄 导出 PDF</button>
+    <button class="warning" onclick="doExportPPT()" id="btnPPT">📊 导出 PPT</button>
+    <button onclick="window.print()">🖨️ 打印</button>
+  </div>
+</header>
+
+<!-- Sticky Nav Bar -->
+<nav class="nav-bar" id="navBar">
+  <button onclick="scrollTo_('sec-news')" data-sec="sec-news">📰 新闻</button>
+  <button onclick="scrollTo_('sec-sentiment')" data-sec="sec-sentiment">🧠 情感</button>
+  <button onclick="scrollTo_('sec-compare')" data-sec="sec-compare">📊 对比</button>
+  <button onclick="scrollTo_('sec-trends')" data-sec="sec-trends">📈 趋势</button>
+  <button onclick="scrollTo_('sec-price')" data-sec="sec-price">💰 价格</button>
+  <button onclick="scrollTo_('sec-chain')" data-sec="sec-chain">🔗 传导链</button>
+  <button onclick="scrollTo_('sec-dashboard')" data-sec="sec-dashboard">📊 看板</button>
+  <button onclick="scrollTo_('sec-timeline')" data-sec="sec-timeline">📅 时间线</button>
+</nav>
+
+<div class="container">
+
+<div id="statusBar">正在加载数据...</div>
+
+<!-- KPI -->
+<div class="kpi" id="kpiArea"></div>
+
+<!-- Section: 新闻列表 -->
+<div class="section" id="sec-news">
+  <h2><span class="icon">📰</span> 最新 AI 新闻</h2>
+  <div class="filter-bar">
+    <select id="filtTag" onchange="applyFilter()">
+      <option value="all">全部标签</option>
+      <option value="模型发布">模型发布</option>
+      <option value="AI Agent">AI Agent</option>
+      <option value="投融资">投融资</option>
+      <option value="监管政策">监管政策</option>
+      <option value="基础设施">基础设施</option>
+      <option value="中国动态">中国动态</option>
+      <option value="开源">开源</option>
+    </select>
+    <select id="filtSenti" onchange="applyFilter()">
+      <option value="all">全部情感</option>
+      <option value="bull">利好</option>
+      <option value="bear">利空</option>
+      <option value="neutral">中性</option>
+    </select>
+    <input type="text" id="filtSearch" placeholder="搜索关键词..." oninput="applyFilter()"/>
+    <span class="count" id="filtCount">0 条</span>
+  </div>
+  <div class="news-grid" id="newsGrid"></div>
+</div>
+
+<!-- Section: 情感分析 -->
+<div class="section" id="sec-sentiment">
+  <h2><span class="icon">🧠</span> 情感分析</h2>
+  <p class="section-desc">基于多维度关键词权重 + 上下文语义规则自动标注</p>
+  <div class="sent-stats" id="sentStats"></div>
+  <div class="news-grid" id="sentGrid"></div>
+</div>
+
+<!-- Section: 周度对比 -->
+<div class="section" id="sec-compare">
+  <h2><span class="icon">📊</span> 周度对比</h2>
+  <p class="section-desc">本周 vs 上周：情感变化、话题热度迁移</p>
+  <div class="compare-grid" id="compareGrid"></div>
+</div>
+
+<!-- Section: 趋势信号 -->
+<div class="section" id="sec-trends">
+  <h2><span class="icon">📈</span> 趋势信号</h2>
+  <p class="section-desc">综合本周新闻提炼的核心趋势判断</p>
+  <div class="trend-grid" id="trendGrid"></div>
+</div>
+
+<!-- Section: 传导链 -->
+<div class="section" id="sec-chain">
+  <h2><span class="icon">🔗</span> 市场传导链</h2>
+  <p class="section-desc">政策 → 产业 → 资本市场的传导路径分析</p>
+  <div class="filter-bar">
+    <select id="chainScn" onchange="renderChain()">
+      <option value="policy">宏观政策</option>
+      <option value="funding">资本流动</option>
+      <option value="chip">芯片供应</option>
+      <option value="agent">Agent 产业化</option>
+    </select>
+  </div>
+  <div class="chain-body" id="chainBody"></div>
+  <div class="chain-detail" id="chainDetail">
+    <h4 id="cdTitle" style="color:var(--acc);margin-bottom:6px"></h4>
+    <p id="cdDesc" style="font-size:.82rem;color:var(--txd)"></p>
+    <div id="cdImpact" style="margin-top:8px;font-size:.78rem"></div>
+  </div>
+</div>
+
+<!-- Section: 模型价格 -->
+<div class="section" id="sec-price">
+  <h2><span class="icon">💰</span> 主流模型价格对比</h2>
+  <div class="tbl-w"><table class="tbl" id="priceTbl"></table></div>
+</div>
+
+<!-- Section: 数据看板 -->
+<div class="section" id="sec-dashboard">
+  <h2><span class="icon">📊</span> 数据看板</h2>
+  <div class="dash-grid" id="dashGrid"></div>
+</div>
+
+<!-- Section: 时间线 -->
+<div class="section" id="sec-timeline">
+  <h2><span class="icon">📅</span> 时间线</h2>
+  <div class="timeline" id="tlBody"></div>
+</div>
+
+</div>
+
+<footer class="footer">
+  <p>AI 行业周报 · 自动聚合多源真实数据</p>
+  <p style="margin-top:4px;color:#475569">IT之家 · 机器之心 · TechCrunch · The Verge · Wired · AI News</p>
+  <p style="margin-top:4px;color:#334155">内容由 AI 自动聚合，仅供参考</p>
+</footer>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<!-- Back to Top -->
+<button class="back-top" id="backTop" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="返回顶部">↑</button>
+
+<script>
+let ALL = [];
+let FIL = [];
+let LW = null; // 上周数据
+
+// ── 工具函数 ──
+function esc(s) { return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+function showToast(msg, duration) {
+  duration = duration || 2500;
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), duration);
+}
+
+function scrollTo_(id) {
+  const el = document.getElementById(id);
+  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// ── 高亮当前导航 ──
+function updateNavHighlight() {
+  const sections = ['sec-news','sec-sentiment','sec-compare','sec-trends','sec-price','sec-chain','sec-dashboard','sec-timeline'];
+  const navBtns = document.querySelectorAll('.nav-bar button[data-sec]');
+  let current = '';
+  for (const id of sections) {
+    const el = document.getElementById(id);
+    if (el) {
+      const rect = el.getBoundingClientRect();
+      if (rect.top <= 80) current = id;
+    }
+  }
+  navBtns.forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.sec === current);
+  });
+}
+window.addEventListener('scroll', function() {
+  updateNavHighlight();
+  // Back to top button
+  var btn = document.getElementById('backTop');
+  if (btn) btn.classList.toggle('show', window.scrollY > 400);
+}, { passive: true });
+
+// ── 情感类型 ──
+function sentType(a) {
+  const s = a.sentiment || {};
+  if (s.type) return s.type;
+  const label = s.sentiment || s.label || '';
+  if (label.includes('利好') || label.includes('偏多')) return 'bull';
+  if (label.includes('利空') || label.includes('偏空')) return 'bear';
+  return 'neutral';
+}
+
+// ── 标签颜色 ──
+function tagCls(t) {
+  if (!t) return 'tag-m';
+  if (t.includes('模型')) return 'tag-m';
+  if (t.includes('Agent')) return 'tag-a';
+  if (t.includes('融资') || t.includes('投')) return 'tag-f';
+  if (t.includes('政策') || t.includes('监管')) return 'tag-p';
+  if (t.includes('基础') || t.includes('算力')) return 'tag-i';
+  if (t.includes('中国')) return 'tag-c';
+  return 'tag-m';
+}
+
+function sentBadge(a) {
+  const t = sentType(a);
+  const s = a.sentiment || {};
+  const label = (s.sentiment || s.label || '中性').replace(/[🟢🔴🟡]\s*/, '');
+  if (t === 'bull') return '<span class="sent-badge sent-bull">' + esc(label) + '</span>';
+  if (t === 'bear') return '<span class="sent-badge sent-bear">' + esc(label) + '</span>';
+  return '<span class="sent-badge sent-neu">' + esc(label) + '</span>';
+}
+
+// ── 数据加载 ──
+async function loadData(force) {
+  const sb = document.getElementById('statusBar');
+  if (force) {
+    sb.innerHTML = '<span class="warn"><span class="spinner"></span> 正在抓取最近 7 天数据，请稍候...</span>';
+    document.getElementById('btnFetch').disabled = true;
+    try {
+      const r = await fetch('/api/fetch');
+      const d = await r.json();
+      if (d.status === 'error') throw new Error(d.message);
+      let retries = 0;
+      while (retries < 60) {
+        await sleep(2000);
+        const sr = await fetch('/api/status');
+        const sd = await sr.json();
+        if (!sd.running) {
+          if (sd.error) throw new Error(sd.error);
+          break;
+        }
+        retries++;
+        sb.innerHTML = '<span class="warn"><span class="spinner"></span> 抓取中... (' + (retries * 2) + 's)</span>';
+      }
+    } catch (e) {
+      sb.innerHTML = '<span class="err">抓取失败: ' + esc(e.message) + '</span>';
+      document.getElementById('btnFetch').disabled = false;
+      return;
+    }
+    document.getElementById('btnFetch').disabled = false;
+  }
+
+  sb.innerHTML = '<span class="warn">正在加载数据...</span>';
+  try {
+    const r = await fetch('ai_weekly_data.json?t=' + Date.now());
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    const d = await r.json();
+    ALL = d.articles || [];
+    const meta = d.meta || {};
+    const stat = d.sentiment_stats || d.stats || {};
+    sb.innerHTML = '<span class="ok">✅ 已加载 ' + ALL.length + ' 条新闻 (' + (stat.source_count || new Set(ALL.map(a=>a.source)).size) + ' 个数据源)</span>';
+    document.getElementById('dateRange').textContent = '抓取时间: ' + (meta.generated_at || '').substring(0, 16).replace('T', ' ') + ' | ' + (meta.week_start || '') + ' ~ ' + (meta.week_end || '');
+  } catch (e) {
+    sb.innerHTML = '<span class="err">数据加载失败: ' + esc(e.message) + ' — 使用演示数据</span>';
+    ALL = getDemo();
+    document.getElementById('dateRange').textContent = '演示数据';
+  }
+  // 尝试加载上周数据
+  try {
+    const lr = await fetch('ai_weekly_last.json?t=' + Date.now());
+    if (lr.ok) LW = (await lr.json()).articles || null;
+  } catch(e) {}
+  renderAll();
+}
+
+// ── 演示数据 ──
+function getDemo() {
+  return [
+    {id:'d1',title:'Google I/O 2026: Gemini 3.5 Flash + Omni 世界模型',summary:'Gemini 3.5 Flash 推理性能翻倍，Omni 视频生成世界模型开放 API',url:'https://blog.google/technology/ai/',source:'Google',tags:['模型发布'],sentiment:{label:'利好',type:'bull',score:1.8},published:'2026-06-10'},
+    {id:'d2',title:'DeepSeek V4 万亿参数开源，成本仅为 GPT-5 的 1/30',summary:'MoE架构，100万+ token原生上下文，完全基于华为昇腾训练',url:'https://deepseek.com',source:'DeepSeek',tags:['模型发布','开源','中国动态'],sentiment:{label:'利好',type:'bull',score:2.0},published:'2026-06-09'},
+    {id:'d3',title:'欧盟 AI Act 高风险系统义务正式生效',summary:'高风险AI系统合规义务正式生效，企业合规成本预计上升',url:'https://consilium.europa.eu',source:'EU Council',tags:['监管政策'],sentiment:{label:'利空',type:'bear',score:-0.8},published:'2026-06-08'},
+    {id:'d4',title:'全球40% AI 数据中心面临供电短缺',summary:'Gartner预计至2027年约40%的AI数据中心受电力短缺限制',url:'https://gartner.com',source:'Gartner',tags:['基础设施'],sentiment:{label:'利空',type:'bear',score:-1.5},published:'2026-06-10'},
+    {id:'d5',title:'Siri AI 发布，集成 Google Gemini',summary:'Apple 在 WWDC 2026 发布 Siri AI，集成 Google Gemini 引擎',url:'https://artificialintelligence-news.com',source:'AI News',tags:['模型发布'],sentiment:{label:'利好',type:'bull',score:1.0},published:'2026-06-10'},
+  ];
+}
+
+// ── 过滤 ──
+function filterArticles() {
+  let res = [...ALL];
+  const tag = document.getElementById('filtTag')?.value || 'all';
+  const st = document.getElementById('filtSenti')?.value || 'all';
+  const kw = (document.getElementById('filtSearch')?.value || '').trim().toLowerCase();
+  if (tag && tag !== 'all') res = res.filter(a => (a.tags || []).includes(tag));
+  if (st === 'bull') res = res.filter(a => sentType(a) === 'bull');
+  if (st === 'bear') res = res.filter(a => sentType(a) === 'bear');
+  if (st === 'neutral') res = res.filter(a => { const t = sentType(a); return !t || t === 'neutral'; });
+  if (kw) res = res.filter(a => (a.title||'').toLowerCase().includes(kw) || (a.summary||'').toLowerCase().includes(kw));
+  FIL = res;
+  document.getElementById('filtCount').textContent = res.length + ' 条';
+  return res;
+}
+
+function applyFilter() {
+  renderNews(filterArticles());
+}
+
+// ── 渲染 KPI ──
+function renderKPI(arts) {
+  const total = arts.length;
+  const bull = arts.filter(a => sentType(a) === 'bull').length;
+  const bear = arts.filter(a => sentType(a) === 'bear').length;
+  const china = arts.filter(a => (a.tags||[]).includes('中国动态')).length;
+  const sources = new Set(arts.map(a => a.source)).size;
+  document.getElementById('kpiArea').innerHTML =
+    kpiCard(total, '本周新闻') + kpiCard(sources, '数据来源') +
+    kpiCard(bull, '利好信号') + kpiCard(bear, '利空信号') +
+    kpiCard(china, '中国动态');
+}
+function kpiCard(num, lbl) {
+  return '<div class="kpi-card"><div class="num">' + num + '</div><div class="lbl">' + lbl + '</div></div>';
+}
+
+// ── 渲染新闻 ──
+function renderNews(arts) {
+  const g = document.getElementById('newsGrid');
+  if (!arts.length) { g.innerHTML = '<p style="color:var(--txd);text-align:center;padding:30px">没有匹配的新闻</p>'; return; }
+  g.innerHTML = arts.map(a => {
+    const tags_html = (a.tags||[]).map(t => '<span class="tag ' + tagCls(t) + '">' + esc(t) + '</span>').join('');
+    const st = sentType(a);
+    const cls = st === 'bull' ? 'bull' : st === 'bear' ? 'bear' : 'neu';
+    return '<div class="news-card ' + cls + '">' +
+      tags_html + sentBadge(a) +
+      '<h3>' + esc(a.title) + '</h3>' +
+      '<p>' + esc(a.summary || '') + '</p>' +
+      '<div class="meta"><span>' + (a.published||'').substring(0,16) + ' · ' + esc(a.source) + '</span>' +
+      '<span><button class="btn-trans" onclick="translateCard(this)">翻译</button> ' +
+      '<a href="' + esc(a.url) + '" target="_blank" rel="noopener">原文 ↗</a></span></div>' +
+      '<div class="trans-box"></div></div>';
+  }).join('');
+}
+
+// ── 渲染情感分析 ──
+function renderSentiment(arts) {
+  const bull = arts.filter(a => sentType(a) === 'bull');
+  const bear = arts.filter(a => sentType(a) === 'bear');
+  const neu = arts.filter(a => { const t = sentType(a); return !t || t === 'neutral'; });
+  const total = arts.length || 1;
+  const pct = (n) => Math.round(n / total * 100) + '%';
+  document.getElementById('sentStats').innerHTML =
+    sentStatCard(bull.length, pct(bull.length), '利好/偏多', '#10b981', '#6ee7b7') +
+    sentStatCard(neu.length, pct(neu.length), '中性', '#f59e0b', '#fcd34d') +
+    sentStatCard(bear.length, pct(bear.length), '利空/偏空', '#ef4444', '#fca5a5');
+
+  document.getElementById('sentGrid').innerHTML = arts.map(a => {
+    const st = sentType(a);
+    const cls = st === 'bull' ? 'bull' : st === 'bear' ? 'bear' : 'neu';
+    const score = ((a.sentiment||{}).score || 0);
+    return '<div class="news-card ' + cls + '">' + sentBadge(a) +
+      '<span style="font-size:.7rem;color:var(--txd);margin-left:6px">分数: ' + score + '</span>' +
+      '<h3 style="margin-top:4px">' + esc(a.title) + '</h3>' +
+      '<p>' + esc(a.summary||'') + '</p>' +
+      '<div class="meta"><span>' + esc(a.source) + '</span><a href="' + esc(a.url) + '" target="_blank">原文</a></div></div>';
+  }).join('');
+}
+function sentStatCard(num, pct, lbl, color, lightColor) {
+  return '<div class="sent-stat-card" style="border:1px solid ' + color + '30"><div class="num" style="color:' + color + '">' + num + '</div><div class="lbl" style="color:' + lightColor + '">' + lbl + ' (' + pct + ')</div></div>';
+}
+
+// ── 渲染周度对比 ──
+function renderCompare() {
+  const grid = document.getElementById('compareGrid');
+  if (!LW || !LW.length) {
+    grid.innerHTML = '<div class="compare-card" style="grid-column:1/-1;text-align:center;color:var(--txd);padding:40px 20px"><p style="font-size:1rem;margin-bottom:8px">📭 暂无上周数据</p><p style="font-size:.82rem">上周数据保存为 <code style="background:rgba(59,130,246,0.15);padding:2px 6px;border-radius:4px;color:#93c5fd">ai_weekly_last.json</code> 后可启用周度对比功能。</p><p style="font-size:.78rem;margin-top:6px;color:#475569">每次更新数据时，当前周数据会自动备份为上周数据。</p></div>';
+    return;
+  }
+  const cur = ALL;
+  const lw = LW;
+  const curBull = cur.filter(a => sentType(a) === 'bull').length;
+  const lastBull = lw.filter(a => sentType(a) === 'bull').length;
+  const curBear = cur.filter(a => sentType(a) === 'bear').length;
+  const lastBear = lw.filter(a => sentType(a) === 'bear').length;
+  const curNeu = cur.length - curBull - curBear;
+  const lastNeu = lw.length - lastBull - lastBear;
+
+  // 话题标签
+  const curTags = {}; cur.forEach(a => (a.tags||[]).forEach(t => { curTags[t] = (curTags[t]||0)+1; }));
+  const lastTags = {}; lw.forEach(a => (a.tags||[]).forEach(t => { lastTags[t] = (lastTags[t]||0)+1; }));
+  const allTags = [...new Set([...Object.keys(curTags), ...Object.keys(lastTags)])];
+  const topTags = allTags.sort((a,b) => (curTags[b]||0) - (curTags[a]||0)).slice(0, 6);
+
+  let barsHtml = '';
+  topTags.forEach(t => {
+    const c = curTags[t] || 0, l = lastTags[t] || 0, mx = Math.max(c, l, 1);
+    barsHtml += '<div class="cmp-bar"><span class="lb">' + esc(t) + '</span>' +
+      '<div class="bw"><div class="bf" style="width:' + (c/mx*100) + '%;background:#3b82f6"></div></div>' +
+      '<span class="pct" style="color:#3b82f6">' + c + '</span>' +
+      '<div class="bw" style="margin-left:4px"><div class="bf" style="width:' + (l/mx*100) + '%;background:#8b5cf6;opacity:.6"></div></div>' +
+      '<span class="pct" style="color:#8b5cf6">' + l + '</span></div>';
+  });
+
+  // 情感变化
+  const bullDiff = curBull - lastBull;
+  const bearDiff = curBear - lastBear;
+
+  grid.innerHTML =
+    '<div class="compare-card"><h4>📊 情感分布变化</h4>' +
+    '<div class="cmp-bar"><span class="lb">利好</span><div class="bw"><div class="bf" style="width:' + Math.min(curBull/Math.max(cur.length,1)*100,100) + '%;background:#10b981"></div></div><span class="pct">' + curBull + '</span><div class="bw" style="margin-left:4px"><div class="bf" style="width:' + Math.min(lastBull/Math.max(lw.length,1)*100,100) + '%;background:#10b981;opacity:.5"></div></div><span class="pct">' + lastBull + '</span></div>' +
+    '<div class="cmp-bar"><span class="lb">中性</span><div class="bw"><div class="bf" style="width:' + Math.min(curNeu/Math.max(cur.length,1)*100,100) + '%;background:#f59e0b"></div></div><span class="pct">' + curNeu + '</span><div class="bw" style="margin-left:4px"><div class="bf" style="width:' + Math.min(lastNeu/Math.max(lw.length,1)*100,100) + '%;background:#f59e0b;opacity:.5"></div></div><span class="pct">' + lastNeu + '</span></div>' +
+    '<div class="cmp-bar"><span class="lb">利空</span><div class="bw"><div class="bf" style="width:' + Math.min(curBear/Math.max(cur.length,1)*100,100) + '%;background:#ef4444"></div></div><span class="pct">' + curBear + '</span><div class="bw" style="margin-left:4px"><div class="bf" style="width:' + Math.min(lastBear/Math.max(lw.length,1)*100,100) + '%;background:#ef4444;opacity:.5"></div></div><span class="pct">' + lastBear + '</span></div>' +
+    '<div class="cmp-legend"><span><span class="dot" style="background:#3b82f6"></span> 本周</span><span><span class="dot" style="background:#8b5cf6;opacity:.5"></span> 上周</span></div></div>' +
+
+    '<div class="compare-card"><h4>🔥 话题热度变化</h4>' + barsHtml +
+    '<div class="cmp-legend"><span><span class="dot" style="background:#3b82f6"></span> 本周</span><span><span class="dot" style="background:#8b5cf6;opacity:.5"></span> 上周</span></div></div>' +
+
+    '<div class="compare-card"><h4>📋 周度摘要</h4><div class="cmp-summary">' +
+    '<div>本周新闻: <span style="color:var(--txb)">' + cur.length + '</span> 条 (上周: ' + lw.length + ' 条)</div>' +
+    '<div>利好信号: <span style="color:#10b981">' + curBull + '</span> (上周: ' + lastBull + ') <span class="' + (bullDiff >= 0 ? 'up' : 'down') + '">' + (bullDiff >= 0 ? '↑' : '↓') + Math.abs(bullDiff) + '</span></div>' +
+    '<div>利空信号: <span style="color:#ef4444">' + curBear + '</span> (上周: ' + lastBear + ') <span class="' + (bearDiff <= 0 ? 'up' : 'down') + '">' + (bearDiff <= 0 ? '↓' : '↑') + Math.abs(bearDiff) + '</span></div>' +
+    '<div>数据来源: <span style="color:var(--txb)">' + new Set(cur.map(a=>a.source)).size + '</span> 个 (上周: ' + new Set(lw.map(a=>a.source)).size + ' 个)</div>' +
+    '</div></div>';
+}
+
+// ── 渲染趋势 ──
+function renderTrends() {
+  const trends = [
+    {sig:'bull',label:'强烈看多',title:'AI Agent 从概念走向企业规模化部署',desc:'Gartner预测40%企业应用将嵌入Agent。字节上线Agent Plan统一计量，Kimi实现网页直接操作。'},
+    {sig:'bull',label:'看多',title:'开源模型性价比碾压闭源',desc:'DeepSeek V4成本仅为GPT-5的1/30。企业AI经济模型被彻底重塑。'},
+    {sig:'bull',label:'看多',title:'中国AI调用量全球领跑，产业链自主突破',desc:'GLM-5完全基于华为昇腾训练，零美国硬件依赖。国产芯片份额攀升至41%。'},
+    {sig:'neu',label:'中性偏多',title:'企业端爆发 vs 个人端涨价',desc:'阿里云API调用量增长超10倍，但个人用户端涨价潮涌现，行业从流量争夺转向价值收割。'},
+    {sig:'bear',label:'风险信号',title:'AI电力危机: 物理基础设施成最大瓶颈',desc:'美国约一半计划数据中心项目因电力短缺推迟或取消。Gartner预计2027年40%受电力限制。'},
+    {sig:'bear',label:'风险信号',title:'资本市场情绪转变: 机构资金流出',desc:'尽管AI融资创纪录，机构资金二季度起持续流出。成本回收压力增大。'},
+  ];
+  document.getElementById('trendGrid').innerHTML = trends.map(t =>
+    '<div class="trend-card ' + t.sig + '"><span class="trend-sig sig-' + t.sig + '">' + t.label + '</span>' +
+    '<h3>' + esc(t.title) + '</h3><p>' + esc(t.desc) + '</p></div>'
+  ).join('');
+}
+
+// ── 传导链 ──
+const CHAINS = {
+  policy:{nodes:[
+    {id:'p1',tp:'pol',t:'AI 监管加强',d:'欧盟AI Act生效 + 中国加速立法',imp:'高'},
+    {id:'i1',tp:'ind',t:'合规成本上升',d:'企业AI合规支出增加30-50%',imp:'中'},
+    {id:'i2',tp:'ind',t:'AI审计需求爆发',d:'第三方AI评估市场预计增200%',imp:'高'},
+    {id:'s1',tp:'stk',t:'安全厂商受益',d:'AI安全/合规公司估值提升',imp:'高'},
+    {id:'s2',tp:'stk',t:'中小AI初创承压',d:'合规成本形成竞争壁垒',imp:'中'},
+  ],edges:[['p1','i1'],['p1','i2'],['i1','s2'],['i2','s1']]},
+  funding:{nodes:[
+    {id:'p1',tp:'pol',t:'AI融资创纪录',d:'2026年全球AI融资总额创新高',imp:'高'},
+    {id:'i1',tp:'ind',t:'头部公司IPO潮',d:'Anthropic/OpenAI上市预期升温',imp:'高'},
+    {id:'i2',tp:'ind',t:'估值泡沫风险',d:'一级市场AI估值普遍偏高',imp:'中'},
+    {id:'s1',tp:'stk',t:'芯片供应链受益',d:'AI芯片需求持续旺盛',imp:'高'},
+    {id:'s2',tp:'stk',t:'概念股波动加剧',d:'机构资金二季度持续流出',imp:'中'},
+  ],edges:[['p1','i1'],['p1','i2'],['i1','s1'],['i1','s2'],['i2','s2']]},
+  chip:{nodes:[
+    {id:'p1',tp:'pol',t:'芯片出口管制',d:'美国对华高端AI芯片限制扩大',imp:'高'},
+    {id:'i1',tp:'ind',t:'国产替代加速',d:'华为昇腾/寒武纪份额快速提升',imp:'高'},
+    {id:'i2',tp:'ind',t:'算力成本短期涨',d:'高端芯片采购成本涨30%+',imp:'中'},
+    {id:'s1',tp:'stk',t:'国产芯片厂受益',d:'摩尔线程/沐曦市值飙升',imp:'高'},
+    {id:'s2',tp:'stk',t:'进口依赖厂承压',d:'部分大模型公司算力成本压力加大',imp:'中'},
+  ],edges:[['p1','i1'],['p1','i2'],['i1','s1'],['i2','s2']]},
+  agent:{nodes:[
+    {id:'p1',tp:'pol',t:'三部门印发Agent文件',d:'网信办+发改委+工信部联合发文',imp:'高'},
+    {id:'i1',tp:'ind',t:'企业Agent部署加速',d:'Gartner预测40%企业应用嵌入Agent',imp:'高'},
+    {id:'i2',tp:'ind',t:'Agent工具市场爆发',d:'LangChain/AutoGen生态快速扩张',imp:'中'},
+    {id:'s1',tp:'stk',t:'SaaS厂商转型Agent',d:'传统SaaS估值逻辑重构',imp:'高'},
+    {id:'s2',tp:'stk',t:'RPA厂商替换风险',d:'传统RPA面临Agent技术替代',imp:'中'},
+  ],edges:[['p1','i1'],['i1','i2'],['i1','s1'],['i2','s1'],['i2','s2']]},
+};
+
+function renderChain() {
+  const scn = document.getElementById('chainScn')?.value || 'policy';
+  const data = CHAINS[scn]; if (!data) return;
+  window._cnodes = {}; data.nodes.forEach(n => { window._cnodes[n.id] = n; });
+  const c = document.getElementById('chainBody');
+  const pols = data.nodes.filter(n => n.tp === 'pol');
+  const inds = data.nodes.filter(n => n.tp === 'ind');
+  const stks = data.nodes.filter(n => n.tp === 'stk');
+  let h = '<div class="chain-col">';
+  pols.forEach(n => { h += '<div class="chain-node pol" onclick="showCD(\'' + n.id + '\')"><div class="nt">' + esc(n.t) + '</div><div class="nd">' + esc(n.d) + '</div></div>'; });
+  h += '</div><div class="chain-arrow"></div><div class="chain-row">';
+  inds.forEach(n => { h += '<div class="chain-col"><div class="chain-node ind" onclick="showCD(\'' + n.id + '\')"><div class="nt">' + esc(n.t) + '</div><div class="nd">' + esc(n.d) + '</div></div></div>'; });
+  h += '</div><div class="chain-arrow"></div><div class="chain-row">';
+  stks.forEach(n => { h += '<div class="chain-col"><div class="chain-node stk" onclick="showCD(\'' + n.id + '\')"><div class="nt">' + esc(n.t) + '</div><div class="nd">' + esc(n.d) + '</div></div></div>'; });
+  h += '</div>';
+  c.innerHTML = h;
+  document.getElementById('chainDetail').style.display = 'none';
+}
+
+function showCD(id) {
+  const n = window._cnodes?.[id]; if (!n) return;
+  document.getElementById('cdTitle').textContent = n.t;
+  document.getElementById('cdDesc').textContent = n.d;
+  const clr = n.imp === '高' ? '#ef4444' : n.imp === '中' ? '#f59e0b' : '#10b981';
+  document.getElementById('cdImpact').innerHTML = '<span style="color:' + clr + ';font-weight:600">影响力度: ' + n.imp + '</span>';
+  document.getElementById('chainDetail').style.display = 'block';
+}
+
+// ── 价格表 ──
+function renderPrice() {
+  const rows = [
+    ['xAI','Grok 4.1','$0.20','$0.50','-','最便宜前沿模型'],
+    ['DeepSeek','V3.2','$0.27','$1.10','1M+','100万上下文性价比之王'],
+    ['OpenAI','o4-mini','$1.10','$4.40','-',''],
+    ['Google','Gemini 3.1 Pro','~$1.25','~$10.00','2M','推理翻倍价格不变'],
+    ['OpenAI','GPT-5','$1.25','$10.00','400K',''],
+    ['Anthropic','Sonnet 4.6','$3.00','$15.00','1M','中端逆袭逼近Opus'],
+    ['Anthropic','Opus 4.6','$15.00','$75.00','200K','最贵旗舰'],
+  ];
+  document.getElementById('priceTbl').innerHTML =
+    '<thead><tr><th>厂商</th><th>模型</th><th>输入 $/M tok</th><th>输出 $/M tok</th><th>上下文</th><th>备注</th></tr></thead>' +
+    '<tbody>' + rows.map(r => {
+      const ic = r[2].startsWith('$0.') || r[2].startsWith('~$1') ? 'hi' : '';
+      const oc = r[3].startsWith('$0.') ? 'hi' : r[3].includes('75') ? 'wa' : '';
+      return '<tr><td>' + r[0] + '</td><td>' + r[1] + '</td><td class="' + ic + '">' + r[2] + '</td><td class="' + oc + '">' + r[3] + '</td><td>' + r[4] + '</td><td>' + r[5] + '</td></tr>';
+    }).join('') + '</tbody>';
+}
+
+// ── 数据看板 ──
+function renderDashboard(arts) {
+  const bull = arts.filter(a => sentType(a) === 'bull').length;
+  const bear = arts.filter(a => sentType(a) === 'bear').length;
+  const neu = arts.length - bull - bear;
+  const total = arts.length || 1;
+  const china = arts.filter(a => (a.tags||[]).includes('中国动态')).length;
+  const glb = arts.length - china;
+  document.getElementById('dashGrid').innerHTML =
+    '<div class="dash-card"><h3>情感分布</h3><div style="display:flex;align-items:center;gap:12px"><svg width="100" height="100" id="donutSVG"></svg><div style="font-size:.74rem"><div style="margin-bottom:4px"><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#10b981;margin-right:4px"></span>利好 ' + Math.round(bull/total*100) + '%</div><div style="margin-bottom:4px"><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#f59e0b;margin-right:4px"></span>中性 ' + Math.round(neu/total*100) + '%</div><div><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#ef4444;margin-right:4px"></span>利空 ' + Math.round(bear/total*100) + '%</div></div></div></div>' +
+    '<div class="dash-card"><h3>来源分布</h3><div class="bar-group">' + srcBars(arts) + '</div></div>' +
+    '<div class="dash-card"><h3>中国 vs 全球</h3><div class="bar-group"><div class="bar-item"><div class="bar" style="height:' + Math.round(china/Math.max(arts.length,1)*100) + '%;background:linear-gradient(0deg,#3b82f6,#60a5fa)"></div><div class="bar-label">中国 ' + china + '</div></div><div class="bar-item"><div class="bar" style="height:' + Math.round(glb/Math.max(arts.length,1)*100) + '%;background:linear-gradient(0deg,#8b5cf6,#a78bfa)"></div><div class="bar-label">全球 ' + glb + '</div></div></div></div>' +
+    '<div class="dash-card"><h3>高频关键词</h3><div style="display:flex;flex-wrap:wrap;gap:6px;align-items:flex-end;min-height:60px">' + wordCloud(arts) + '</div></div>' +
+    '<div class="dash-card"><h3>话题标签分布</h3><div class="bar-group">' + tagBars(arts) + '</div></div>';
+  drawDonut(bull, neu, bear, total);
+}
+
+function drawDonut(b, n, t, total) {
+  const svg = document.getElementById('donutSVG'); if (!svg) return;
+  const r = 40, cx = 50, cy = 50;
+  if (total < 1) total = 1;
+  const slices = [{pct: b/total, c:'#10b981'}, {pct: n/total, c:'#f59e0b'}, {pct: t/total, c:'#ef4444'}];
+  let angle = -90, pth = '';
+  slices.forEach(s => {
+    if (s.pct < 0.005) return;
+    const da = s.pct * 360, r1 = angle * Math.PI / 180, r2 = (angle + da) * Math.PI / 180;
+    const x1 = cx + r * Math.cos(r1), y1 = cy + r * Math.sin(r1);
+    const x2 = cx + r * Math.cos(r2), y2 = cy + r * Math.sin(r2);
+    const la = da > 180 ? 1 : 0;
+    pth += '<path d="M ' + cx + ',' + cy + ' L ' + x1.toFixed(1) + ',' + y1.toFixed(1) + ' A ' + r + ',' + r + ' 0 ' + la + ',1 ' + x2.toFixed(1) + ',' + y2.toFixed(1) + ' Z" fill="' + s.c + '" opacity="0.85"/>';
+    angle += da;
+  });
+  pth += '<circle cx="' + cx + '" cy="' + cy + '" r="18" fill="#111827"/>';
+  pth += '<text x="' + cx + '" y="' + (cy + 3) + '" text-anchor="middle" fill="#e2e8f0" font-size="10" font-weight="700">' + total + '</text>';
+  svg.innerHTML = pth;
+}
+
+function srcBars(arts) {
+  const count = {}; arts.forEach(a => { count[a.source] = (count[a.source]||0) + 1; });
+  const entries = Object.entries(count).sort((a,b) => b[1]-a[1]).slice(0, 6);
+  const max = Math.max(...entries.map(e => e[1]), 1);
+  return entries.map(([s,c]) => '<div class="bar-item"><div class="bar" style="height:' + Math.round(c/max*100) + '%;background:linear-gradient(0deg,#3b82f6,#8b5cf6)" title="' + esc(s) + ': ' + c + '"></div><div class="bar-label">' + s.substring(0,5) + '</div></div>').join('');
+}
+
+function tagBars(arts) {
+  const count = {}; arts.forEach(a => { (a.tags||[]).forEach(t => { count[t] = (count[t]||0) + 1; }); });
+  const entries = Object.entries(count).sort((a,b) => b[1]-a[1]).slice(0, 6);
+  const max = Math.max(...entries.map(e => e[1]), 1);
+  return entries.map(([t,c]) => '<div class="bar-item"><div class="bar" style="height:' + Math.round(c/max*100) + '%;background:linear-gradient(0deg,#06b6d4,#8b5cf6)" title="' + esc(t) + ': ' + c + '"></div><div class="bar-label">' + t + '</div></div>').join('');
+}
+
+function wordCloud(arts) {
+  const freq = {};
+  const words = ['AI','Agent','大模型','芯片','融资','开源','算力','DeepSeek','OpenAI','Google','Claude','监管','百度','阿里','数据中心','GPT','LLM','智能体'];
+  words.forEach(w => {
+    let cnt = 0;
+    arts.forEach(a => { if ((a.title + (a.summary||'')).toLowerCase().includes(w.toLowerCase())) cnt++; });
+    freq[w] = cnt || 0;
+  });
+  const max = Math.max(...Object.values(freq), 1);
+  const colors = ['#3b82f6','#8b5cf6','#06b6d4','#10b981','#f59e0b','#ec4899','#f97316'];
+  return Object.entries(freq).filter(([,c]) => c > 0).sort((a,b) => b[1]-a[1]).map(([w,c],i) =>
+    '<span style="font-size:' + (0.7 + (c/max)*1.1) + 'rem;color:' + colors[i%colors.length] + ';font-weight:' + (c > max*.5 ? '700' : '400') + ';opacity:.85">' + w + '</span>'
+  ).join(' ');
+}
+
+// ── 时间线 ──
+function renderTimeline() {
+  const tl = [...ALL].sort((a,b) => (b.published||'').localeCompare(a.published||''));
+  document.getElementById('tlBody').innerHTML = tl.slice(0, 15).map(a =>
+    '<div class="tl-item"><div class="tl-date">' + (a.published||'').substring(0, 16) + '</div>' +
+    '<h4>' + esc(a.title) + '</h4><p>' + esc(a.summary||'') + '</p></div>'
+  ).join('');
+}
+
+// ── 翻译 ──
+async function translateCard(btn) {
+  const card = btn.closest('.news-card');
+  if (!card) return;
+  const h3 = card.querySelector('h3');
+  const p = card.querySelector('p:not(.section-desc)');
+  const transBox = card.querySelector('.trans-box');
+  if (!h3 || !transBox) return;
+
+  if (btn.classList.contains('done')) {
+    // 恢复原文
+    if (card.dataset.origTitle) {
+      h3.textContent = card.dataset.origTitle;
+      if (p) p.textContent = card.dataset.origSummary;
+    }
+    transBox.style.display = 'none';
+    btn.textContent = '翻译';
+    btn.classList.remove('done');
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = '翻译中...';
+
+  const isChinese = /[\u4e00-\u9fff]/.test(h3.textContent);
+  const targetLang = isChinese ? 'en' : 'zh-CN';
+
+  try {
+    const [tTitle, tSummary] = await Promise.all([
+      translateText(h3.textContent, targetLang),
+      p ? translateText(p.textContent, targetLang) : ''
+    ]);
+    if (!card.dataset.origTitle) {
+      card.dataset.origTitle = h3.textContent;
+      card.dataset.origSummary = p ? p.textContent : '';
+    }
+    transBox.innerHTML = '<strong>' + esc(tTitle) + '</strong><br>' + esc(tSummary);
+    transBox.style.display = 'block';
+    btn.textContent = '原文';
+    btn.classList.add('done');
+  } catch (e) {
+    btn.textContent = '失败';
+    setTimeout(() => { btn.textContent = '翻译'; }, 2000);
+  }
+  btn.disabled = false;
+}
+
+async function translateText(text, targetLang) {
+  if (!text || text.length < 3) return text;
+  try {
+    const url = '/api/translate?tl=' + encodeURIComponent(targetLang) + '&text=' + encodeURIComponent(text.substring(0, 3000));
+    const r = await fetch(url, { signal: AbortSignal.timeout(15000) });
+    const d = await r.json();
+    return d.translatedText || text;
+  } catch(e) {
+    console.warn('翻译失败:', e);
+    return text;
+  }
+}
+
+// ── 批量翻译 ──
+let batchTranslating = false;
+async function batchTranslate() {
+  if (batchTranslating) return;
+  batchTranslating = true;
+  const btn = document.getElementById('btnBatchTrans');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span> 翻译中...';
+
+  const cards = document.querySelectorAll('#newsGrid .news-card');
+  let count = 0;
+  for (const card of cards) {
+    const b = card.querySelector('.btn-trans');
+    if (b && !b.classList.contains('done')) {
+      await translateCard(b);
+      count++;
+      await sleep(300); // 节流
+    }
+  }
+
+  btn.disabled = false;
+  btn.innerHTML = '🌐 批量翻译';
+  batchTranslating = false;
+  showToast('✅ 已翻译 ' + count + ' 条新闻');
+}
+
+// ── 导出 ──
+async function doFetch() {
+  // 备份当前数据为上周数据
+  try {
+    const r = await fetch('ai_weekly_data.json');
+    if (r.ok) {
+      const d = await r.json();
+      if (d.articles && d.articles.length > 0) {
+        // 通过服务器备份（简单方案：直接在前端标记）
+        localStorage.setItem('ai_weekly_last_backup', JSON.stringify(d));
+      }
+    }
+  } catch(e) {}
+  await loadData(true);
+}
+
+async function doExportPDF() {
+  const btn = document.getElementById('btnPDF');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span> 生成 PDF...';
+  try {
+    const r = await fetch('/api/export/pdf');
+    const d = await r.json();
+    if (d.status === 'ok') {
+      showToast('✅ ' + d.message, 4000);
+    } else {
+      showToast('❌ ' + d.message, 4000);
+    }
+  } catch (e) {
+    showToast('❌ 导出失败: ' + e.message, 4000);
+  }
+  btn.disabled = false;
+  btn.innerHTML = '📄 导出 PDF';
+}
+
+async function doExportPPT() {
+  const btn = document.getElementById('btnPPT');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span> 生成 PPT...';
+  try {
+    const r = await fetch('/api/export/ppt');
+    const d = await r.json();
+    if (d.status === 'ok') {
+      showToast('✅ ' + d.message, 4000);
+    } else {
+      showToast('❌ ' + d.message, 4000);
+    }
+  } catch (e) {
+    showToast('❌ 导出失败: ' + e.message, 4000);
+  }
+  btn.disabled = false;
+  btn.innerHTML = '📊 导出 PPT';
+}
+
+// ── 渲染全部 ──
+function renderAll() {
+  const arts = filterArticles();
+  renderKPI(arts);
+  renderNews(arts);
+  renderSentiment(arts);
+  renderCompare();
+  renderTrends();
+  renderChain();
+  renderPrice();
+  renderDashboard(arts);
+  renderTimeline();
+}
+
+// ── 初始化 ──
+document.addEventListener('DOMContentLoaded', () => {
+  loadData(true); // 自动抓取最新数据
+});
+</script>
+</body>
+</html>

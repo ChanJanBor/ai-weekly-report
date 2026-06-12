@@ -1,0 +1,39 @@
+# ── 生成数据 ──
+ai_weekly_data.json
+ai_weekly_last.json
+ai_news_cache.json
+
+# ── Python ──
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+dist/
+build/
+.eggs/
+*.egg
+
+# ── Node ──
+node_modules/
+package-lock.json
+
+# ── 导出文件 ──
+exports/
+
+# ── 日志 ──
+logs/
+*.log
+
+# ── IDE ──
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# ── OS ──
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+# ── 翻译修复临时记录 ──
+翻译修复记录_*.md
