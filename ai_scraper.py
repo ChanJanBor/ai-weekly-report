@@ -23,6 +23,7 @@ from datetime import datetime, timedelta
 from pathlib import Path
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from typing import List, Dict, Optional, Tuple
+from email.utils import parsedate_to_datetime
 
 # ============================================================
 # 配置区
@@ -40,22 +41,34 @@ CONFIG = {
 
 # ── RSS 订阅源 ──
 RSS_FEEDS = [
-    # 国际科技媒体
+    # ── 国际顶级科技媒体 ──
     {"url": "https://feeds.feedburner.com/TechCrunch/artificial-intelligence", "source": "TechCrunch", "lang": "en", "category": "AI"},
     {"url": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml", "source": "The Verge", "lang": "en", "category": "AI"},
     {"url": "https://www.wired.com/feed/tag/ai/latest/rss", "source": "Wired", "lang": "en", "category": "AI"},
     {"url": "https://venturebeat.com/category/ai/feed/", "source": "VentureBeat", "lang": "en", "category": "AI"},
     {"url": "https://www.artificialintelligence-news.com/feed/", "source": "AI News", "lang": "en", "category": "AI"},
-    # 中国科技媒体
+    # ── 国际权威媒体 AI 版块 ──
+    {"url": "https://rss.nytimes.com/services/xml/rss/nyt/Technology.xml", "source": "纽约时报科技", "lang": "en", "category": "科技"},
+    {"url": "https://feeds.bbci.co.uk/news/technology/rss.xml", "source": "BBC科技", "lang": "en", "category": "科技"},
+    {"url": "https://rss.app/feeds/trBCwMIbGmgKBvSu.xml", "source": "Reuters科技", "lang": "en", "category": "科技"},
+    {"url": "https://www.technologyreview.com/feed/", "source": "MIT科技评论", "lang": "en", "category": "AI"},
+    # ── AI 专业媒体 ──
+    {"url": "https://syncedreview.com/feed/", "source": "SyncedAI", "lang": "en", "category": "AI"},
+    {"url": "https://theneuralblog.com/feed/", "source": "The Neural Blog", "lang": "en", "category": "AI"},
+    {"url": "https://www.marktechpost.com/feed/", "source": "MarkTechPost", "lang": "en", "category": "AI"},
+    # ── 中国科技媒体 ──
     {"url": "https://www.ithome.com/rss/", "source": "IT之家", "lang": "zh", "category": "科技"},
     {"url": "https://rsshub.app/36kr/motif/ai", "source": "36氪AI", "lang": "zh", "category": "AI"},
     {"url": "https://www.jiqizhixin.com/rss", "source": "机器之心", "lang": "zh", "category": "AI"},
     {"url": "https://rsshub.app/huxiu/channel/ai", "source": "虎嗅AI", "lang": "zh", "category": "AI"},
-    # 学术
+    {"url": "https://rsshub.app/zhihu/hot", "source": "知乎热榜", "lang": "zh", "category": "科技"},
+    # ── 研究机构博客 ──
     {"url": "https://arxiv.org/rss/cs.AI", "source": "arXiv AI", "lang": "en", "category": "学术"},
     {"url": "https://rsshub.app/openai/research", "source": "OpenAI Blog", "lang": "en", "category": "研究"},
     {"url": "https://www.anthropic.com/research/feed", "source": "Anthropic Research", "lang": "en", "category": "研究"},
     {"url": "https://blog.google/technology/ai/rss/", "source": "Google AI Blog", "lang": "en", "category": "研究"},
+    {"url": "https://ai.meta.com/blog/rss/", "source": "Meta AI Blog", "lang": "en", "category": "研究"},
+    {"url": "https://blogs.microsoft.com/ai/feed/", "source": "微软AI博客", "lang": "en", "category": "研究"},
 ]
 
 # ── API 数据源 (需要 Key 的留空则跳过) ──
@@ -112,6 +125,29 @@ class AINewsScraper:
     def _hash_url(self, url: str) -> str:
         return hashlib.md5(url.encode()).hexdigest()[:12]
 
+    def _normalize_date(self, raw_date: str) -> str:
+        """统一日期格式为 ISO 8601 (YYYY-MM-DDTHH:MM:SS)"""
+        if not raw_date:
+            return ""
+        raw = raw_date.strip()
+        # 已经是 ISO 格式
+        if re.match(r'\d{4}-\d{2}-\d{2}T', raw):
+            return raw[:19]  # 截取到秒
+        # RFC 822 格式: Wed, 10 Jun 2026 11:00:00 +0000
+        try:
+            dt = parsedate_to_datetime(raw)
+            return dt.strftime("%Y-%m-%dT%H:%M:%S")
+        except Exception:
+            pass
+        # 尝试其他常见格式
+        for fmt in ["%Y-%m-%d %H:%M:%S", "%Y-%m-%d", "%Y/%m/%d"]:
+            try:
+                dt = datetime.strptime(raw[:len(fmt)+5], fmt)
+                return dt.strftime("%Y-%m-%dT%H:%M:%S")
+            except Exception:
+                continue
+        return raw  # 无法解析则原样返回
+
     def _is_relevant(self, text: str) -> bool:
         """关键词相关性过滤"""
         combined = " ".join([text] if isinstance(text, str) else text)
@@ -123,7 +159,7 @@ class AINewsScraper:
         title = getattr(entry, 'title', '') or ''
         summary = getattr(entry, 'summary', '') or getattr(entry, 'description', '') or ''
         link = getattr(entry, 'link', '') or ''
-        published = getattr(entry, 'published', '') or getattr(entry, 'updated', '') or ''
+        published_raw = getattr(entry, 'published', '') or getattr(entry, 'updated', '') or ''
 
         # 清理 HTML 标签
         summary_clean = re.sub(r'<[^>]+>', '', summary)[:500]
@@ -140,6 +176,9 @@ class AINewsScraper:
 
         # 分类标签
         tags = self._classify_tags(title + " " + summary_clean)
+
+        # 统一日期格式
+        published = self._normalize_date(published_raw)
 
         return {
             "id": url_hash,
