@@ -187,207 +187,25 @@ def do_translate(text, target_lang="zh-CN"):
 # ============================================================
 
 def export_pdf():
-    """使用 Playwright 将 HTML 转为 PDF"""
+    """生成 PDF"""
     try:
-        from playwright.sync_api import sync_playwright
-    except ImportError:
-        return None, "playwright 未安装，请运行: pip install playwright && playwright install chromium"
-
-    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    output_path = DESKTOP / f"AI行业周报_{timestamp}.pdf"
-
-    with sync_playwright() as p:
-        browser = p.chromium.launch(headless=True)
-        page = browser.new_page()
-        file_url = f"file:///{REPORT_HTML.resolve().as_posix()}"
-        page.goto(file_url, wait_until="networkidle", timeout=30000)
-        page.wait_for_timeout(2000)
-        page.pdf(
-            path=str(output_path),
-            format="A4",
-            print_background=True,
-            margin={"top": "10mm", "bottom": "10mm", "left": "8mm", "right": "8mm"},
-        )
-        browser.close()
-
-    return str(output_path), None
+        from export_engine import export_pdf as _export_pdf
+        return _export_pdf(DATA_FILE, DESKTOP)
+    except Exception as e:
+        import traceback
+        traceback.print_exc()
+        return None, str(e)
 
 
 def export_ppt():
-    """使用 python-pptx 生成 PPT"""
+    """生成可编辑 PPT"""
     try:
-        from pptx import Presentation
-        from pptx.util import Inches, Pt, Emu
-        from pptx.dml.color import RGBColor
-        from pptx.enum.text import PP_ALIGN, MSO_ANCHOR
-    except ImportError:
-        return None, "python-pptx 未安装，请运行: pip install python-pptx"
-
-    # 读取数据
-    try:
-        data = json.loads(DATA_FILE.read_text(encoding="utf-8"))
-    except Exception:
-        data = {"articles": [], "meta": {}}
-
-    articles = data.get("articles", [])
-    meta = data.get("meta", {})
-    stats = data.get("sentiment_stats", data.get("stats", {}))
-
-    prs = Presentation()
-    prs.slide_width = Inches(13.333)
-    prs.slide_height = Inches(7.5)
-
-    BG_COLOR = RGBColor(10, 14, 26)
-    CARD_COLOR = RGBColor(17, 24, 39)
-    ACCENT = RGBColor(59, 130, 246)
-    WHITE = RGBColor(248, 250, 252)
-    GRAY = RGBColor(148, 163, 184)
-    GREEN = RGBColor(16, 185, 129)
-    RED = RGBColor(239, 68, 68)
-    YELLOW = RGBColor(245, 158, 11)
-    PURPLE = RGBColor(139, 92, 246)
-
-    def set_slide_bg(slide, color):
-        bg = slide.background
-        fill = bg.fill
-        fill.solid()
-        fill.fore_color.rgb = color
-
-    def add_text_box(slide, left, top, width, height, text, font_size=18,
-                     color=WHITE, bold=False, alignment=PP_ALIGN.LEFT):
-        txBox = slide.shapes.add_textbox(Inches(left), Inches(top), Inches(width), Inches(height))
-        tf = txBox.text_frame
-        tf.word_wrap = True
-        p = tf.paragraphs[0]
-        p.text = text
-        p.font.size = Pt(font_size)
-        p.font.color.rgb = color
-        p.font.bold = bold
-        p.alignment = alignment
-        return txBox
-
-    def add_rect(slide, left, top, width, height, fill_color):
-        from pptx.util import Emu
-        shape = slide.shapes.add_shape(
-            1,  # MSO_SHAPE.RECTANGLE
-            Inches(left), Inches(top), Inches(width), Inches(height)
-        )
-        shape.fill.solid()
-        shape.fill.fore_color.rgb = fill_color
-        shape.line.fill.background()
-        return shape
-
-    # ── Slide 1: 封面 ──
-    slide = prs.slides.add_slide(prs.slide_layouts[6])  # blank
-    set_slide_bg(slide, BG_COLOR)
-    add_text_box(slide, 1, 1.5, 11, 1.5, "AI 行业周报", 54, ACCENT, True, PP_ALIGN.CENTER)
-    add_text_box(slide, 1, 3.2, 11, 0.8, "多源聚合 · 真实数据 · 情感分析 · 趋势洞察", 22, GRAY, False, PP_ALIGN.CENTER)
-    week_range = f"{meta.get('week_start', '')} ~ {meta.get('week_end', '')}"
-    add_text_box(slide, 1, 4.2, 11, 0.6, week_range, 18, RGBColor(100, 116, 139), False, PP_ALIGN.CENTER)
-    add_text_box(slide, 1, 5.0, 11, 0.5, f"共 {len(articles)} 条新闻 · 生成于 {datetime.now().strftime('%Y-%m-%d %H:%M')}", 14, RGBColor(71, 85, 105), False, PP_ALIGN.CENTER)
-
-    # ── Slide 2: KPI 概览 ──
-    slide = prs.slides.add_slide(prs.slide_layouts[6])
-    set_slide_bg(slide, BG_COLOR)
-    add_text_box(slide, 0.5, 0.3, 12, 0.7, "📊 本周 KPI 概览", 32, WHITE, True)
-
-    bull = len([a for a in articles if (a.get("sentiment", {}) or {}).get("type") == "bull" or "利好" in str((a.get("sentiment", {}) or {}).get("sentiment", ""))])
-    bear = len([a for a in articles if (a.get("sentiment", {}) or {}).get("type") == "bear" or "利空" in str((a.get("sentiment", {}) or {}).get("sentiment", ""))])
-    sources = len(set(a.get("source", "") for a in articles))
-    china = len([a for a in articles if "中国动态" in str(a.get("tags", []))])
-    neu = len(articles) - bull - bear
-
-    kpis = [
-        (f"{len(articles)}", "本周新闻", ACCENT),
-        (f"{sources}", "数据来源", PURPLE),
-        (f"{bull}", "利好信号", GREEN),
-        (f"{bear}", "利空信号", RED),
-        (f"{china}", "中国动态", RGBColor(6, 182, 212)),
-    ]
-
-    card_w = 2.2
-    gap = 0.3
-    total_w = len(kpis) * card_w + (len(kpis) - 1) * gap
-    start_x = (13.333 - total_w) / 2
-
-    for i, (num, label, color) in enumerate(kpis):
-        x = start_x + i * (card_w + gap)
-        add_rect(slide, x, 1.5, card_w, 2.0, CARD_COLOR)
-        add_text_box(slide, x, 1.7, card_w, 1.0, num, 42, color, True, PP_ALIGN.CENTER)
-        add_text_box(slide, x, 2.8, card_w, 0.5, label, 14, GRAY, False, PP_ALIGN.CENTER)
-
-    # 情感分布条
-    total = len(articles) or 1
-    add_text_box(slide, 0.8, 4.2, 11, 0.5, "情感分布", 20, WHITE, True)
-
-    bar_y = 4.9
-    bar_h = 0.6
-    bar_total_w = 11.0
-    if total > 0:
-        bull_w = bull / total * bar_total_w
-        neu_w = neu / total * bar_total_w
-        bear_w = bear / total * bar_total_w
-        if bull_w > 0:
-            add_rect(slide, 0.8, bar_y, max(bull_w, 0.1), bar_h, GREEN)
-        if neu_w > 0:
-            add_rect(slide, 0.8 + bull_w, bar_y, max(neu_w, 0.1), bar_h, YELLOW)
-        if bear_w > 0:
-            add_rect(slide, 0.8 + bull_w + neu_w, bar_y, max(bear_w, 0.1), bar_h, RED)
-
-    add_text_box(slide, 0.8, 5.7, 11, 0.4, f"🟢 利好 {bull} ({round(bull/total*100)}%)  🟡 中性 {neu} ({round(neu/total*100)}%)  🔴 利空 {bear} ({round(bear/total*100)}%)", 14, GRAY)
-
-    # ── Slide 3+: 新闻详情 (每页5条) ──
-    per_page = 5
-    for page_idx in range(0, len(articles), per_page):
-        slide = prs.slides.add_slide(prs.slide_layouts[6])
-        set_slide_bg(slide, BG_COLOR)
-        page_arts = articles[page_idx:page_idx + per_page]
-        title_text = f"📰 AI 新闻 ({page_idx + 1}-{min(page_idx + per_page, len(articles))} / {len(articles)})"
-        add_text_box(slide, 0.5, 0.3, 12, 0.7, title_text, 28, WHITE, True)
-
-        y = 1.2
-        for art in page_arts:
-            sent = art.get("sentiment", {}) or {}
-            sent_text = sent.get("sentiment", sent.get("label", ""))
-            if "利好" in str(sent_text) or sent.get("type") == "bull":
-                sent_color = GREEN
-            elif "利空" in str(sent_text) or sent.get("type") == "bear":
-                sent_color = RED
-            else:
-                sent_color = YELLOW
-
-            title = (art.get("title", "") or "")[:80]
-            summary = (art.get("summary", "") or "")[:120]
-            source = art.get("source", "")
-            pub = (art.get("published", "") or "")[:16]
-            tags = ", ".join(art.get("tags", [])[:3])
-
-            # Sentiment badge
-            add_rect(slide, 0.7, y, 0.08, 0.9, sent_color)
-
-            add_text_box(slide, 1.0, y, 9, 0.35, title, 16, WHITE, True)
-            add_text_box(slide, 1.0, y + 0.35, 9, 0.3, summary, 11, GRAY)
-            meta_text = f"{source} · {pub}"
-            if tags:
-                meta_text += f"  [{tags}]"
-            add_text_box(slide, 1.0, y + 0.65, 9, 0.25, meta_text, 10, RGBColor(71, 85, 105))
-
-            add_text_box(slide, 10.5, y + 0.1, 2.5, 0.3, sent_text.split()[-1] if " " in str(sent_text) else str(sent_text), 12, sent_color, True, PP_ALIGN.RIGHT)
-
-            y += 1.15
-
-    # ── 最后一页: 页脚 ──
-    slide = prs.slides.add_slide(prs.slide_layouts[6])
-    set_slide_bg(slide, BG_COLOR)
-    add_text_box(slide, 1, 2.5, 11, 1, "AI 行业周报", 48, ACCENT, True, PP_ALIGN.CENTER)
-    add_text_box(slide, 1, 3.8, 11, 0.5, "数据来源: IT之家 · 机器之心 · TechCrunch · The Verge · Wired · AI News", 16, GRAY, False, PP_ALIGN.CENTER)
-    add_text_box(slide, 1, 4.5, 11, 0.5, "内容由 AI 自动聚合，仅供参考", 14, RGBColor(71, 85, 105), False, PP_ALIGN.CENTER)
-
-    # 保存
-    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    output_path = DESKTOP / f"AI行业周报_{timestamp}.pptx"
-    prs.save(str(output_path))
-    return str(output_path), None
+        from export_engine import export_ppt as _export_ppt
+        return _export_ppt(DATA_FILE, DESKTOP)
+    except Exception as e:
+        import traceback
+        traceback.print_exc()
+        return None, str(e)
 
 
 # ============================================================
