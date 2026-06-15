@@ -46,18 +46,21 @@ PORT = 8899
 # ============================================================
 
 def save_to_history():
-    """将当前数据保存到 history/ 目录，按年-周命名"""
+    """将当前数据保存到 history/ 目录，按年-周命名（仅首次保存）"""
     if not DATA_FILE.exists():
-        return None
+        return None, False
     HISTORY_DIR.mkdir(exist_ok=True)
     now = datetime.now()
-    # 文件名: 2026-W24.json
     week_str = f"{now.strftime('%Y')}-W{now.strftime('%V')}"
     dest = HISTORY_DIR / f"{week_str}.json"
+    # 如果历史文件已存在，说明本周已保存过，跳过
+    if dest.exists():
+        print(f"📦 历史归档已存在: {dest.name}（跳过）")
+        return str(dest), False
     import shutil
     shutil.copy2(str(DATA_FILE), str(dest))
     print(f"📦 历史归档: {dest.name}")
-    return str(dest)
+    return str(dest), True
 
 
 def get_last_week_file():
@@ -89,12 +92,12 @@ def run_scrape_and_analyze():
         _fetch_status["running"] = True
         _fetch_status["error"] = None
         try:
-            # 将当前数据归档到 history/
+            # 归档当前数据到 history/（仅首次，避免重复保存）
             save_to_history()
 
-            # Step 1: 抓取
+            # Step 1: 清除缓存 + 抓取新数据
             print("\n📡 正在抓取最近7天数据...")
-            r = subprocess.run(
+            subprocess.run(
                 [sys.executable, str(SCRAPER_FILE), "--clear-cache"],
                 capture_output=True, text=True, cwd=str(BASE_DIR), timeout=30
             )
@@ -113,9 +116,6 @@ def run_scrape_and_analyze():
             )
             if r2.returncode != 0:
                 print(f"  ⚠ 情感分析警告: {r2.stderr[-200:]}")
-
-            # Step 3: 将新数据也归档
-            save_to_history()
 
             _last_fetch_time = datetime.now().isoformat()
             _fetch_status["last_time"] = _last_fetch_time

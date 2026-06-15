@@ -265,6 +265,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Noto
       <option value="neutral">中性</option>
     </select>
     <input type="text" id="filtSearch" placeholder="搜索关键词..." oninput="applyFilter()"/>
+    <button onclick="toggleSort()" id="btnSort" style="padding:5px 12px;border-radius:6px;border:1px solid rgba(59,130,246,0.3);background:rgba(59,130,246,0.1);color:#93c5fd;font-size:.78rem;cursor:pointer">📅 时间排序</button>
     <span class="count" id="filtCount">0 条</span>
   </div>
   <div class="news-grid" id="newsGrid"></div>
@@ -348,6 +349,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Noto
 let ALL = [];
 let FIL = [];
 let LW = null; // 上周数据
+let SORT_DESC = true; // 时间排序方向：true=最新在前
 
 // ── 工具函数 ──
 function esc(s) { return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
@@ -490,6 +492,17 @@ function getDemo() {
   ];
 }
 
+// ── 排序切换 ──
+function toggleSort() {
+  SORT_DESC = !SORT_DESC;
+  const btn = document.getElementById('btnSort');
+  if (btn) {
+    btn.textContent = SORT_DESC ? '📅 时间排序' : '📅 时间倒序';
+    btn.style.background = SORT_DESC ? 'rgba(59,130,246,0.1)' : 'rgba(139,92,246,0.2)';
+  }
+  applyFilter();
+}
+
 // ── 过滤 ──
 function filterArticles() {
   let res = [...ALL];
@@ -501,6 +514,12 @@ function filterArticles() {
   if (st === 'bear') res = res.filter(a => sentType(a) === 'bear');
   if (st === 'neutral') res = res.filter(a => { const t = sentType(a); return !t || t === 'neutral'; });
   if (kw) res = res.filter(a => (a.title||'').toLowerCase().includes(kw) || (a.summary||'').toLowerCase().includes(kw));
+  // 按时间排序
+  res.sort((a, b) => {
+    const da = a.published || '';
+    const db = b.published || '';
+    return SORT_DESC ? db.localeCompare(da) : da.localeCompare(db);
+  });
   FIL = res;
   document.getElementById('filtCount').textContent = res.length + ' 条';
   return res;
