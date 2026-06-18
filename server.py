@@ -95,18 +95,19 @@ def run_scrape_and_analyze():
             # 归档当前数据到 history/（仅首次，避免重复保存）
             save_to_history()
 
-            # Step 1: 清除缓存 + 抓取新数据
+            # Step 1: 抓取新数据（自动与已有数据合并）
             print("\n📡 正在抓取最近7天数据...")
-            subprocess.run(
-                [sys.executable, str(SCRAPER_FILE), "--clear-cache"],
-                capture_output=True, text=True, cwd=str(BASE_DIR), timeout=30
-            )
             r = subprocess.run(
                 [sys.executable, str(SCRAPER_FILE)],
-                capture_output=True, text=True, cwd=str(BASE_DIR), timeout=120
+                capture_output=True, text=True, cwd=str(BASE_DIR), timeout=180
             )
             if r.returncode != 0:
                 print(f"  ⚠ 抓取警告: {r.stderr[-300:]}")
+            else:
+                # 打印关键输出
+                for line in r.stdout.split('\n'):
+                    if '抓取完成' in line or '合并' in line or '数据已保存' in line:
+                        print(f"  {line.strip()}")
 
             # Step 2: 情感分析
             print("🧠 正在进行情感分析...")
@@ -239,6 +240,21 @@ class ReportHandler(http.server.SimpleHTTPRequestHandler):
                 t = threading.Thread(target=run_scrape_and_analyze, daemon=True)
                 t.start()
                 self._json_response({"status": "started", "message": "数据抓取已启动"})
+            return
+
+        # API: 强制刷新（清除缓存后抓取）
+        if path == "/api/fetch/force":
+            if _fetch_status["running"]:
+                self._json_response({"status": "running", "message": "正在抓取中..."})
+            else:
+                # 先清除缓存
+                cache_file = BASE_DIR / "ai_news_cache.json"
+                if cache_file.exists():
+                    cache_file.write_text("{}", encoding="utf-8")
+                    print("🗑️ 缓存已清除（强制刷新）")
+                t = threading.Thread(target=run_scrape_and_analyze, daemon=True)
+                t.start()
+                self._json_response({"status": "started", "message": "强制刷新已启动"})
             return
 
         # API: 抓取状态

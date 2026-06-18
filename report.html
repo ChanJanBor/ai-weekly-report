@@ -209,6 +209,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Noto
   <span class="badge" id="dateRange">等待数据加载...</span>
   <div class="toolbar">
     <button class="primary" onclick="doFetch()" id="btnFetch">🔄 更新数据</button>
+    <button onclick="doFetch(true)" id="btnForceFetch" style="padding:7px 14px;border-radius:8px;border:1px solid rgba(239,68,68,0.4);background:rgba(239,68,68,0.1);color:#fca5a5;font-size:.82rem;cursor:pointer" title="清除缓存，完全重新抓取">🔄 强制刷新</button>
     <div class="sep"></div>
     <button onclick="scrollTo_('sec-news')">📰 新闻</button>
     <button onclick="scrollTo_('sec-sentiment')">🧠 情感分析</button>
@@ -264,7 +265,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Noto
       <option value="bear">利空</option>
       <option value="neutral">中性</option>
     </select>
-    <input type="text" id="filtSearch" placeholder="搜索关键词..." oninput="applyFilter()"/>
+    <input type="text" id="filtSearch" placehnewer="搜索关键词..." oninput="applyFilter()"/>
     <button onclick="toggleSort()" id="btnSort" style="padding:5px 12px;border-radius:6px;border:1px solid rgba(59,130,246,0.3);background:rgba(59,130,246,0.1);color:#93c5fd;font-size:.78rem;cursor:pointer">📅 时间排序</button>
     <span class="count" id="filtCount">0 条</span>
   </div>
@@ -424,17 +425,19 @@ function sentBadge(a) {
 }
 
 // ── 数据加载 ──
-async function loadData(force) {
+async function loadData(force, forceRefresh) {
   const sb = document.getElementById('statusBar');
   if (force) {
     sb.innerHTML = '<span class="warn"><span class="spinner"></span> 正在抓取最近 7 天数据，请稍候...</span>';
     document.getElementById('btnFetch').disabled = true;
+    document.getElementById('btnForceFetch').disabled = true;
     try {
-      const r = await fetch('/api/fetch');
+      const apiUrl = forceRefresh ? '/api/fetch/force' : '/api/fetch';
+      const r = await fetch(apiUrl);
       const d = await r.json();
       if (d.status === 'error') throw new Error(d.message);
       let retries = 0;
-      while (retries < 60) {
+      while (retries < 90) {
         await sleep(2000);
         const sr = await fetch('/api/status');
         const sd = await sr.json();
@@ -448,9 +451,11 @@ async function loadData(force) {
     } catch (e) {
       sb.innerHTML = '<span class="err">抓取失败: ' + esc(e.message) + '</span>';
       document.getElementById('btnFetch').disabled = false;
+      document.getElementById('btnForceFetch').disabled = false;
       return;
     }
     document.getElementById('btnFetch').disabled = false;
+    document.getElementById('btnForceFetch').disabled = false;
   }
 
   sb.innerHTML = '<span class="warn">正在加载数据...</span>';
@@ -904,8 +909,8 @@ async function batchTranslate() {
 }
 
 // ── 导出 ──
-async function doFetch() {
-  await loadData(true);
+async function doFetch(forceRefresh) {
+  await loadData(true, forceRefresh);
 }
 
 async function doExportPDF() {

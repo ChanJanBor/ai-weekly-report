@@ -325,6 +325,23 @@ class AINewsScraper:
                 seen.add(a["id"])
                 unique.append(a)
 
+        # Phase 3.5: 合并已有数据（避免覆盖旧数据）
+        if self.output_path.exists():
+            try:
+                existing = json.loads(self.output_path.read_text(encoding="utf-8"))
+                old_articles = existing.get("articles", [])
+                merged_count = 0
+                for a in old_articles:
+                    aid = a.get("id", "")
+                    if aid and aid not in seen:
+                        seen.add(aid)
+                        unique.append(a)
+                        merged_count += 1
+                if merged_count > 0:
+                    print(f"  📦 合并已有数据: 保留 {merged_count} 条旧新闻")
+            except Exception as e:
+                print(f"  ⚠ 读取已有数据失败: {e}")
+
         # 按发布时间排序
         unique.sort(key=lambda x: x.get("published", ""), reverse=True)
 
